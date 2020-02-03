@@ -1,0 +1,187 @@
+#ss_menu {
+    bottom: 30px;
+    color: #fff;
+    height: 60px;
+    position: fixed;
+    right: 30px;
+    transform: rotate(180deg);
+    transition: all 1s ease 0s;
+    width: 60px;
+    z-index: 100000;
+}
+#ss_menu > .menu {
+    border-radius: 50%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16);
+    color: #fff;
+    display: block;
+    height: 60px;
+    position: absolute;
+    text-align: center;
+    transition: all 1s ease 0s;
+    width: 60px;
+}
+#ss_menu > .menu .share {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform: rotate(180deg);
+    transition: all 1s ease 0s;
+    width: 100%;
+}
+#ss_menu > .menu .share .circle {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 50%;
+    height: 12px;
+    left: 12px;
+    margin-top: -6px;
+    opacity: 1;
+    position: absolute;
+    top: 50%;
+    transition: all 1s ease 0s;
+    width: 12px;
+}
+#ss_menu > .menu .share .circle::after, #ss_menu > .menu .share .circle::before {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 50%;
+    content: "";
+    display: block;
+    height: 12px;
+    opacity: 1;
+    position: absolute;
+    transition: all 1s ease 0s;
+    width: 12px;
+}
+#ss_menu > .menu .share .circle::after {
+    left: 20.7846px;
+    top: 12px;
+}
+#ss_menu > .menu .share .circle::before {
+    left: 20.7846px;
+    top: -12px;
+}
+#ss_menu > .menu .share .bar {
+    background: #fff none repeat scroll 0 0;
+    height: 3px;
+    left: 18px;
+    margin-top: -1.5px;
+    position: absolute;
+    top: 50%;
+    transform: rotate(30deg);
+    transform-origin: 0 50% 0;
+    transition: all 1s ease 0s;
+    width: 24px;
+}
+#ss_menu > .menu .share .bar::before {
+    background: #fff none repeat scroll 0 0;
+    content: "";
+    height: 3px;
+    left: 0;
+    position: absolute;
+    transform: rotate(-60deg);
+    transform-origin: 0 50% 0;
+    transition: all 1s ease 0s;
+    width: 24px;
+}
+#ss_menu > .menu .share.close .circle {
+    opacity: 0;
+}
+#ss_menu > .menu .share.close .bar {
+    left: 50%;
+    margin-left: -12px;
+    margin-top: -1.5px;
+    top: 50%;
+    transform: rotate(405deg);
+    transform-origin: 50% 50% 0;
+}
+#ss_menu > .menu .share.close .bar::before {
+    transform: rotate(-450deg);
+    transform-origin: 50% 50% 0;
+}
+#ss_menu > .menu.ss_active {
+    background: #173452 none repeat scroll 0 0;
+    transform: scale(0.7);
+}
+#ss_menu > div {
+    background: #173452 none repeat scroll 0 0;
+    border-radius: 50%;
+    box-sizing: border-box;
+    display: table;
+    font-size: 14px;
+    height: 73px;
+    position: absolute;
+    text-align: center;
+    width: 73px;
+}
+#ss_menu > div > a {
+    color: #fff;
+    position: relative;
+    top: 26px;
+}
+#ss_menu > div i {
+    margin-left: 20px;
+    margin-top: 16px;
+}
+#ss_menu > div .icon-close1 {
+    margin-left: 0;
+    margin-top: 17px;
+    width: 27px;
+}
+#ss_menu > div:hover {
+    background: #214263 none repeat scroll 0 0;
+    color: #fff;
+    cursor: pointer;
+}
+#ss_menu .circless:nth-child(1) {
+    left: -160px;
+    top: 0;
+}
+#ss_menu .circless:nth-child(2) {
+    left: -138.564px;
+    top: -80px;
+}
+#ss_menu .circless:nth-child(3) {
+    left: -80px;
+    top: -138.564px;
+}
+#ss_menu .circless:nth-child(4) {
+    left: 0;
+    top: -160px;
+}
+@keyframes badbounce {
+0%, 100% {
+    transform: translateY(0px);
+}
+10% {
+    transform: translateY(6px);
+}
+30% {
+    transform: translateY(-4px);
+}
+70% {
+    transform: translateY(3px);
+}
+90% {
+    transform: translateY(-2px);
+}
+}
+@keyframes badbounce {
+0%, 100% {
+    transform: translateY(0px);
+}
+10% {
+    transform: translateY(6px);
+}
+30% {
+    transform: translateY(-4px);
+}
+70% {
+    transform: translateY(3px);
+}
+90% {
+    transform: translateY(-2px);
+}
+}
+.ss_animate {
+    animation: 1s linear 0s normal none 1 running badbounce;
+}

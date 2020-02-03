@@ -1,0 +1,90 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['cID'])){
+        header('Location:../index.php'); 
+    }
+?>
+<div class="large-12 columns header text-center">
+    <div class="large-12 columns">
+        <h2>Shravani Tourism Admin</h2>
+    </div>
+</div>
+<div class="large-12  menu columns">
+
+    <div class="title-bar off-canvas-wrapper" data-responsive-toggle="example-menu" data-hide-for="medium">
+      <button class="menu-icon" type="button" data-toggle="offCanvas"></button>
+      <div class="title-bar-title">Menu</div>
+    </div>
+
+    <div class="top-bar" id="example-menu">
+      <div class="top-bar-left">
+        <ul class="dropdown menu" data-dropdown-menu>
+          <li><a href='\<?php echo ADMINROOT;?>/home/index.php'><span>Home</span></a></li>
+          <li class='has-sub'><a href='#'><span>Settings</span></a>
+              <ul class="menu vertical" style="z-index: 9999999;">
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\index.php'><span>Packages</span></a></li>
+                    <li>
+                        <a href='#'><span>Bus Settings</span></a>
+                        <ul class="menu vertical" style="z-index: 9999999;">
+                            <li><a href='\<?php echo ADMINROOT;?>\settings\export_bus_dates.php'><span>Export Bus Dates</span></a></li>
+                            <li><a href='\<?php echo ADMINROOT;?>\settings\reserved_seats.php'><span>Reserve Seats</span></a></li>
+                        </ul>
+                        
+                    </li>
+                    <li>
+                        <a href='#'><span>Pickup/Drop</span></a>
+                        <ul class="menu vertical" style="z-index: 9999999;">
+                            <li><a href='\<?php echo ADMINROOT;?>\settings\ashtavinayak_pickup.php'><span>Pickup Points</span></a></li>
+                            <li><a href='\<?php echo ADMINROOT;?>\settings\ashtavinayak_drop.php'><span>Drop Points</span></a></li>
+                        </ul>
+                        <!-- <a href='\<?php echo ADMINROOT;?>\settings\ashtavinayak_pickup.php'><span>Pickup Points</span></a> -->
+                    </li>
+                    
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\region_list.php'><span>Regions</span></a></li>
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\state_list.php'><span>States</span></a></li>
+                    
+<!--                         <li><a href='<?php echo WEBROOT;?>\listings\export.php'><span>Export Listing</span></a></li>
+ --><!--                        <li><a href='<?php echo WEBROOT;?>/listings/upload.php'><span>Product Upload</span></a></li>
+                        <li><a href='<?php echo WEBROOT;?>/listings/bulkupload.php'><span>Product Bulk Upload</span></a></li>-->
+                    </ul>
+                </li>
+                <li class='has-sub'><a href='#'><span>Orders</span></a>
+                    <ul class="menu vertical"  style="z-index: 9999999;">
+                        <li><a href='\<?php echo ADMINROOT;?>\orders\ashtavinayak.php'><span>Ashtavinayak</span></a></li>
+                        <!-- <li><a href='<?php echo WEBROOT;?>/orders/orders.php'><span>Order List</span></a></li>
+                        <li><a href='<?php echo WEBROOT;?>/orders/export.php'><span>Order Export</span></a></li> -->
+                    </ul>    
+                        <!-- <ul class="menu vertical">
+                        <li><a href='<?php //echo WEBROOT;?>/orders/orders.php'><span>Active Orders</span></a></li>
+                        <li><a href='#'><span>Cancelled Orders</span></a></li>
+                    </ul> -->
+                </li>
+                
+<!--                 <li><a href='<?php echo WEBROOT;?>/returns/returns.php'><span>Return</span></a></li>
+ -->                <!--
+                <li class='has-sub'><a href='#'><span>Payment</span></a>
+                    <ul class="menu vertical">
+                        <li><a href='#'><span>Settlements</span></a></li>
+                        <li><a href='#'><span>Statements</span></a></li>
+                        <li><a href='#'><span>Transactions</span></a></li>
+                        <li><a href='#'><span>Invoices</span></a></li>
+                    </ul>
+                </li>
+                -->
+<!--                 <li><a href='<?php echo WEBROOT;?>/metrics/index.php'><span>Metric</span></a></li>
+ -->               
+                     <!-- <li><a href='<?php echo WEBROOT;?>/profile/index.php'><span>Profile</span></a></li> -->
+<!--                 <li><a href='<?php echo WEBROOT;?>/howitworks/index.php'><span>How it works</span></a></li>
+
+ -->                <li class='has-sub'><a href='#'><span>Admin Users</span></a>
+                        <ul class="menu vertical" style="z-index: 9999999;">
+                            <li><a href='\<?php echo ADMINROOT;?>\aUsers\register.php'><span>Add Admin Users </span></a></li>
+                            <li><a href='\<?php echo ADMINROOT;?>\aUsers\index.php'><span>Admin Users List</span></a></li>
+                        </ul>
+                    </li>
+                    <li class='last'><a href='\<?php echo ADMINROOT;?>\logout.php'><span>Logout</span></a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+

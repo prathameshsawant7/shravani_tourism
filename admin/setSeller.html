@@ -1,0 +1,42 @@
+<!--
+ * @author  : Prathamesh Sawant<prathamesh.sawant@jewelsouk.com>
+ * @package : Jewelsouk Seller Hub
+ * @version : 1.0
+ * @since   : 2016-Mar
+ * Set Seller Page
+-->
+            
+
+
+<div id="setSeller" class="reveal-modal"  style="z-index: 999999;width: 48%">
+    <h1>Set Seller</h1>
+    <ul class="tabs horizontal" id="example-vert-tabs" data-tabs  >
+            <li class="tabs-title is-active" style="width: 25%"><a href="#panel1v" aria-selected="true"><i class="fa fa-lock"></i>Set</center></a></li>
+            <li class="tabs-title" style="width: 25%"><a href="#panel2v"><center><i class="fa fa-floppy-o"></i>Save</center></a></li>
+            <li class="tabs-title" style="width: 25%"><a href="#panel3v"><center><i class="fa fa-upload"></i>Update</center></a></li>
+            <li class="tabs-title" style="width: 25%"><a href="#panel4v"><center><i class="fa fa-times"></i>Delete</center></a></li>
+    </ul>
+
+    <div class="tabs-content vertical" data-tabs-content="example-vert-tabs">
+        <div class="tabs-panel is-active" id="panel1v">
+            <div id="setTemplate_div"></div><BR>
+            <input type="button" class="small button view_btn" value="Set" onclick="setSeller()">
+        </div>
+        <div class="tabs-panel" id="panel2v">
+            <div id="saveTemplate_div"></div><BR>
+            <input type="button" class="small button view_btn" value="Save" onclick="saveSeller()">
+        </div>
+        <div class="tabs-panel" id="panel3v">
+            <div id="updateTemplate_div"></div><BR>
+            <input type="button" class="small button view_btn" value="Update" onclick="updateSeller()">
+        </div>
+        <div class="tabs-panel" id="panel4v">
+            <div id="deleteTemplate_div"></div><BR>
+            <input type="button" class="small button view_btn" value="Delete" onclick="deleteSeller()">
+        </div>
+    </div>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+<center>
+<label><a href="#" id="setSeller" data-reveal-id="setSeller" class="button" >Set Seller</a></label>
+</center>  

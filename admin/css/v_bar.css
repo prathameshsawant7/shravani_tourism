@@ -1,0 +1,68 @@
+#graph_holder 
+{
+    width: 900px;
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+}
+
+.v_bar 
+{
+    font-size: 12px;
+    background-color: #0099FF;
+    color: #FFF;
+    font-family: 'Righteous', cursive;
+    border: 2px solid #FFF;
+    box-shadow: 0px 0px 5px #AAA;
+
+    overflow: hidden;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 350ms;
+    -webkit-transition-timing-function: ease-in-out;	
+    position: absolute;	
+
+    z-index: 0;
+    opacity: 1;
+    padding-left: 2px;
+    font-size: 12px;
+}
+
+.v_bar:hover 
+{
+    opacity: 0.7;
+}
+
+.v_bar:hover .v_bar_title 
+{
+    color: #FFF;
+}
+
+.v_bar .v_bar_value 
+{
+        color: #FFF;
+        margin-right: 0;
+}	
+
+.v_bar_title {
+    float: left;
+    padding: 0px 5px;
+    -webkit-transition-property: padding-left, font-size, margin-left, margin-top;
+    -webkit-transition-duration: 350ms;
+    -webkit-transition-timing-function: ease-in-out;		
+    -moz-transition-property: padding-left, font-size, margin-right, margin-top;
+    -moz-transition-duration: 350ms;
+    -moz-transition-timing-function: ease-in-out;	  		
+}
+
+.v_bar_value {
+    float: right;
+    padding: 0px 1px;
+    margin-right: -250px;
+    -webkit-transition-property: padding-right, font-size, margin-right, margin-top;
+    -webkit-transition-duration: 350ms;
+    -webkit-transition-timing-function: ease-in-out;	
+    -moz-transition-property: padding-right, font-size, margin-right, margin-top;
+    -moz-transition-duration: 350ms;
+    -moz-transition-timing-function: ease-in-out;	
+    font-size: 12px;
+}
