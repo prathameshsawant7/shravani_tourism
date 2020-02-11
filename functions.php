@@ -28,9 +28,9 @@ class Functions
 			$adult_single_rate = 0;
 
 			$service_charge = 200;
-			$service_charge_off = 200;
-			$gst = 0;
-			$discount = 0;
+			//$service_charge_off = 200;
+			$gst = 10;
+			$discount = 100;
 			
 
 			$query = "SELECT identifier, rate FROM tour_rates WHERE tour_id=".$tour_id." && hotel_type='".$hotel_type."';";
@@ -75,14 +75,14 @@ class Functions
 					$cost+= $rooms[$i]['child'] * $child_rate;
 
 					$service += ($rooms[$i]['adult'] +  $rooms[$i]['child']) * $service_charge;
-					$service -= ($rooms[$i]['child']>0)?$service_charge_off:0;
+					//$service -= ($rooms[$i]['child']>0)?$service_charge_off:0;
 
  				}else if($rooms[$i]['adult'] == 3){
 					$cost+= (2 * $adult_double_rate) + (1 * $extra_adult_rate);
 					$cost+= $rooms[$i]['child'] * $child_rate;
 
 					$service += ($rooms[$i]['adult'] +  $rooms[$i]['child']) * $service_charge;
-					$service -= ($rooms[$i]['child']>0)?$service_charge_off:0;	
+					//$service -= ($rooms[$i]['child']>0)?$service_charge_off:0;	
 				}
 			
 

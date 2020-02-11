@@ -49,8 +49,30 @@ if(isset($_POST['action']) && $_POST['action'] == 'register') {
 	}
 }else if(isset($_GET['action']) && $_GET['action'] == 'getTourCost'){
 	$func = new Functions();
-	$data = $func->calculate_tour_cost($_GET['id'],$_GET['hotel_type'], json_decode($_GET['rooms'], True));
+	$data = $func->calculate_tour_cost($_GET['id'],$_GET['tour_type'], json_decode($_GET['rooms'], True));
 	echo json_encode($data);
+}elseif (isset($_POST['action']) && $_POST['action'] == 'create_booking') {
+	try{
+		$func = new Functions();
+		$cost_data = $func->calculate_tour_cost($_POST['tour_id'],$_POST['tour_type'], $_POST['room_data']);
+
+
+		$query = "INSERT INTO ashtavinayak_bookings(tour_id,tour_date,tour_type,tour_pickup,tour_drop,seat_no,seat_data, room_data, cost_data, total_cost, contact_name, contact_phone, contact_email, contact_address, status , added_by, added_on) VALUE 
+					(".$_POST['tour_id'].",'".$_POST['tour_date']."','".$_POST['tour_type']."','".$_POST['pickup']."','".$_POST['drop']."','".$_POST['seat_no']."','".json_encode($_POST['seat_data'])."','".json_encode($_POST['room_data'])."','".json_encode($cost_data)."',".$cost_data['total_cost'].",'".$_POST['contact_name']."','".$_POST['phone']."','".$_POST['email']."','".$_POST['address']."','new',".$_POST['user_id'].",'now()')";
+
+		mysqli_query($con,$query);
+		$id = mysqli_insert_id($con);
+
+		if(!empty($id)){
+			session_start(); 
+			$_SESSION['booking_id']  = $id;
+			echo 'success';
+		}else{
+			echo 'fail';
+		}
+	}catch(Exception $e){
+		echo 'fail';
+	}	
 }
 
 ?>

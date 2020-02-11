@@ -319,18 +319,26 @@ $tour_data = $fetch_data->fetch_assoc();
 							  <div class="row">
 							  	<p class="text-left con-det mb-0">Contact Details</p>
 							  	<div class="col-sm-12 col-md-12 col-lg-12 con-det">
-							  		<form class="form-inline">				 
+							  		<form class="form-inline">	
+							  		  <input type="text" class="form-control in-text mr-3" placeholder="Name" id="contact_name">			 
 									  <input type="text" class="form-control in-text mr-3" placeholder="Phone No" id="phone">
-									  <input type="text" class="form-control in-text mr-3" placeholder="Email" id="email">
+									  
 									</form>
 							  	</div>
 							  	<div class="col-sm-12 col-md-12 col-lg-12 con-det">
 							  		<form>
-							  		<textarea class="form-control in-text" rows="3" id="address" placeholder="Note" name="text"></textarea>  	
+							  		<input type="text" class="form-control in-text mr-3" placeholder="Email" id="email">
+							  		<BR>
+							  		<textarea class="form-control in-text" rows="3" id="address" placeholder="Address" name="text"></textarea>  	
 							  		</form>
 							  	</div>	
 							  	<div class="col-sm-12 col-md-12 col-lg-12 text-center">
-							  		<button id="submit" type="button" onclick="openConfirm()" class="btn btn-primary">Submit</button>
+							  		<?php if(empty($_SESSION)){ ?>
+									<button id="submit" href="#myModal-log" class="btn btn-primary" data-toggle="modal">Submit</button>
+									<?php }else{ ?>
+									<button id="submit" type="button" onclick="openConfirm()" class="btn btn-primary">Submit</button>
+									<?php } ?>
+							  		
 							  	</div>
 							  </div>						
 						</div>
@@ -423,6 +431,14 @@ $tour_data = $fetch_data->fetch_assoc();
 								</tr>
 								<tr>
 									<td>
+										<label class="tour-search text-uppercase">Name</label>
+									</td>
+									<td>
+										<label id="text_contact_name" class="sele-place ml-3"></label>
+									</td>
+								</tr>
+								<tr>
+									<td>
 										<label class="tour-search text-uppercase">Phone No.</label>
 									</td>
 									<td>
@@ -452,6 +468,8 @@ $tour_data = $fetch_data->fetch_assoc();
 							<table border="2" id="text_passenger"></table>
 							<BR>
 							<table border="2" id="text_rooms"></table>
+							<BR>
+							<table border="2" id="text_cost"></table>
 						</div>
 
 
@@ -459,7 +477,7 @@ $tour_data = $fetch_data->fetch_assoc();
 					<BR>
 					<center>
 						<button id="back" onclick="backToBooking()" type="button" class="btn btn-primary">Back</button>
-						<button id="proceed" type="button" class="btn btn-primary">Proceed to Pay</button>
+						<button id="proceed" onclick="proceed_to_pay()" type="button" class="btn btn-primary">Proceed to Pay</button>
 					</center>
 					<BR>
 				</div>
@@ -468,11 +486,6 @@ $tour_data = $fetch_data->fetch_assoc();
 		</div>
 	</div>	
 <BR>
-
-
-
-
-
 
 <script>
 var room_counter = 0;
@@ -582,11 +595,69 @@ function checkSeatRoomSelection(){
 	
 }
 
+function proceed_to_pay(){
+	var request = {}
+	request['action'] = 'create_booking';
+	request['user_id'] = "<?php echo !empty($_SESSION['user_id'])?$_SESSION['user_id']:''; ?>";
+	request['contact_name'] = $('#contact_name').val();
+	request['phone'] = $('#phone').val();
+	request['email'] = $('#email').val();
+	request['address'] = $('#address').val();
+	request['tour_id'] = "<?php echo $_GET['tour_id']; ?>";
+	request['tour_date'] = $('#tour_date').val();
+	request['tour_type'] = $('#tour_type').val();
+	request['pickup'] = $('#pickup').val();
+	request['drop'] = $('#drop').val();
+	request['seat_no'] = $('#seat-no').val();
+
+	request['seat_data'] = {};
+	counter = 0;
+	$('.seat_row').each(function(){
+		request['seat_data'][counter] = {}
+	    request['seat_data'][counter]['seat'] = $(this).attr('row');
+	    request['seat_data'][counter]['name'] = $('#p_name_'+seat).val();
+	    request['seat_data'][counter]['gender'] = $('[name=p_gender_'+seat+']:checked').val();
+	    request['seat_data'][counter]['age'] = $('#p_age_'+seat).val();
+	    counter++;
+    });
+
+	request['room_data'] = {};
+	counter = 0;
+	$('.room_row').each(function(){
+		request['room_data'][counter] = {};
+		request['room_data'][counter]['adult'] = $('#room_adult_'+(counter+1)).val();
+		request['room_data'][counter]['child'] = $('#room_child_'+(counter+1)).val();
+		counter++;
+	});
+
+	$.ajax({
+		url:'requests.php',
+		type: 'POST',
+	    data:request,
+	    success: function (data,status,xhr) {   // success callback function
+	        console.log(data);
+	        if(trim(data) == 'success'){
+	        	window.location.href = "<?php echo WEBROOT;?>" +"payment/index.php"
+	        } else if(trim(data) == 'fail'){
+	            location.reload();
+	        }
+	    },
+	    error: function (jqXhr, textStatus, errorMessage) { // error callback 
+	        console.log('Error: ' + errorMessage);
+	    }
+	});
+}
+
 function openConfirm(){
+	var contact_name = trim($('#contact_name').val());
 	var phone = trim($('#phone').val());
 	var email = trim($('#email').val());
 	var address = trim($('#address').val());
 	var error = '';
+
+	if(contact_name == ''){
+		error += 'Name is mandatory.\n';
+	}
 
 	if(phone == ''){
 		error += 'Phone is mandatory.\n';
@@ -609,6 +680,7 @@ function openConfirm(){
 		$('#text_pickup').html($('#pickup').val());
 		$('#text_drop').html($('#drop').val());
 		$('#text_tour_type').html($('#tour_type').val());
+		$('#text_contact_name').html($('#contact_name').val());
 		$('#text_phone').html($('#phone').val());
 		$('#text_email').html($('#email').val());
 		$('#text_address').html($('#address').val());
@@ -651,7 +723,7 @@ function openConfirm(){
 		    
 		});
 
-		$('#text_passenger').html(text_passenger);
+		
 
 		var text_rooms = '<tr><th colspan="3" class="tour-search text-uppercase">';
 		text_rooms += '<center>Room Details</center></th></tr>';
@@ -682,7 +754,63 @@ function openConfirm(){
 		    counter++;
 		});
 
+
+		var text_cost = '<tr><th colspan="3" class="tour-search text-uppercase">';
+		text_cost += '<center>Cost Details</center></th></tr>';
+		text_cost += '<tr>';
+	    text_cost += '<td>';
+	    text_cost += '<label class="sele-place ml-3">Tour Cost</label>';
+	    text_cost += '</td>';
+	    text_cost += '<td>';
+	    text_cost += '<label class="sele-place ml-3">Rs. '+$('#cost').html()+'</label>';
+	    text_cost += '</td>';
+		text_cost += '</tr>';
+
+		text_cost += '<tr>';
+	    text_cost += '<td>';
+	    text_cost += '<label class="sele-place ml-3">Service charge</label>';
+	    text_cost += '</td>';
+	    text_cost += '<td>';
+	    text_cost += '<label class="sele-place ml-3">Rs. '+$('#service_charge').html()+'</label>';
+	    text_cost += '</td>';
+		text_cost += '</tr>';
+
+		if($('#discount').html() != ''){
+			text_cost += '<tr>';
+		    text_cost += '<td>';
+		    text_cost += '<label class="sele-place ml-3">Discount</label>';
+		    text_cost += '</td>';
+		    text_cost += '<td>';
+		    text_cost += '<label class="sele-place ml-3">Rs. '+$('#discount').html()+'</label>';
+		    text_cost += '</td>';
+			text_cost += '</tr>';
+		}
+
+		if($('#gst_percent').html() != ''){
+			text_cost += '<tr>';
+		    text_cost += '<td>';
+		    text_cost += '<label class="sele-place ml-3">GST</label>';
+		    text_cost += '</td>';
+		    text_cost += '<td>';
+		    text_cost += '<label class="sele-place ml-3">Rs. '+$('#gst').html()+'</label>';
+		    text_cost += '</td>';
+			text_cost += '</tr>';
+		}
+
+		if($('#total_cost').html() != ''){
+			text_cost += '<tr>';
+		    text_cost += '<td>';
+		    text_cost += '<label class="sele-place ml-3">Total cost</label>';
+		    text_cost += '</td>';
+		    text_cost += '<td>';
+		    text_cost += '<label class="sele-place ml-3">Rs. '+$('#total_cost').html()+'</label>';
+		    text_cost += '</td>';
+			text_cost += '</tr>';
+		}
+
+		$('#text_passenger').html(text_passenger);
 		$('#text_rooms').html(text_rooms);
+		$('#text_cost').html(text_cost);
 		$('#confirm_booking').show();
 		$('#booking').hide();
 	}else{
@@ -720,7 +848,7 @@ function calculate_tour_cost(){
 	console.log(rooms);
 
 	$.get("requests.php",
-		{action:'getTourCost',id:<?php echo $_GET['tour_id'];?>,hotel_type:$('#tour_type').val(),rooms:JSON.stringify(rooms)},
+		{action:'getTourCost',id:<?php echo $_GET['tour_id'];?>,tour_type:$('#tour_type').val(),rooms:JSON.stringify(rooms)},
 		function(data) {
 
 		console.log(data);
@@ -902,7 +1030,7 @@ $(function () {
         disableDates: function(date){
         	let today = new Date();
           	let current = formatDate(date);
-          	if(today+1<date+2){
+          	if(today>=date){
           		return false;
           	}
       		return enableDays.indexOf(current) != -1
@@ -915,11 +1043,15 @@ $(function () {
         uiLibrary: 'bootstrap4'
   	});
 
+	// if(setDate != ''){
+	// 	$("#tour_date").val(setDate);
+	// }
+  	
+
 });	
 
 
 
 </script>
-
 </body>
 </html>

@@ -38,7 +38,7 @@ session_start();
 	</form>
 	<!--BreadCrumps-->
 	<?php
-			$query = "SELECT * FROM tours WHERE id=".$_GET[tour_id].";";
+			$query = "SELECT * FROM tours WHERE id=".$_GET['tour_id'].";";
             $fetch_data = mysqli_query($con,$query);    
             $tour_data = $fetch_data->fetch_assoc();            
     ?>
@@ -57,6 +57,7 @@ session_start();
 				<span class="tour-search text-uppercase">Cost Per Person</span>
 				<h2>Rs.<?php echo $tour_data['tour_price'];?>/-</h2>
 			</div>
+
 			<div class="col-sm-2 col-md-2 col-lg-2 align-self-center bknowbox">
 				<a href="ashtvinayak-bus-booking.php?tour_id=<?php echo $_GET['tour_id']; ?>" class="btn btn-primary bknow-butt">BOOK NOW</a>
 			</div>
