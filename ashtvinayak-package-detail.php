@@ -47,7 +47,7 @@ session_start();
 		<div class="row pack-bac">
 			<div class="col-sm-4 col-md-4 col-lg-4">
 				<span class="tour-search text-uppercase">Tour Id: <?php echo $tour_data['tour_code'];?></span>
-				<h2><?php echo ucwords($tour_data['tour_name']);?></h2>
+				<h5><?php echo ucwords($tour_data['tour_name']);?></h5>
 			</div>
 			<div class="col-sm-2 col-md-2 col-lg-2">
 				<span class="tour-search text-uppercase">Days</span>
@@ -55,7 +55,7 @@ session_start();
 			</div>
 			<div class="col-sm-2 col-md-2 col-lg-2">
 				<span class="tour-search text-uppercase">Cost Per Person</span>
-				<h2>Rs.<?php echo $tour_data['tour_price'];?>/-</h2>
+				<h4>Rs.<?php echo $tour_data['tour_price'];?>/-</h4>
 			</div>
 
 			<div class="col-sm-2 col-md-2 col-lg-2 align-self-center bknowbox">
@@ -141,7 +141,7 @@ session_start();
 			    </div>
 			    <div id="menu2" class="container tab-pane fade"><br>
 			      <h3>Tour Cost</h3>
-			      <table border="2" style="width: 100%;">
+			      <table border="1" style="width: 100%;">
 			      	<?php 
 			      		$rates = json_decode($tour_data['rates_json']);
 			      		
@@ -182,9 +182,9 @@ session_start();
 			      <div class="row">
 					<div class="col-sm-6 col-lg-6">
 					   <div class="card card-bor">
-					   		<table border="2">
+					   		<table border="1">
 					   			<tr>
-					   				<thead><center><h3>PickUp Point & Timing</h3></center></thead>
+					   				<thead><center><h5>PickUp Point & Timing</h5></center></thead>
 					   			</tr>
 					   			<?php
 								$query = "SELECT * FROM ashtavinayak_pickup_drop WHERE type='pickup';";
@@ -200,9 +200,9 @@ session_start();
 					</div>	
 					<div class="col-sm-6 col-lg-6">
 					    <div class="card card-bor">
-					   		 <table border="2">
+					   		 <table border="1">
 					   			<tr>
-					   				<thead><center><h3>Drop Point & Timing</h3></center></thead>
+					   				<thead><center><h5>Drop Point & Timing</h5></center></thead>
 					   			</tr>
 					   			<?php
 								$query = "SELECT * FROM ashtavinayak_pickup_drop WHERE type='drop';";

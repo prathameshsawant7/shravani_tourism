@@ -80,7 +80,7 @@ $tour_data = $fetch_data->fetch_assoc();
 				 //  	});
 				    </script>
 				</div>
-				<div class="col-sm-2 col-md-2 col-lg-2">
+				<div class="col-sm-3 col-md-3 col-lg-3">
 					<span class="tour-search text-uppercase">Pick Up From</span>
 						<select class="form-control mod-in dest-text bt-gr-booking" id="pickup" name="pickup" onchange="updatePickupDropText()">
 							<?php
@@ -92,7 +92,7 @@ $tour_data = $fetch_data->fetch_assoc();
 					    	<?php } ?>
 					     </select>
 				</div>
-				<div class="col-sm-2 col-md-2 col-lg-2">
+				<div class="col-sm-3 col-md-3 col-lg-3">
 					<span class="tour-search text-uppercase">Drop To</span>
 						 <select class="form-control mod-in dest-text bt-gr-booking" id="drop" name="drop" onchange="updatePickupDropText()">
 						 	<?php
@@ -364,10 +364,10 @@ $tour_data = $fetch_data->fetch_assoc();
 				<BR>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="row bor-bott">
-						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							<table border="2">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-4">
+							<table border="1" width="100%">
 								<tr>
-									<th colspan="2" class="tour-search text-uppercase">
+									<th colspan="6" class="tour-search text-uppercase">
 										<center>Tour Details</center></th>
 								</tr>
 								<tr>
@@ -379,8 +379,6 @@ $tour_data = $fetch_data->fetch_assoc();
 											<?php echo $tour_data['tour_code']." - ".$tour_data['tour_name'];?>
 										</label>
 									</td>
-								</tr>
-								<tr>
 									<td>
 										<label class="tour-search text-uppercase">Duration</label>
 									</td>
@@ -389,8 +387,6 @@ $tour_data = $fetch_data->fetch_assoc();
 											<?php echo $tour_data['tour_duration'];?>
 										</label>
 									</td>
-								</tr>
-								<tr>
 									<td>
 										<label for="seat" class="tour-search text-uppercase">Tour Date</label>
 									</td>
@@ -398,6 +394,7 @@ $tour_data = $fetch_data->fetch_assoc();
 										<label id="text_tour_date" class="sele-place ml-3"></label>
 									</td>
 								</tr>
+								
 								<tr>
 									<td>
 										<label class="tour-search text-uppercase">Pickup Pont</label>
@@ -405,16 +402,12 @@ $tour_data = $fetch_data->fetch_assoc();
 									<td>
 										<label id="text_pickup" class="sele-place ml-3"></label>
 									</td>
-								</tr>
-								<tr>
 									<td>
 										<label class="tour-search text-uppercase">Drop Point</label>
 									</td>
 									<td>
 										<label id="text_drop" class="sele-place ml-3"></label>
 									</td>
-								</tr>
-								<tr>
 									<td>
 										<label class="tour-search text-uppercase">Tour Type</label>
 									</td>
@@ -422,57 +415,65 @@ $tour_data = $fetch_data->fetch_assoc();
 										<label id="text_tour_type" class="sele-place ml-3"></label>
 									</td>
 								</tr>
+								
 							</table>
-							<BR>
-
-							<table border="2">
-								<tr>
-									<th colspan="2" class="tour-search text-uppercase"><center>Contact details</center></th>
-								</tr>
-								<tr>
-									<td>
-										<label class="tour-search text-uppercase">Name</label>
-									</td>
-									<td>
-										<label id="text_contact_name" class="sele-place ml-3"></label>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label class="tour-search text-uppercase">Phone No.</label>
-									</td>
-									<td>
-										<label id="text_phone" class="sele-place ml-3"></label>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label class="tour-search text-uppercase">Email</label>
-									</td>
-									<td>
-										<label id="text_email" class="sele-place ml-3"></label>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label class="tour-search text-uppercase">Address</label>
-									</td>
-									<td>
-										<label id="text_address" class="sele-place ml-3"></label>
-									</td>
-								</tr>
-							</table>
-						<BR>
 						</div>
-						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-							<table border="2" id="text_passenger"></table>
-							<BR>
-							<table border="2" id="text_rooms"></table>
-							<BR>
-							<table border="2" id="text_cost"></table>
+						<div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 pad-none">
+							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-4">
+									<table border="1" width="100%">
+										<tr>
+											<th colspan="6" class="tour-search text-uppercase"><center>Contact details</center></th>
+										</tr>
+										<tr>
+											<td>
+												<label class="tour-search text-uppercase">Name</label>
+											</td>
+											<td>
+												<label id="text_contact_name" class="sele-place ml-3"></label>
+											</td>
+											<td>
+												<label class="tour-search text-uppercase">Phone No.</label>
+											</td>
+											<td>
+												<label id="text_phone" class="sele-place ml-3"></label>
+											</td>
+											<td>
+												<label class="tour-search text-uppercase">Email</label>
+											</td>
+											<td>
+												<label id="text_email" class="sele-place ml-3"></label>
+											</td>
+										</tr>
+																			
+										<tr>
+											<td>
+												<label class="tour-search text-uppercase">Address</label>
+											</td>
+											<td colspan="5">
+												<label id="text_address" class="sele-place ml-3"></label>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2">
+									<table border="1" id="text_passenger" width="100%"></table>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 pad-none">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pad-none mb-3">
+									<table border="1" width="100%" id="text_cost"></table>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pad-none">
+									<table border="1" id="text_rooms" width="100%"></table>
+								</div>
+							</div>
 						</div>
+						
+<!--Contact Details-->
 
 
+<!--Contact Details-->
 					</div>
 					<BR>
 					<center>

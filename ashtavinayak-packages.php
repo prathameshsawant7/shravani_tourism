@@ -46,23 +46,31 @@ session_start();
             while($tour_data = $fetch_data->fetch_assoc()){
                //	 print_r($tour_data);
             ?>
-			<div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-4">
-				<div class="card card-bor">
-			   		 <a href="ashtvinayak-package-detail.php?tour_id=<?php echo $tour_data['id'];?>" border="0px"><img class="card-img-top card-img-bor-rad img-fluid" src="images/ashtvinayak01.jpg" alt="Card image" style="width:100%"></a>
-			   		 <div class="card-body ca-bo row">
-		      		<div class="card-title tx-al-le text-uppercase col-sm-8">
-		      			<?php echo $tour_data['tour_name'];?><br>
-		      		</div>
-		      		<div class="card-title tx-al-ri text-uppercase col-sm-4 nopadd-mar"><?php echo $tour_data['tour_duration'];?></div>
-		      		<!-- <p class="card-text ca-tx pl-3">Shastrokt Ashtavinayak Yatra...3N/4D</p> -->
-		      	 </div>
-	  			</div>
+            
+			<div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-5">
+				<a href="ashtvinayak-package-detail.php?tour_id=<?php echo $tour_data['id'];?>" border="0px">
+			   		 	<img src="images/ashtvinayak0112.jpg" class="img-thumbnail card-img-bor-rad img-fluid" alt="Cinque Terre"  style="width:95%">
+			   		 </a>
 			</div>
-			<?php
+			<div class="col-12 col-sm-8 col-md-8 col-lg-8 mb-5">
+					<div class="tx-al-le text-uppercase col-sm-12 col-md-12 col-lg-12 nopadd-mar"><?php echo $tour_data['tour_name'];?><br><br></div>
+		      		
+		      		<div class="ca-tx nopadd-mar"><?php echo $tour_data['tour_name'];?><?php echo $tour_data['tour_duration'];?><br>Tour Code:
+						STMT-008 / SHASTROKT ASHTAVINAYAK YATRA<br>
+						वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।
+						निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥ Shashtrokt Ashtavinayak Yatra with Shravani Tourism. All Ashtagapati is called Swayambhu Ganpati. These eight very ancient temples are also known as Lord Shakti Peeth of Lord Ganesha. The Darshan Yatra of these temples with Shastrokt Puja is also known as Shastrokt Ashtavinayak Yatra.</div>
+						<div class="nopadd-mar mt-5"><a href="ashtvinayak-package-detail.php?tour_id=<?php echo $tour_data['id'];?>"><button class="btn btn-default more-det">More Details</button></a></div>
+			</div>
+				
+	  		<?php
 			}
-			?>
-			</div>
+			?>	
+		</div>
+		
+
+			
 	</div>
+</div>
 	<!--Pagination-->
 	<div class="col- col-sm-12 col-md-12 col-lg-12">
 		<ul class="pagination pagination-sm">
