@@ -32,23 +32,26 @@ else
 if(isset($_POST['id']) && $_POST['id'] != '')
     $filter  .= "AND t.id = ".$_POST['id']." ";
 
-if(isset($_POST['tour_id']) && $_POST['tour_id'] != '')
-    $filter  .= "AND t.tour_id = ".$_POST['tour_id']." ";
+if(isset($_POST['ticket']) && $_POST['ticket'] != '')
+    $filter  .= "AND t.ticket = ".$_POST['ticket']." ";
 
-if(isset($_POST['date']) && $_POST['date'] != '')
-    $filter  .= "AND t.date LIKE '%".$_POST['date']."%' ";
+if(isset($_POST['tour_date']) && $_POST['tour_date'] != '')
+    $filter  .= "AND t.tour_date LIKE '%".$_POST['tour_date']."%' ";
 
-if(isset($_POST['bus']) && $_POST['bus'] != '')
-    $filter  .= "AND t.bus LIKE '%".$_POST['bus']."%' ";
+if(isset($_POST['tour_date']) && $_POST['tour_date'] != '')
+    $filter  .= "AND t.tour_date LIKE '%".$_POST['tour_date']."%' ";
 
-if(isset($_POST['seats']) && $_POST['seats'] != '')
-    $filter  .= "AND t.seats LIKE '%".$_POST['seats']."%' ";
+if(isset($_POST['tour_type']) && $_POST['tour_type'] != '')
+    $filter  .= "AND t.tour_type LIKE '%".$_POST['tour_type']."%' ";
 
-if(isset($_POST['pickup_point']) && $_POST['pickup_point'] != '')
-    $filter  .= "AND t.pickup_point LIKE '%".$_POST['pickup_point']."%' ";
+if(isset($_POST['seat_no']) && $_POST['seat_no'] != '')
+    $filter  .= "AND t.seat_no LIKE '%".$_POST['seat_no']."%' ";
 
-if(isset($_POST['travellers']) && $_POST['travellers'] != '')
-    $filter  .= "AND t.travellers LIKE '%".$_POST['travellers']."%' ";
+if(isset($_POST['tour_pickup']) && $_POST['tour_pickup'] != '')
+    $filter  .= "AND t.tour_pickup LIKE '%".$_POST['tour_pickup']."%' ";
+
+// if(isset($_POST['travellers']) && $_POST['travellers'] != '')
+//     $filter  .= "AND t.travellers LIKE '%".$_POST['travellers']."%' ";
 
 if(isset($_POST['status']) && $_POST['status'] != '')
     $filter  .= "AND t.status LIKE '%".$_POST['status']."%' ";
@@ -59,11 +62,11 @@ if(isset($_POST['processed_by']) && $_POST['processed_by'] != '')
 if(isset($_POST['added_by']) && $_POST['added_by'] != '')
     $filter  .= "AND t.added_by LIKE '%".$_POST['added_by']."%' ";
 
-if(isset($_POST['updated_by']) && $_POST['updated_by'] != '')
-    $filter  .= "AND t.updated_by LIKE '%".$_POST['updated_by']."%' ";
+if(isset($_POST['processed_by']) && $_POST['processed_by'] != '')
+    $filter  .= "AND t.processed_by LIKE '%".$_POST['processed_by']."%' ";
 
-if(isset($_POST['active']) && $_POST['active'] != '')
-    $filter  .= "AND t.active = ".$_POST['active']." ";
+// if(isset($_POST['active']) && $_POST['active'] != '')
+//     $filter  .= "AND t.active = ".$_POST['active']." ";
 
 
 if(isset($_POST['arrangeOrder'])){
@@ -73,7 +76,7 @@ else{
     $OrderBy = "t.id DESC";
 }
 
-$query = "SELECT COUNT(*) FROM ashtavinayak_orders AS t WHERE ".$filter;
+$query = "SELECT COUNT(*) FROM ashtavinayak_bookings AS t WHERE ".$filter;
 $results = $con->query($query);
 
 
@@ -84,10 +87,9 @@ $total_pages = ceil($get_total_rows[0]/$item_per_page);
 //position of records
 $page_position = (($page_number-1) * $item_per_page);
 
-$query = "SELECT o.id,t.tour_code,o.date,o.bus,o.seats,o.pickup_point,o.travellers,o.status,o.processed_by,o.added_by,o.updated_by "
-            . "FROM ashtavinayak_orders AS o "
+$query = "SELECT o.id,o.ticket,t.tour_code,o.tour_date,o.tour_type,o.seat_no,o.tour_pickup,o.tour_drop,o.seat_data,o.room_data,o.total_cost,o.added_by,o.status,o.processed_by,o.processed_on "
+            . "FROM ashtavinayak_bookings AS o "
             . "LEFT JOIN tours as t ON t.id = o.tour_id "
-            . "LEFT JOIN customers as c ON o.travellers = c.id "
             . "WHERE ".$filter." "
             . "ORDER BY $OrderBy LIMIT $page_position, $item_per_page";
 
@@ -102,29 +104,50 @@ $count = 1;
 
 while($order_data = $fetch_data->fetch_assoc()){ //fetch values
     $count++;
-    $active = $order_data['active'] ? 'Yes' : 'No';
+   // $active = $order_data['active'] ? 'Yes' : 'No';
     $processed_by = $order_data['processed_by'] == 0 ? '-' : $order_data['processed_by'];
     $added_by = $order_data['added_by'] == 0 ? '-' : $order_data['added_by'];
-    $updated_by = $order_data['updated_by'] == 0 ? '-' : $order_data['updated_by'];
+    $processed_on = $order_data['processed_on'] == 0 ? '-' : $order_data['processed_on'];
 
-    $query = "SELECT GROUP_CONCAT(name) as name FROM customers where id IN (".$order_data['travellers'].")";
-    $travellers_data    = mysqli_query($con,$query);
-    $travellers         = $travellers_data->fetch_assoc();
-    $travellers         = str_replace(',', ',<br />', $travellers['name']);
+    // $query = "SELECT GROUP_CONCAT(name) as name FROM customers where id IN (".$order_data['travellers'].")";
+    // $travellers_data    = mysqli_query($con,$query);
+    // $travellers         = $travellers_data->fetch_assoc();
+    // $travellers         = str_replace(',', ',<br />', $travellers['name']);
+    $seat_data = json_decode($order_data['seat_data'],true);
+    $seat_text = '';
+    foreach ($seat_data as $key => $value) {
+        $seat_text = $seat_text.$value['name']." [".$value['age']." , ".$value['gender']."]<BR>";
+    }
+
+    $room_data = json_decode($order_data['room_data'],true);
+    $room_text = '';
+    $room_counter = 1;
+    $total = 0;
+    foreach ($room_data as $key => $value) {
+        $room_text = $room_text."Room ".$room_counter .":<BR>[".$value['adult']." A | ".$value['child']." C]<BR>";
+        $total += $value['adult']+$value['child'];
+        $room_counter++;
+    }
+    $room_text = $room_text."Total: ".$total."<BR>";
 
     $listingHtml .= <<<HEREDOC
     <tr id="tr_{$order_data['id']}" style="border:1px solid #000000;">
         <td><center><label>{$order_data['id']}</label></center></td>
+        <td><center><label>{$order_data['ticket']}</label></center></td>
         <td><center><label>{$order_data['tour_code']}</label></center></td>
-        <td><center><label>{$order_data['date']}</label></center></td>
-        <td><center><label>{$order_data['bus']}</label></center></td>
-        <td><center><label>{$order_data['seats']}</label></center></td>
-        <td><center><label>{$order_data['pickup_point']}</label></center></td>
-        <td><center><label>{$travellers}</label></center></td>
+        <td><center><label>{$order_data['tour_date']}</label></center></td>
+        <td><center><label>{$order_data['tour_type']}</label></center></td>
+        <td><center><label>{$order_data['seat_no']}</label></center></td>
+        <td><center><label>{$order_data['tour_pickup']}</label></center></td>
+        <td><center><label>{$order_data['tour_drop']}</label></center></td>
+        <td><center><label>{$seat_text}</label></center></td>
+        <td><center><label>{$room_text}</label></center></td>
+        <td><center><label>{$order_data['total_cost']}</label></center></td>
+        <td><center><label>{$added_by}</label></center></td>
         <td><center><label>{$order_data['status']}</label></center></td>
         <td><center><label>{$processed_by}</label></center></td>
-        <td><center><label>{$added_by}</label></center></td>
-        <td><center><label>{$updated_by}</label></center></td>
+        <td><center><label>{$processed_on}</label></center></td>
+        <td><center><a href="../../receipt.php?ticket={$order_data['ticket']}"  target="_blank">Receipt</a></center></td>
          <td>
             <center>
                 <input type="button" class="small button" value="Action" onclick="" style="margin-bottom: -5px;" />
@@ -174,28 +197,48 @@ echo <<<HEREDOC
                 <input type="text" id="id" class="filter" placeholder="ID" value=""/>
             </td>
             <td>
+                <center><label><b>Ticket</b></label></center>
+                <input type="text" id="ticket" class="filter" placeholder="Ticket" name="ticket"/>
+            </td>
+            <td>
                 <center><label><b>Tour ID</b></label></center>
                 <input type="text" id="tour_id" class="filter" placeholder="Tour ID"  name="tour_id"/>
             </td>
             <td>
                 <center><label><b>Date</b></label></center>
-                <input type="text" id="date" class="filter" placeholder="Date" name="date"/>
+                <input type="text" id="tour_date" class="filter" placeholder="Date" name="tour_date"/>
             </td>
             <td>
-                <center><label><b>Bus</b></label></center>
-                <input type="text" id="bus" class="filter" placeholder="Bus" name="bus"/>
+                <center><label><b>Tour Type</b></label></center>
+                <input type="text" id="tour_type" class="filter" placeholder="Tour Type" name="tour_type"/>
             </td>
             <td>
                 <center><label><b>Seats</b></label></center>
-                <input type="text" id="seats" class="filter" placeholder="Seats" name="seats"/>
+                <input type="text" id="seat_no" class="filter" placeholder="Seats" name="seat_no"/>
             </td>
             <td>
                 <center><label><b>Pickup Points</b></label></center>
-                <input type="text" id="pickup_point" class="filter" placeholder="Pickup Points"  name="pickup_point"/>
+                <input type="text" id="tour_pickup" class="filter" placeholder="Pickup Points"  name="tour_pickup"/>
+            </td>
+            <td>
+                <center><label><b>Drop Points</b></label></center>
+                <input type="text" id="tour_drop" class="filter" placeholder="Drop Points"  name="tour_drop"/>
             </td>
             <td>
                 <center><label><b>Travellers</b></label></center>
-                <input type="text" id="travellers" class="filter" placeholder="Travellers" name="travellers"/>
+                <input type="text" id="seat_data" class="filter" placeholder="Travellers" name="seat_data"/>
+            </td>
+            <td>
+                <center><label><b>Rooms</b></label></center>
+                <input type="text" id="room_data" class="filter" placeholder="Travellers" name="room_data"/>
+            </td>
+            <td>
+                <center><label><b>Total Cost</b></label></center>
+                <input type="text" id="total_cost" class="filter" placeholder="Total Cost"  name="total_cost"/>
+            </td>
+            <td>
+                <center><label><b>Added By</b></label></center>
+                <input type="text" id="added_by" class="filter" placeholder="Added By" name="added_by"/>
             </td>
             <td>
                 <center><label><b>Status</b></label></center>
@@ -206,12 +249,11 @@ echo <<<HEREDOC
                 <input type="text" id="processed_by" class="filter" placeholder="Processed By" name="processed_by"/>
             </td>
             <td>
-                <center><label><b>Added By</b></label></center>
-                <input type="text" id="added_by" class="filter" placeholder="Added By" name="added_by"/>
+                <center><label><b>Processed On</b></label></center>
+                <input type="text" id="processed_on" class="filter" placeholder="Processed On" name="processed_on"/>
             </td>
             <td>
-                <center><label><b>Updated By</b></label></center>
-                <input type="text" id="updated_by" class="filter" placeholder="Updated By" name="updated_by"/>
+                <center><label><b>Download</b></label></center>
             </td>
             <td>
                 <center>

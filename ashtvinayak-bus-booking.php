@@ -614,6 +614,7 @@ function proceed_to_pay(){
 	request['seat_data'] = {};
 	counter = 0;
 	$('.seat_row').each(function(){
+		seat = $(this).attr('row');
 		request['seat_data'][counter] = {}
 	    request['seat_data'][counter]['seat'] = $(this).attr('row');
 	    request['seat_data'][counter]['name'] = $('#p_name_'+seat).val();

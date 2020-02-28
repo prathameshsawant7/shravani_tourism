@@ -3,8 +3,7 @@ include_once("configs/defines.php");
 include("configs/settings.php");
 $est =new settings();
 $con=$est->connection();
-session_start(); 
-
+session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,16 +46,16 @@ session_start();
             $confirmed = true;
             $razorpay_payment_id = $_POST['razorpay_payment_id'];
             $razorpay_order_id = $_POST['razorpay_order_id'];
+            $ticket = $result['ticket'];
             $name = $result['contact_name'];
             $phone = $result['contact_phone'];
             $email = $result['contact_email'];
             $total_cost = $result['total_cost'];
 
-            $query = "INSERT INTO payments(booking_id,razorpay_payment_id,razorpay_order_id,amount) VALUE 
+            $query = "INSERT IGNORE INTO payments(booking_id,razorpay_payment_id,razorpay_order_id,amount) VALUE 
           (".$booking_id.",'".$razorpay_payment_id."','".$razorpay_order_id."',".$total_cost.")";
             mysqli_query($con,$query);
-            echo $id = mysqli_insert_id($con);
-            unset($_SESSION['booking_id']);
+            $id = mysqli_insert_id($con);
           }
         }
       if($confirmed){
@@ -71,6 +70,12 @@ session_start();
               </center>
             </td>
            </tr>
+        </thead>
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Ticket no.</th>
+            <td><?php echo $ticket;?></td>
+          </tr>
         </thead>
         <thead class="thead-dark">
           <tr>
@@ -97,7 +102,7 @@ session_start();
           </tr>
         </thead>
       </table>
-        
+      <h2><center><button id="back" type="button" class="btn btn-primary">Download Receipt</button></center></h2>
 
     </div>
 <?php

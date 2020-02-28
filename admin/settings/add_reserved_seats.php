@@ -38,13 +38,13 @@ $con=$est->connection();
                     $reserved_data  = $fetch_data->fetch_assoc();
 
 
-                    $query = "SELECT * FROM buses WHERE tour_id = ".$reserved_data['tour_id'];
+                    $query = "SELECT * FROM tour_type WHERE tour_id = $id;";
 				    $fetch_data = mysqli_query($con,$query);
 				    $data = [];$i=0;
 				    $bus_html = '';
 				    while($order_data = $fetch_data->fetch_assoc()){
-				    	$selected = ($order_data['id'] == $reserved_data['bus_id'])?'selected=selected':'';
-				        $bus_html .= "<option value=".$order_data['id']." ".$selected.">".$order_data['name']." - [Rs.".$order_data['price']."]</option>";
+				    	$selected = ($order_data['identifier'] == $reserved_data['tour_type'])?'selected=selected':'';
+				        $bus_html .= "<option value=".$order_data['identifier']." ".$selected.">".$order_data['identifier']."</option>";
 				    }
 
                     $page_action= $_GET['action'];
@@ -86,7 +86,7 @@ $con=$est->connection();
                        	<tr>
                             <th style="border:1px solid #000000;"><label>Tour: </label></th>
                             <td > 
-                            	<select id="tour_id" name="tour_id" onchange="getBusesByTourID()">
+                            	<select id="tour_id" name="tour_id" onchange="getTourTypesByTourID()">
                             		<option value="">Please Select</option>
 	                            <?php
 	                            	$query = "SELECT id,tour_code,tour_name FROM tours WHERE tour_name LIKE '%ASHTAVINAYAK%';";
@@ -104,9 +104,9 @@ $con=$est->connection();
                             </td>
                         </tr>
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Bus: </label></th>
+                            <th style="border:1px solid #000000;"><label>Tour Type: </label></th>
                             <td > 
-                            	<select id="bus" name="bus">
+                            	<select id="tour_type" name="tour_type">
                             		<?php echo $bus_html; ?>
 	                        	</select>
                             </td>
@@ -221,19 +221,19 @@ $con=$est->connection();
       //   		}
       //   	?>
 
-        	function getBusesByTourID(){
+        	function getTourTypesByTourID(){
         		var tour_id = $('#tour_id').val();
         		if(tour_id != ''){
-        			 $.get("ajax_calls.php",{request:'getBusesByTourID',id:tour_id},function(data) {
-        			 	var buses = JSON.parse(data);
+        			 $.get("ajax_calls.php",{request:'getTourTypesByTourID',id:tour_id},function(data) {
+        			 	var tour_type = JSON.parse(data);
         			 	select_html = "";
-        			 	Object.keys(buses).forEach(function (key) {
+        			 	Object.keys(tour_type).forEach(function (key) {
         			 		console.log("dssd"+key);
-						   select_html += '<option value="'+buses[key]['id']+'">';
-						   select_html += buses[key]['name']+ ' - [Rs.'+buses[key]['price']+']';
+						   select_html += '<option value="'+tour_type[key]['identifier']+'">';
+						   select_html += tour_type[key]['identifier'];
 						   select_html += '</option>';
 						});
-						$('#bus').html(select_html);
+						$('#tour_type').html(select_html);
         			 });
         		}
         	}

@@ -33,13 +33,14 @@ $con=$est->connection();
                 if(!empty($_GET['msg'])){
                     echo $_GET['msg'];
                 }
-
-
+                $query      = "SELECT * FROM configurations WHERE id=1;";
+                $fetch_data = mysqli_query($con,$query);
+                $data  = $fetch_data->fetch_assoc();
             ?>
             </h4>
         </center>
         <form action="insert_tour.php" name="register" method="post" enctype="multipart/form-data">
-        <input type="hidden" id="data" name="data" value="export_bus_dates" />
+        <input type="hidden" id="data" name="data" value="configurations" />
         <div class="medium-9 columns">
             <div class="tabs-content vertical" data-tabs-content="example-vert-tabs" style="margin-left: 30%;">
                 <BR>
@@ -47,16 +48,34 @@ $con=$est->connection();
                     <tbody>
                         <tr>
                            <th colspan="2">
-                                <h3 style="color: #000"><center>Export Bus Dates</center></h3>
+                                <h3 style="color: #000"><center>Configurations</center></h3>
                 
                            </th> 
                         </tr>
                         
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Select CSV File: </label></th>
+                            <th style="border:1px solid #000000;"><label>GST Percent: </label></th>
                             <td> 
-                                <input type="file" name="file" id="file" class="input-large">
-                                <input type="submit" class="small button" value="Submit" style="margin-bottom: -4px;"/>
+                                <input type="text" id="gst" class="filter" placeholder="GST Percent" name="gst" value="<?php echo $data['gst'];?>"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="border:1px solid #000000;"><label>Service Charge: </label></th>
+                            <td> 
+                                <input type="text" id="service_charge" class="filter" placeholder="Service Charge" name="service_charge" value="<?php echo $data['service_charge'];?>"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="border:1px solid #000000;"><label>Discount: </label></th>
+                            <td> 
+                                <input type="text" id="discount" class="filter" placeholder="Discount" name="discount" value="<?php echo $data['discount'];?>"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <center>
+                                    <input type="submit" class="small button" value="Submit" style="margin-bottom: -4px;"/>
+                                </center>
                             </td>
                         </tr>
                     </tbody>

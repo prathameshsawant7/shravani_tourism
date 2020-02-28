@@ -20,13 +20,14 @@
       <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
           <li><a href='\<?php echo ADMINROOT;?>/home/index.php'><span>Home</span></a></li>
+          <li><a href='\<?php echo ADMINROOT;?>\settings\index.php'><span>Packages</span></a></li>
           <li class='has-sub'><a href='#'><span>Settings</span></a>
               <ul class="menu vertical" style="z-index: 9999999;">
-                    <li><a href='\<?php echo ADMINROOT;?>\settings\index.php'><span>Packages</span></a></li>
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\configurations.php'><span>Package Configurations</span></a></li>
                     <li>
                         <a href='#'><span>Bus Settings</span></a>
                         <ul class="menu vertical" style="z-index: 9999999;">
-                            <li><a href='\<?php echo ADMINROOT;?>\settings\export_bus_dates.php'><span>Export Bus Dates</span></a></li>
+                            <li><a href='\<?php echo ADMINROOT;?>\settings\import_bus_dates.php'><span>Import Bus Dates</span></a></li>
                             <li><a href='\<?php echo ADMINROOT;?>\settings\reserved_seats.php'><span>Reserve Seats</span></a></li>
                         </ul>
                         

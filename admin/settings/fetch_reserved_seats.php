@@ -61,10 +61,9 @@ $query = "SELECT COUNT(*) FROM reserved_seats AS t "
         . "LEFT JOIN admin_users as a ON t.added_by = a.id "
         . "LEFT JOIN admin_users as u ON t.updated_by = u.id "
         . "LEFT JOIN tours as p ON p.id = t.tour_id "
-        . "LEFT JOIN buses as b ON b.id = t.bus_id "
         . "WHERE ".$filter;
 $results = $con->query($query);
-
+//exit;
 
 $get_total_rows = $results->fetch_row(); //hold total records in variable
 
@@ -73,20 +72,17 @@ $total_pages = ceil($get_total_rows[0]/$item_per_page);
 //position of records
 $page_position = (($page_number-1) * $item_per_page);
 
-$query = "SELECT t.id,t.date,p.tour_code,b.name,REPLACE(t.seats, '|', ' , ') as seats,a.name as added_by,u.name as updated_by "
+$query = "SELECT t.id,t.date,p.tour_code,t.tour_type,REPLACE(t.seats, '|', ' , ') as seats,a.name as added_by,u.name as updated_by "
             . "FROM reserved_seats AS t "
             . "LEFT JOIN admin_users as a ON t.added_by = a.id "
             . "LEFT JOIN admin_users as u ON t.updated_by = u.id "
             . "LEFT JOIN tours as p ON p.id = t.tour_id "
-            . "LEFT JOIN buses as b ON b.id = t.bus_id "
             . "WHERE ".$filter." "
             . "ORDER BY $OrderBy LIMIT $page_position, $item_per_page";
 
 
 //Limit our results within a specified range.
 $fetch_data = mysqli_query($con,$query);
-//$results->execute(); //Execute prepared Query
-//$results->bind_result($id,$id_tour,$tour_name,$tour_location_category_name,$tour_type,$night_days,$price); //bind variables to prepared statement
 
 $listingHtml = '';
 $count = 1;
@@ -98,7 +94,7 @@ while($reserved_seats_data = $fetch_data->fetch_assoc()){ //fetch values
         <td><center><label>{$reserved_seats_data['id']}</label></center></td>
         <td><center><label>{$reserved_seats_data['date']}</label></center></td>
         <td><center><label>{$reserved_seats_data['tour_code']}</label></center></td>
-        <td><center><label>{$reserved_seats_data['name']}</label></center></td>
+        <td><center><label>{$reserved_seats_data['tour_type']}</label></center></td>
          <td><center><label>{$reserved_seats_data['seats']}</label></center></td>
         <td><center><label>{$reserved_seats_data['added_by']}</label></center></td>
         <td><center><label>{$reserved_seats_data['updated_by']}</label></center></td>

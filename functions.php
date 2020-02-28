@@ -27,11 +27,15 @@ class Functions
 			$child_rate = 0;
 			$adult_single_rate = 0;
 
-			$service_charge = 200;
-			//$service_charge_off = 200;
-			$gst = 10;
-			$discount = 100;
-			
+
+			$query = "SELECT * FROM configurations WHERE id=1;";
+			$result = mysqli_query($this->con,$query);
+			$configs = $result->fetch_assoc();
+
+			$service_charge = $configs['service_charge'];
+			$gst = $configs['gst'];
+			$discount = $configs['discount'];
+
 
 			$query = "SELECT identifier, rate FROM tour_rates WHERE tour_id=".$tour_id." && hotel_type='".$hotel_type."';";
 
@@ -106,6 +110,10 @@ class Functions
 
 		}
 
+	}
+
+	function generate_ticket(){
+		return strtoupper(substr(sha1(time()), 0, 20));
 	}
 }
 

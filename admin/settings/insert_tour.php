@@ -152,7 +152,7 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
     $id             = mysqli_escape_string($con,$_POST['id']);
     $date          	= mysqli_escape_string($con,$_POST['date']);
     $tour_id        = mysqli_escape_string($con,$_POST['tour_id']);
-    $bus_id         = mysqli_escape_string($con,$_POST['bus']);
+    $tour_type      = mysqli_escape_string($con,$_POST['tour_type']);
     $user_id        = $_SESSION['cID'];
     $page_action    = mysqli_escape_string($con,$_POST['page_action']);
     $seats = '';
@@ -161,15 +161,15 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	}
 
     if($page_action == 'edit'){
-       $query = "UPDATE reserved_seats SET date='".$date."',tour_id='".$tour_id."',bus_id='".$bus_id."',seats='".$seats."',updated_by=".$user_id." WHERE id=".$id;
+       $query = "UPDATE reserved_seats SET date='".$date."',tour_id='".$tour_id."',tour_type='".$tour_type."',seats='".$seats."',updated_by=".$user_id." WHERE id=".$id;
     }else{
-       $query = "INSERT INTO reserved_seats (date,tour_id,bus_id,seats,added_by,updated_by) VALUES ('".$date."',".$tour_id.",".$bus_id.",'".$seats."',".$user_id.",".$user_id.");";
+       $query = "INSERT INTO reserved_seats (date,tour_id,tour_type,seats,added_by,updated_by) VALUES ('".$date."',".$tour_id.",'".$tour_type."','".$seats."',".$user_id.",".$user_id.");";
     }
     mysqli_query($con,$query);
     $action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
     $id = ($id == '')? mysqli_insert_id($con):$id;
     header("Location:add_reserved_seats.php?id=".$id.$action);
-}else if(isset($_POST['data']) && $_POST['data'] == "export_bus_dates") {
+}else if(isset($_POST['data']) && $_POST['data'] == "import_bus_dates") {
 	$filename=$_FILES["file"]["tmp_name"];
 	$user_id = $_SESSION['cID'];
 	$msg = "";
@@ -179,15 +179,15 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 		while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
 			if($counter != 0){
 				$tour_id = $getData[0];
-				$bus_id = $getData[1];
+				$tour_type = $getData[1];
 				$is_ashtavinayak = $getData[2];
 				$date = $getData[3];
-				$query      = "SELECT count(tour_id) AS count FROM bus_dates WHERE tour_id=$tour_id AND bus_id=$bus_id AND is_ashtavinayak='$is_ashtavinayak' AND date='$date';";
+				$query      = "SELECT count(tour_id) AS count FROM bus_dates WHERE tour_id=$tour_id AND tour_type='$tour_type' AND is_ashtavinayak='$is_ashtavinayak' AND date='$date';";
 	            $fetch_data = mysqli_query($con,$query);echo "<BR>";
 	            $records  = $fetch_data->fetch_assoc();
 	            if($records['count']<1){
-	            	$sql = "INSERT into bus_dates (tour_id,bus_id,is_ashtavinayak,date,added_by) 
-				   values (".$tour_id.",".$bus_id.",'".$is_ashtavinayak."','".$date."',".$user_id.")";
+	            	$sql = "INSERT into bus_dates (tour_id,tour_type,is_ashtavinayak,date,added_by) 
+				   values (".$tour_id.",'".$tour_type."','".$is_ashtavinayak."','".$date."',".$user_id.")";
 					$result = mysqli_query($con, $sql);
 					if(!isset($result)){
 					    $msg = "Invalid File:Please Upload CSV File.";    
@@ -205,6 +205,15 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	if($msg == ''){
 		$msg = "Bus dates has been successfully Imported.";
 	}
-	header("Location:export_bus_dates.php?msg=".$msg); 
-}
+	header("Location:import_bus_dates.php?msg=".$msg); 
+	}else if(isset($_POST['data']) && $_POST['data'] == "configurations") {
+		$user_id = $_SESSION['cID'];
+		$gst            = mysqli_escape_string($con,$_POST['gst']);
+	    $service_charge	= mysqli_escape_string($con,$_POST['service_charge']);
+	    $discount       = mysqli_escape_string($con,$_POST['discount']);
+
+	    echo $query = "UPDATE configurations SET gst=".$gst.",service_charge=".$service_charge.",discount=".$discount.",updated_by=".$user_id." WHERE id=1";
+	    $result = mysqli_query($con, $query);
+	    header("Location:configurations.php?msg=Updated successfully");
+	}
 ?>
