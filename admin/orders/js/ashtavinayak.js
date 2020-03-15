@@ -30,7 +30,7 @@ function getListing(page,order){
     var pickup_point                    = (typeof $("#pickup_point").val() != 'undefined') ? trim($("#pickup_point").val()) : '';
     var travellers                      = (typeof $("#travellers").val() != 'undefined') ? trim($("#travellers").val()) : '';
     var status                          = (typeof $("#status").val() != 'undefined') ? trim($("#status").val()) : '';
-    var processed_by                    = (typeof $("#processed_by").val() != 'undefined') ? trim($("#processed_by").val()) : '';
+    var updated_by                    = (typeof $("#updated_by").val() != 'undefined') ? trim($("#updated_by").val()) : '';
     var added_by                        = (typeof $("#added_by").val() != 'undefined') ? trim($("#added_by").val()) : '';
     var updated_by                      = (typeof $("#updated_by").val() != 'undefined') ? trim($("#updated_by").val()) : '';
     var active                          = (typeof $("#active").val() != 'undefined') ? trim($("#active").val()) : '';
@@ -39,7 +39,7 @@ function getListing(page,order){
 
     $("#loading").show(); //show loading element
     $("#table_tour_list").html('');
-    $("#table_tour_list").load("fetch_ashtavinayak_list.php",{"arrangeOrder":arrangeOrder,"cRows":cRows,"page":page,"id":id,"tour_id":tour_id,"date":date,"bus":bus,"seats":seats,"pickup_point":pickup_point,"travellers":travellers,"status":status,"processed_by":processed_by,"added_by":added_by,"updated_by":updated_by}, function(){ //get content from PHP page
+    $("#table_tour_list").load("fetch_ashtavinayak_list.php",{"arrangeOrder":arrangeOrder,"cRows":cRows,"page":page,"id":id,"tour_id":tour_id,"date":date,"bus":bus,"seats":seats,"pickup_point":pickup_point,"travellers":travellers,"status":status,"updated_by":updated_by,"added_by":added_by,"updated_by":updated_by}, function(){ //get content from PHP page
         $("#loading").hide(); //once done, hide loading element
         $("#id").val(id);
         $("#tour_id").val(tour_id);
@@ -49,7 +49,7 @@ function getListing(page,order){
         $("#pickup_point").val(pickup_point);
         $("#travellers").val(travellers);
         $("#status").val(status);
-        $("#processed_by").val(processed_by);
+        $("#updated_by").val(updated_by);
         $("#added_by").val(added_by);
         $("#updated_by").val(updated_by);
         $("#cRows").val(cRows);

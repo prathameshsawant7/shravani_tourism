@@ -102,7 +102,11 @@ session_start();
           </tr>
         </thead>
       </table>
-      <h2><center><button id="back" type="button" class="btn btn-primary">Download Receipt</button></center></h2>
+      <h2>
+        <center>
+          <a href="receipt.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Receipt</a>
+        </center>
+      </h2>
 
     </div>
 <?php

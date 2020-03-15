@@ -61,7 +61,6 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	}else{
 		$display_image = '';
 	}
-	echo $display_image;
 	$tour_region = mysqli_escape_string($con,$_POST['tour_region']);
 	$tour_state = mysqli_escape_string($con,$_POST['tour_state']);
 	$tour_places = mysqli_escape_string($con,$_POST['tour_places']);
@@ -182,12 +181,13 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 				$tour_type = $getData[1];
 				$is_ashtavinayak = $getData[2];
 				$date = $getData[3];
-				$query      = "SELECT count(tour_id) AS count FROM bus_dates WHERE tour_id=$tour_id AND tour_type='$tour_type' AND is_ashtavinayak='$is_ashtavinayak' AND date='$date';";
+				$buses = $getData[4];
+				$query      = "SELECT count(tour_id) AS count FROM bus_dates WHERE tour_id=$tour_id AND tour_type='$tour_type' AND is_ashtavinayak='$is_ashtavinayak' AND date='$date' AND buses='$buses';";
 	            $fetch_data = mysqli_query($con,$query);echo "<BR>";
 	            $records  = $fetch_data->fetch_assoc();
 	            if($records['count']<1){
-	            	$sql = "INSERT into bus_dates (tour_id,tour_type,is_ashtavinayak,date,added_by) 
-				   values (".$tour_id.",'".$tour_type."','".$is_ashtavinayak."','".$date."',".$user_id.")";
+	            	$sql = "INSERT into bus_dates (tour_id,tour_type,is_ashtavinayak,date,buses,added_by) 
+				   values (".$tour_id.",'".$tour_type."','".$is_ashtavinayak."','".$date."','".$buses."',".$user_id.")";
 					$result = mysqli_query($con, $sql);
 					if(!isset($result)){
 					    $msg = "Invalid File:Please Upload CSV File.";    

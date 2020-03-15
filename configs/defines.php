@@ -8,7 +8,7 @@
  * Defines
  */
 
-$exec = 1; //0: local , 1:live
+$exec = 0; //0: local , 1:live
 define("EXEC", $exec);
 ini_set("display_errors",0);
 error_reporting(E_ALL);

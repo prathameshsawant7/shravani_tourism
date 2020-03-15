@@ -19,7 +19,7 @@ else
 
 
 
-$filter = '1 ';
+$filter = ' ';
 $OrderBy= "";
 
 
@@ -30,53 +30,53 @@ else
     $item_per_page = 10;
 
 if(isset($_POST['id']) && $_POST['id'] != '')
-    $filter  .= "AND t.id = ".$_POST['id']." ";
+    $filter  .= "AND o.id = ".$_POST['id']." ";
 
 if(isset($_POST['ticket']) && $_POST['ticket'] != '')
-    $filter  .= "AND t.ticket = ".$_POST['ticket']." ";
+    $filter  .= "AND o.ticket = ".$_POST['ticket']." ";
 
 if(isset($_POST['tour_date']) && $_POST['tour_date'] != '')
-    $filter  .= "AND t.tour_date LIKE '%".$_POST['tour_date']."%' ";
+    $filter  .= "AND o.tour_date LIKE '%".$_POST['tour_date']."%' ";
 
 if(isset($_POST['tour_date']) && $_POST['tour_date'] != '')
-    $filter  .= "AND t.tour_date LIKE '%".$_POST['tour_date']."%' ";
+    $filter  .= "AND o.tour_date LIKE '%".$_POST['tour_date']."%' ";
 
 if(isset($_POST['tour_type']) && $_POST['tour_type'] != '')
-    $filter  .= "AND t.tour_type LIKE '%".$_POST['tour_type']."%' ";
+    $filter  .= "AND o.tour_type LIKE '%".$_POST['tour_type']."%' ";
 
 if(isset($_POST['seat_no']) && $_POST['seat_no'] != '')
-    $filter  .= "AND t.seat_no LIKE '%".$_POST['seat_no']."%' ";
+    $filter  .= "AND o.seat_no LIKE '%".$_POST['seat_no']."%' ";
 
 if(isset($_POST['tour_pickup']) && $_POST['tour_pickup'] != '')
-    $filter  .= "AND t.tour_pickup LIKE '%".$_POST['tour_pickup']."%' ";
+    $filter  .= "AND o.tour_pickup LIKE '%".$_POST['tour_pickup']."%' ";
 
 // if(isset($_POST['travellers']) && $_POST['travellers'] != '')
 //     $filter  .= "AND t.travellers LIKE '%".$_POST['travellers']."%' ";
 
 if(isset($_POST['status']) && $_POST['status'] != '')
-    $filter  .= "AND t.status LIKE '%".$_POST['status']."%' ";
+    $filter  .= "AND o.status LIKE '%".$_POST['status']."%' ";
 
-if(isset($_POST['processed_by']) && $_POST['processed_by'] != '')
-    $filter  .= "AND t.processed_by LIKE '%".$_POST['processed_by']."%' ";
+if(isset($_POST['updated_by']) && $_POST['updated_by'] != '')
+    $filter  .= "AND o.updated_by LIKE '%".$_POST['updated_by']."%' ";
 
 if(isset($_POST['added_by']) && $_POST['added_by'] != '')
-    $filter  .= "AND t.added_by LIKE '%".$_POST['added_by']."%' ";
+    $filter  .= "AND o.added_by LIKE '%".$_POST['added_by']."%' ";
 
-if(isset($_POST['processed_by']) && $_POST['processed_by'] != '')
-    $filter  .= "AND t.processed_by LIKE '%".$_POST['processed_by']."%' ";
+if(isset($_POST['updated_by']) && $_POST['updated_by'] != '')
+    $filter  .= "AND o.updated_by LIKE '%".$_POST['updated_by']."%' ";
 
 // if(isset($_POST['active']) && $_POST['active'] != '')
 //     $filter  .= "AND t.active = ".$_POST['active']." ";
 
 
-if(isset($_POST['arrangeOrder'])){
-    $OrderBy = "t.id ".$_POST['arrangeOrder'];
+if(isset($_POST['arrangeOrder']) && $_POST['arrangeOrder']!=''){
+    $OrderBy = "o.updated_by ".$_POST['arrangeOrder'];
 }
 else{
-    $OrderBy = "t.id DESC";
+    $OrderBy = "o.updated_by DESC";
 }
 
-$query = "SELECT COUNT(*) FROM ashtavinayak_bookings AS t WHERE ".$filter;
+$query = "SELECT COUNT(*) FROM ashtavinayak_bookings AS t WHERE active=1 ".$filter;
 $results = $con->query($query);
 
 
@@ -87,10 +87,10 @@ $total_pages = ceil($get_total_rows[0]/$item_per_page);
 //position of records
 $page_position = (($page_number-1) * $item_per_page);
 
-$query = "SELECT o.id,o.ticket,t.tour_code,o.tour_date,o.tour_type,o.seat_no,o.tour_pickup,o.tour_drop,o.seat_data,o.room_data,o.total_cost,o.added_by,o.status,o.processed_by,o.processed_on "
+$query = "SELECT o.id,o.ticket,t.tour_code,o.tour_date,o.tour_type,o.seat_no,o.tour_pickup,o.tour_drop,o.seat_data,o.room_data,o.total_cost,o.added_by,o.status,o.updated_by,o.updated_on "
             . "FROM ashtavinayak_bookings AS o "
             . "LEFT JOIN tours as t ON t.id = o.tour_id "
-            . "WHERE ".$filter." "
+            . "WHERE o.active=1 ".$filter." "
             . "ORDER BY $OrderBy LIMIT $page_position, $item_per_page";
 
 //echo $query;exit;
@@ -105,9 +105,9 @@ $count = 1;
 while($order_data = $fetch_data->fetch_assoc()){ //fetch values
     $count++;
    // $active = $order_data['active'] ? 'Yes' : 'No';
-    $processed_by = $order_data['processed_by'] == 0 ? '-' : $order_data['processed_by'];
+    $updated_by = $order_data['updated_by'] == 0 ? '-' : $order_data['updated_by'];
     $added_by = $order_data['added_by'] == 0 ? '-' : $order_data['added_by'];
-    $processed_on = $order_data['processed_on'] == 0 ? '-' : $order_data['processed_on'];
+    $updated_on = $order_data['updated_on'] == 0 ? '-' : $order_data['updated_on'];
 
     // $query = "SELECT GROUP_CONCAT(name) as name FROM customers where id IN (".$order_data['travellers'].")";
     // $travellers_data    = mysqli_query($con,$query);
@@ -145,12 +145,12 @@ while($order_data = $fetch_data->fetch_assoc()){ //fetch values
         <td><center><label>{$order_data['total_cost']}</label></center></td>
         <td><center><label>{$added_by}</label></center></td>
         <td><center><label>{$order_data['status']}</label></center></td>
-        <td><center><label>{$processed_by}</label></center></td>
-        <td><center><label>{$processed_on}</label></center></td>
+        <td><center><label>{$updated_by}</label></center></td>
+        <td><center><label>{$updated_on}</label></center></td>
         <td><center><a href="../../receipt.php?ticket={$order_data['ticket']}"  target="_blank">Receipt</a></center></td>
          <td>
             <center>
-                <input type="button" class="small button" value="Action" onclick="" style="margin-bottom: -5px;" />
+                <a href="../settings/add_ashtavinayak_booking.php?ticket={$order_data['ticket']}" class="small button" style="margin-bottom: -5px;">Update Booking</a>
             </center>
         </td>
     </tr>
@@ -163,7 +163,7 @@ if(empty($listingHtml)){
 echo <<<HEREDOC
     <table border="4">
         <tr>
-           <th colspan="12">
+           <th colspan="17">
                 <h3 style="color: #000"><center>Ashtavinayak Orders</center></h3>
                 <section>
                     <label style="float: left">Number of rows to display: &nbsp;&nbsp;&nbsp;</label>
@@ -179,9 +179,7 @@ echo <<<HEREDOC
                         <option value="90">90</option>
                         <option value="100">100</option>
                     </select>
-                    <span style="float: left;padding-left: 22px;margin-top: -5px;">
-                        <a href="add_region.php" class="small button">Add New Region</a>
-                    </span>
+                    
 
                </section>
            </th> 
@@ -246,11 +244,11 @@ echo <<<HEREDOC
             </td>
             <td>
                 <center><label><b>Processed By</b></label></center>
-                <input type="text" id="processed_by" class="filter" placeholder="Processed By" name="processed_by"/>
+                <input type="text" id="updated_by" class="filter" placeholder="Processed By" name="updated_by"/>
             </td>
             <td>
                 <center><label><b>Processed On</b></label></center>
-                <input type="text" id="processed_on" class="filter" placeholder="Processed On" name="processed_on"/>
+                <input type="text" id="updated_on" class="filter" placeholder="Processed On" name="updated_on"/>
             </td>
             <td>
                 <center><label><b>Download</b></label></center>

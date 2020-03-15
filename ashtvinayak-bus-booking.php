@@ -8,6 +8,43 @@ session_start();
 $query = "SELECT * FROM tours WHERE id=".$_GET['tour_id'].";";
 $fetch_data = mysqli_query($con,$query);    
 $tour_data = $fetch_data->fetch_assoc();  
+
+
+if(isset($_GET['date'])){
+	$bus_no = isset($_COOKIE['bus_no'])?$_COOKIE['bus_no']:1;
+	$query = "SELECT GROUP_CONCAT(seat_no) as bookings FROM ashtavinayak_bookings WHERE tour_id=".$_GET['tour_id']." AND  tour_date='".$_GET['date']."' AND tour_type='".$_GET['type']."' AND bus_no=".$bus_no." AND active=1;";
+	$fetch_data = mysqli_query($con,$query);    
+	$bookings = $fetch_data->fetch_assoc(); 
+	//print_r($bookings);
+
+	$query = "SELECT REPLACE(GROUP_CONCAT(seats),'|',',') as reserved FROM reserved_seats WHERE tour_id=".$_GET['tour_id']." AND date='".$_GET['date']."' AND tour_type='".$_GET['type']."' AND bus_no=".$bus_no.";" ;
+	$fetch_data = mysqli_query($con,$query);    
+	$reserved = $fetch_data->fetch_assoc(); 
+	//print_r($reserved);
+
+	$booking_arr  = explode(',', $bookings['bookings']);
+	$reserved_arr = explode(',', $reserved['reserved']);
+	print_r($reserved_arr);
+
+	$total_filled_seats = (count($booking_arr)+count($reserved_arr));
+	if($bus_no == 1){
+		$bus_no = ($total_filled_seats >= 45)? 2:1;
+		setcookie("bus_no", $bus_no, time()+24*60*60);
+		($bus_no == 2)?location.reload():'';
+	}
+	// if($bus_no != 1){
+	// 	$bus_no = ($total_filled_seats >= 4)? 2:1;
+	// 	setcookie("bus_no", $bus_no, time()+24*60*60);
+	// 	if($bus_no == 2 and $_COOKIE['bus_no']!=2){	
+	// 		location.reload();
+	// 	}
+	// }
+	
+	
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -185,6 +222,12 @@ $tour_data = $fetch_data->fetch_assoc();
 									  for($j=$counter;$j>0;$j--){
 									  	$glapClass = ($counter-$j == 1 && $counter!=5)?'mr-bott sp-sty pt-1':'sp-sty pt-1';
 									  	$cStatus = ''; //[reserved,booked]
+									  	if(in_array($seatOrder[$i], $booking_arr)){
+									  		$cStatus = 'booked';
+									  	}else if(in_array($seatOrder[$i], $reserved_arr)){
+									  		$cStatus = 'reserved';
+									  	}
+
 									?>
 									    <label class="<?php echo $cStatus;?>">
 									     	<input id="seat_<?php echo $seatOrder[$i];?>" type="checkbox" class="cust-checkbox" >
@@ -239,7 +282,7 @@ $tour_data = $fetch_data->fetch_assoc();
 							        <th class="table-head" width="30%">Name</th>
 							        <th class="table-head" width="20%">Gender</th>
 							        <th class="table-head" width="15%">Age</th>
-							        <th class="table-head" width="20%">Cost</th>
+							        <th class="table-head" width="20%">Category</th>
 							      </tr>
 							    </thead>
 							    <tbody>
@@ -445,7 +488,7 @@ $tour_data = $fetch_data->fetch_assoc();
 												<label id="text_email" class="sele-place ml-3"></label>
 											</td>
 										</tr>
-																			
+							seat												
 										<tr>
 											<td>
 												<label class="tour-search text-uppercase">Address</label>
@@ -496,16 +539,13 @@ $(document).ready(function(){
 	addRoom();
 	resetCost();
     $("label").click(function(){
-        if(!$(this).hasClass("reserved")){
+        if(!$(this).hasClass("reserved") && !$(this).hasClass("booked")){
             if($(this).find("input").is(":checked")){
             $(this).addClass("selected");
             }else{
                 console.log("selected");
                 $(this).removeClass("selected");
             }
-        }
-        else{
-            alert("Already booked");
         }
        	checkSeatRoomSelection();
        	resetCost();
@@ -516,7 +556,7 @@ $(document).ready(function(){
     var counter = "";
     
     $(".cust-checkbox").click(function(){
-   		if(!$(this).hasClass("reserved")){    	
+   		if(!$(this).parent('label').hasClass("reserved") && !$(this).parent('label').hasClass("booked")){    	
             if($(this).parent().prop('className') == 'selected'){
             	var textArr = text.split(',');
             	textArr = textArr.filter(item => item != trim($(this).next('span').html()));
@@ -990,7 +1030,6 @@ function createPassenger(id){
 }
 
 function removePassenger(id){
-	alert(id);
 	$('#row_'+id).remove();
 }
 
@@ -1031,6 +1070,7 @@ $(function () {
         value: setDate,
         disableDates: function(date){
         	let today = new Date();
+        	today.setDate(today.getDate() - 1);
           	let current = formatDate(date);
           	if(today>=date){
           		return false;

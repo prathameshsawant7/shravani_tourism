@@ -59,7 +59,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'register') {
 		$ticket = $func->generate_ticket();
 
 		$query = "INSERT INTO ashtavinayak_bookings(ticket,tour_id,tour_date,tour_type,tour_pickup,tour_drop,seat_no,seat_data, room_data, cost_data, total_cost, contact_name, contact_phone, contact_email, contact_address, status , added_by, added_on) VALUE 
-					('".$ticket."',".$_POST['tour_id'].",'".$_POST['tour_date']."','".$_POST['tour_type']."','".$_POST['pickup']."','".$_POST['drop']."','".$_POST['seat_no']."','".json_encode($_POST['seat_data'])."','".json_encode($_POST['room_data'])."','".json_encode($cost_data)."',".$cost_data['total_cost'].",'".$_POST['contact_name']."','".$_POST['phone']."','".$_POST['email']."','".$_POST['address']."','new',".$_POST['user_id'].",'now()')";
+					('".$ticket."',".$_POST['tour_id'].",'".$_POST['tour_date']."','".$_POST['tour_type']."','".$_POST['pickup']."','".$_POST['drop']."','".$_POST['seat_no']."','".json_encode($_POST['seat_data'])."','".json_encode($_POST['room_data'])."','".json_encode($cost_data)."',".$cost_data['total_cost'].",'".$_POST['contact_name']."','".$_POST['phone']."','".$_POST['email']."','".$_POST['address']."','new',".$_POST['user_id'].",now())";
 
 		mysqli_query($con,$query);
 		$id = mysqli_insert_id($con);

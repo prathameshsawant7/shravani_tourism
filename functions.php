@@ -115,6 +115,23 @@ class Functions
 	function generate_ticket(){
 		return strtoupper(substr(sha1(time()), 0, 20));
 	}
+
+	function get_non_available_seats($id, $date, $type, $bus_no, $ref_ticket = ''){
+		$query = "SELECT GROUP_CONCAT(seat_no) as bookings FROM ashtavinayak_bookings WHERE tour_id='".$id."' AND  tour_date='".$date."' AND tour_type='".$type."' AND bus_no='".$bus_no."' ";
+
+		$query .= ($ref_ticket != '')?"AND ticket != '".$ref_ticket."';":";";
+		$fetch_data = mysqli_query($this->con,$query);    
+		$bookings = $fetch_data->fetch_assoc(); 
+
+		$query = "SELECT REPLACE(GROUP_CONCAT(seats),'|',',') as reserved FROM reserved_seats WHERE tour_id='".$id."' AND date='".$date."' AND tour_type='".$type."' AND bus_no='".$bus_no."';" ;
+		$fetch_data = mysqli_query($this->con,$query);    
+		$reserved = $fetch_data->fetch_assoc(); 
+
+		$booking_arr  = explode(',', $bookings['bookings']);
+		$reserved_arr = explode(',', $reserved['reserved']);
+		$non_available_seats = array_merge($booking_arr,$reserved_arr);
+		return $non_available_seats;
+	}
 }
 
 function test(){
