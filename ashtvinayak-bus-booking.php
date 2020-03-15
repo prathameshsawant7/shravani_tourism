@@ -488,7 +488,7 @@ if(isset($_GET['date'])){
 												<label id="text_email" class="sele-place ml-3"></label>
 											</td>
 										</tr>
-							seat												
+																			
 										<tr>
 											<td>
 												<label class="tour-search text-uppercase">Address</label>

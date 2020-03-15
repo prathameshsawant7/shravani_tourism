@@ -19,7 +19,7 @@
     <div class="top-bar" id="example-menu">
       <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
-          <!-- <li><a href='\<?php echo ADMINROOT;?>/home/index.php'><span>Home</span></a></li> -->
+          <!-- <li><a href='\<?php echo ADMINROOT;?>/home/index.php'><span>Home</span></a></li>  -->
           <li><a href='\<?php echo ADMINROOT;?>\settings\index.php'><span>Packages</span></a></li>
           <li class='has-sub'><a href='#'><span>Settings</span></a>
               <ul class="menu vertical" style="z-index: 9999999;">

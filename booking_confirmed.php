@@ -51,13 +51,19 @@ session_start();
             $phone = $result['contact_phone'];
             $email = $result['contact_email'];
             $total_cost = $result['total_cost'];
-
+            $status = 'confirmed';
             $query = "INSERT IGNORE INTO payments(booking_id,razorpay_payment_id,razorpay_order_id,amount) VALUE 
           (".$booking_id.",'".$razorpay_payment_id."','".$razorpay_order_id."',".$total_cost.")";
             mysqli_query($con,$query);
             $id = mysqli_insert_id($con);
+          }else{
+            $status = 'incomplete';
           }
         }
+        
+        $query = "UPDATE ashtavinayak_bookings SET status='$status' WHERE id='$booking_id' AND status='incomplete';";
+        mysqli_query($con,$query);
+
       if($confirmed){
       ?>
       <div class="row pack-bac">

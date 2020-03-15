@@ -31,6 +31,8 @@ $phone = $result['contact_phone'];
 $email = $result['contact_email'];
 $total_cost = $result['total_cost'];
 
+$query = "UPDATE ashtavinayak_bookings SET status='incomplete' WHERE id='$booking_id' AND status='new';";
+mysqli_query($con,$query);
 
 ?>
 <!DOCTYPE html>
@@ -51,24 +53,43 @@ $total_cost = $result['total_cost'];
      		width:80%;
      		display: inline-block;
      		margin: 0 auto;
-     		padding: 3px;
+     		padding-left: 1rem;
+     		padding-bottom: 0.5rem;
+     		padding-right: 1rem;
+     		padding-top:1rem;
      		background-color: #dfdfdf;
      		border:1px solid #838383;
      	}
      	.o-pay{
-     		border-bottom: border:1px solid #838383!important;
-     		padding:2rem;
+     		padding:1rem;
      	}
      	.text1{
-     		font-size: 0.8rem;
-     		padding-left:0.5rem;
-     		background-color: #acacac;
-     		color: #212221;
-     		font-weight: 400;
-     		text-align: left;
-     		line-height: 25px;
-     		letter-spacing: 1.3px;
+     		font-size: 1rem;
+		    padding-left: 0.5rem;
+		    background-color: #efefef;
+		    color: #212221;
+		    font-weight: 400;
+		    text-align: left;
+		    line-height: 2.5rem;
+		    letter-spacing: 1.3px;
+		    border-top: 1px solid #acacac;
+		    border-right: 1px solid #acacac;
+		    border-left: 1px solid #acacac;
      	}
+     	.bt-text{
+     		font-size: 1rem;
+		    padding-left: 0.5rem;
+		    background-color: #efefef;
+		    color: #212221;
+		    font-weight: 400;
+		    text-align: center;
+		    line-height: 2.5rem;
+		    letter-spacing: 1.3px;
+		    border: 1px solid #acacac;
+		   	}
+		   	.pay-d{
+		   		margin:0 auto;
+		   	}
      </style>
 </head>
 <body>
@@ -77,32 +98,32 @@ $total_cost = $result['total_cost'];
 		<BR>
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pay">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 o-pay"><h2>Online Payment</h2></div>
-			<div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 pay-d">
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text1">
 					Name:
 				</div>
-				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text1">
 					<?php echo $name;?>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text1">
 					Phone:
 				</div>
-				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text1">
 					<?php echo $phone;?>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text1">
 					Email:
 				</div>
-				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text1">
 					<?php echo $email;?>
 				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text1">
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text1">43
 					Total Amount:
 				</div>
-				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text1">
 					<?php echo $total_cost;?>
 				</div>
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 bt-text p-3 mb-3">
 					<form action="../booking_confirmed.php" method="POST">
 						<script
 						    src="https://checkout.razorpay.com/v1/checkout.js"
