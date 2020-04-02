@@ -147,7 +147,7 @@ session_start();
 			      		
 			      	?>
 			      	<tr>
-				      	<th width="300px"></th>
+				      	<th width="45%"></th>
 				      	<?php foreach ($rates as $key => $val){ 
 				      		foreach ($val as $type => $price){ 
 				      	?>

@@ -37,8 +37,11 @@ if(isset($_POST['date']) && $_POST['date'] != '')
 if(isset($_POST['tour_id']) && $_POST['tour_id'] != '')
     $filter  .= "AND p.tour_code LIKE '%".$_POST['tour_id']."%' ";
 
-if(isset($_POST['bus_id']) && $_POST['bus_id'] != '')
-    $filter  .= "AND b.name LIKE '%".$_POST['bus_id']."%' ";
+if(isset($_POST['tour_type']) && $_POST['tour_type'] != '')
+    $filter  .= "AND p.tour_type LIKE '%".$_POST['tour_type']."%' ";
+
+if(isset($_POST['bus_no']) && $_POST['bus_no'] != '')
+    $filter  .= "AND t.bus_no  = '".$_POST['bus_no']."' ";
 
 if(isset($_POST['seats']) && $_POST['seats'] != '')
     $filter  .= "AND t.seats LIKE '%".$_POST['seats']."%' ";
@@ -72,7 +75,7 @@ $total_pages = ceil($get_total_rows[0]/$item_per_page);
 //position of records
 $page_position = (($page_number-1) * $item_per_page);
 
-$query = "SELECT t.id,t.date,p.tour_code,t.tour_type,REPLACE(t.seats, '|', ' , ') as seats,a.name as added_by,u.name as updated_by "
+$query = "SELECT t.id,t.date,p.tour_code,t.tour_type,t.bus_no,REPLACE(t.seats, '|', ' , ') as seats,a.name as added_by,u.name as updated_by "
             . "FROM reserved_seats AS t "
             . "LEFT JOIN admin_users as a ON t.added_by = a.id "
             . "LEFT JOIN admin_users as u ON t.updated_by = u.id "
@@ -95,7 +98,8 @@ while($reserved_seats_data = $fetch_data->fetch_assoc()){ //fetch values
         <td><center><label>{$reserved_seats_data['date']}</label></center></td>
         <td><center><label>{$reserved_seats_data['tour_code']}</label></center></td>
         <td><center><label>{$reserved_seats_data['tour_type']}</label></center></td>
-         <td><center><label>{$reserved_seats_data['seats']}</label></center></td>
+        <td><center><label>{$reserved_seats_data['bus_no']}</label></center></td>
+        <td><center><label>{$reserved_seats_data['seats']}</label></center></td>
         <td><center><label>{$reserved_seats_data['added_by']}</label></center></td>
         <td><center><label>{$reserved_seats_data['updated_by']}</label></center></td>
         <td>
@@ -112,27 +116,25 @@ while($reserved_seats_data = $fetch_data->fetch_assoc()){ //fetch values
 HEREDOC;
 }
 if(empty($listingHtml)){
-    $listingHtml = '<tr><td colspan="9"><center><label><b>No Record Found</b></label></center></t>';
+    $listingHtml = '<tr><td colspan="10"><center><label><b>No Record Found</b></label></center></t>';
+}
+
+$rows_html = '';
+//$rows_html .= '<option value="1">1</option>';
+for($i=1;$i<6;$i++){
+    $selected = ($item_per_page == ($i*10))?"selected=selected":'';
+    $rows_html .= '<option '.$selected.' value="'.($i*10).'">'.($i*10).'</option>';
 }
 
 echo <<<HEREDOC
     <table border="4">
         <tr>
-           <th colspan="9">
+           <th colspan="10">
                 <h3 style="color: #000"><center>Reserved Seats</center></h3>
                 <section>
                     <label style="float: left">Number of rows to display: &nbsp;&nbsp;&nbsp;</label>
                     <select id="cRows" style="width: 50px;float: left" value="10">
-                        <option value="10" selected="selected">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
-                        <option value="60">60</option>
-                        <option value="70">70</option>
-                        <option value="80">80</option>
-                        <option value="90">90</option>
-                        <option value="100">100</option>
+                        {$rows_html}
                     </select>
                     <span style="float: left;padding-left: 22px;margin-top: -5px;">
                         <a href="add_reserved_seats.php" class="small button">Add Reserved Seats</a>
@@ -160,8 +162,12 @@ echo <<<HEREDOC
                 <input type="text" id="tour_id" class="filter" placeholder="Tour" value="Tour"/>
             </td>
             <td>
-                <center><label><b>Bus</b></label></center>
-                <input type="text" id="bus_id" class="filter" placeholder="Bus" value="Bus"/>
+                <center><label><b>Tour Type</b></label></center>
+                <input type="text" id="tour_type" class="filter" placeholder="Tour Type" value=""/>
+            </td>
+            <td>
+                <center><label><b>Bus Number</b></label></center>
+                <input type="text" id="bus_no" class="filter" placeholder="Bus Number" value=""/>
             </td>
             <td>
                 <center><label><b>Seats</b></label></center>

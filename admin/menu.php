@@ -29,7 +29,6 @@
                         <ul class="menu vertical" style="z-index: 9999999;">
                             <li><a href='\<?php echo ADMINROOT;?>\settings\import_bus_dates.php'><span>Import Bus Dates</span></a></li>
                             <li><a href='\<?php echo ADMINROOT;?>\settings\reserved_seats.php'><span>Reserve Seats</span></a></li>
-                            <li><a href='\<?php echo ADMINROOT;?>\settings\bus_chart.php'><span>Generate Bus Chart</span></a></li>
                         </ul>
                         
                     </li>
@@ -66,10 +65,11 @@
                         <li><a href='\<?php echo ADMINROOT;?>\reports\bus_chart.php'><span>Generate Bus Chart</span></a></li>
                     </ul> 
                 </li>
-                <li class='has-sub'><a href='#'><span>Admin Users</span></a>
+                <li class='has-sub'><a href='#'><span>Users</span></a>
                         <ul class="menu vertical" style="z-index: 9999999;">
-                            <li><a href='\<?php echo ADMINROOT;?>\aUsers\register.php'><span>Add Admin Users </span></a></li>
+                            <li><a href='\<?php echo ADMINROOT;?>\aUsers\register.php'><span>Add Users </span></a></li>
                             <li><a href='\<?php echo ADMINROOT;?>\aUsers\index.php'><span>Admin Users List</span></a></li>
+                            <li><a href='\<?php echo ADMINROOT;?>\aUsers\site_index.php'><span>Site Users List</span></a></li>
                         </ul>
                     </li>
                     <li class='last'><a href='\<?php echo ADMINROOT;?>\logout.php'><span>Logout</span></a></li>

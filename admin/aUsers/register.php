@@ -23,127 +23,163 @@ $con=$est->connection();
         <input  type="hidden" id="cWebpath" value="<?php echo WEBROOT; ?>">
     </div>
 
+    <?php 
+        $page_action = '';
+        $id          = ''; 
+        if(!empty($_GET['action']) && $_GET['action'] == 'edit'){
+            $id         = $_GET['id'];
+            $table      = ($_GET['tab'] == 'admin')? 'admin_users':'users';
+            $query      = "SELECT * FROM $table WHERE id=$id;";
+            $fetch_data = mysqli_query($con,$query);
+            $users_data  = $fetch_data->fetch_assoc();
+            $page_action= $_GET['action'];
+            print_r($users_data);
+        }
 
+
+    ?>
+
+    
      <div class="large-12 columns no-pad">
         <div class="large-3 columns dark_bg no-pad">
             <div class="row dark_bg">
-                <h4>Add user</h4>
+                <h4>Onboarding</h4>
             </div>
             <div class="row dark_bg height_200vh" style="height: 180vh;">
                 <ul class="tabs vertical" id="example-vert-tabs" data-tabs  >
-                    <li class="tabs-title is-active"><a href="#panel1v" aria-selected="true">User Details</a></li>
+                    <?php 
+                        if(!isset($_GET['tab'])){
+                            $active_admin = 'is-active';
+                            $active_site = '';
+                        }else if($_GET['tab'] == 'admin'){
+                            $active_admin = 'is-active';
+                            $active_site = '';
+                        }else if($_GET['tab'] == 'site'){
+                            $active_admin = '';
+                            $active_site = 'is-active';
+                        }
+                    ?>
+                    <li class="tabs-title <?php echo $active_admin;?>"><a href="#panel1v" aria-selected="true">Add Admin User</a></li>
+                    <li class="tabs-title <?php echo $active_site;?>"><a href="#panel2v" aria-selected="true">Add Site User</a></li>
                 </ul>
             </div>
         </div>
 
-         <form action="create_admin.php" name="register" onsubmit="return(validate());" method="post"  enctype="multipart/form-data">
+        
         <div class="medium-9 columns">
             <div class="tabs-content vertical" data-tabs-content="example-vert-tabs">
-                <div class="tabs-panel is-active" id="panel1v">
-                    <div class="row">
-                       <div class="large-12 medium-12 columns">
-                            <table id="reg_view" class="reg_view">
-                                <thead style="background-color: #2b3643;">
-                                    <tr>
-                                        <th colspan="2">
-                                            <h3>User details:</h3>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                <div class="tabs-panel <?php echo $active_admin;?>" id="panel1v">
+                    <form action="create_admin.php" name="register" onsubmit="return(validate());" method="post"  enctype="multipart/form-data" autocomplete="off">
+                        <input type="hidden" name="page_action" value="<?php echo $page_action;?>">
+                        <input type="hidden" name="id" value="<?php echo $id;?>">
+                        <div class="row">
+                           <div class="large-12 medium-12 columns">
+                                <table id="reg_view" class="reg_view">
+                                    <thead style="background-color: #2b3643;">
+                                        <tr>
+                                            <th colspan="2">
+                                                <h3>Admin User details:</h3>
+                                                <h6>&nbsp&nbspNote for Edit - Keep passwords blank if just want to update other details</h6>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
                                     <tr>
                                         <td>
                                             <label>Name:</label>
-                                            <input type="text" id="cName" name="cName" />
+                                            <input type="text" id="cName" name="cName" value="<?php echo $users_data['name'];?>"/>
                                         </td>
                                         <td>
                                             <label>Email Id:</label>
-                                            <input type="text" id="cEmail" name="cEmail" />
+                                            <input type="text" id="cEmail" name="cEmail" value="<?php echo $users_data['email'];?>"/>
                                         </td> 
                                     </tr>
-                                    <tr>    
                                     <tr>
                                         <td>
                                             <label>Password:</label>
-                                            <input type="password" id="cPassword" name="cPassword"/>
+                                            <input type="password" id="cPassword" name="cPassword" value=""/>
                                         </td>
                                         <td>
                                             <label>Verify Password:</label>
-                                            <input type="password" id="cVPassword" name="cVPassword"/>
+                                            <input type="password" id="cVPassword" name="cVPassword"  value="" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
+                                            <?php 
+                                            $checked = (isset($users_data['isAdmin']) && $users_data['isAdmin'] == '1')?'checked':'unchecked';
+                                            ?>
                                             <label>Is Super Admin: 
-                                            <input type="checkbox" id="isAdmin" name="isAdmin" unchecked />
+                                            <input type="checkbox" id="isAdmin" name="isAdmin" <?php echo $checked;?> />
                                             </label>
                                         </td>
                                     </tr>
                                     
                                    
-                                </tbody>
-                            </table>
-                            <input type="submit" class="small button" value="Submit"/>
+                                        </tbody>
+                                    </table>
+                                    <input type="submit" class="small button" value="Submit"/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-      <!--           <div class="tabs-panel" id="panel2v">
-                    <div class="row">
-                       <div class="large-12 medium-12 columns">
-                           
+                <div class="tabs-panel <?php echo $active_site;?>" id="panel2v">
+                    <form action="create_site_user.php" name="register" onsubmit="return(validate_site());" method="post"  enctype="multipart/form-data" autocomplete="off">
+                        <input type="hidden" name="page_action" value="<?php echo $page_action;?>">
+                        <input type="hidden" name="id" value="<?php echo $id;?>">
+                        <div class="row">
+                           <div class="large-12 medium-12 columns">
                                 <table id="reg_view" class="reg_view">
-                                    <thead>
+                                    <thead style="background-color: #2b3643;">
                                         <tr>
                                             <th colspan="2">
-                                                <h3>Business Details:</h3>
+                                                <h3>Site User details:</h3>
+                                                <h6>&nbsp&nbspNote for Edit- Keep passwords blank if just want to update other details</h6>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td colspan="2">
-                                                <label>Your Firm is:</label>
-                                                <select id="cFirm" name="cFirm" style="width:100%;">
-                                                    <option value="">Please select</option>
-                                                    <option value="Limited">Limited</option>
-                                                    <option value="Private Limited">Private Limited</option>
-                                                    <option value="Proprietor">Proprietor</option>
-                                                    <option value="Partnership">Partnership</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        
-                                        <tr>
-                                            <td>
-                                                <label>Name(s) of : Directors /Proprietors/Partners:</label>
-                                                <input type="text" id="cOwnerName" name="cOwnerName" value=""/>
-                                            </td>
-                                            <td>
-                                                <label>Business Category:</label>
-                                                <input type="text" id="cBusinessCategory" name="cBusinessCategory" value=""/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <label>Services offered/Items Sold on the net:</label>
-                                                <textarea id="cServices" name="cServices" ></textarea>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label>Turn over for last two years:</label>
-                                                <input type="text" id="cTurnOver" name="cTurnOver" value="" />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <input type="button" onclick="backTab('1')" class="small button" value="Back"/>
-                                <input type="button" onclick="nextTab('3')" class="small button" value="Next"/>
-                           
-                        </div> 
-                    </div>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <label>Email Id:</label>
+                                            <input type="text" id="sEmail" name="sEmail" value="<?php echo $users_data['email'];?>"/>
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Name:</label>
+                                            <input type="text" id="sName" name="sName" value="<?php echo $users_data['name'];?>" />
+                                        </td>
+                                        <td>
+                                            <label>Mobile:</label>
+                                            <input type="text" id="sMobile" name="sMobile" value="<?php echo $users_data['mobile'];?>"/>
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label>Password:</label>
+                                            <input type="password" id="sPassword" name="sPassword" value="" />
+                                        </td>
+                                        <td>
+                                            <label>Verify Password:</label>
+                                            <input type="password" id="sVPassword" name="sVPassword" value=""/>
+                                        </td>
+                                    </tr>
+                                    
+                                    
+                                   
+                                        </tbody>
+                                    </table>
+                                    <input type="submit" class="small button" value="Submit"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+                <!--           
                 <div class="tabs-panel" id="panel3v">
                     <div class="row">
                        <div class="large-12 medium-12 columns">
@@ -1348,17 +1384,70 @@ $con=$est->connection();
                 error=error+"Incorrect Email-id.\n";
             }
        }
-       if( $('#cPassword').val() == "" ){
-            error=error+"Please provide password.\n";
-       }
 
-       if( $('#cVPassword').val() == "" ){
-            error=error+"Please provide verify password.\n";
-       }
+       if(!($('#cPassword').val() == "" && $('#cVPassword').val() == "")){
+           if( $('#cPassword').val() == "" ){
+                error=error+"Please provide password.\n";
+           }
 
-       if($('#cPassword').val() != "" && $('#cVPassword').val() != "" && $('#cPassword').val() != $('#cVPassword').val()){
-            error=error+"Please provide password and verify password doesn't match.\n";
+           if( $('#cVPassword').val() == "" ){
+                error=error+"Please provide verify password.\n";
+           }
+
+           if($('#cPassword').val() != "" && $('#cVPassword').val() != "" && $('#cPassword').val() != $('#cVPassword').val()){
+                error=error+"Please provide password and verify password doesn't match.\n";
+            }
         }
+
+       if(error==""){
+        return( true );
+       }
+       else
+       {
+            alert("Fix Below issues: \n"+error);
+            return( false );
+       }
+    }
+
+    function validate_site()
+    {
+       var error="";
+       if( $('#sName').val() == ""){
+         error=error+"Please provide name.\n";
+       }
+
+       if( $('#sEmail').val() == "")
+       {
+         error=error+"Please provide email id.\n";
+       }
+       else
+       {
+            var emailID = $('#sEmail').val();
+            atpos = emailID.indexOf("@");
+            dotpos = emailID.lastIndexOf(".");
+            if (atpos < 1 || ( dotpos - atpos < 2 )) 
+            {
+                error=error+"Incorrect Email-id.\n";
+            }
+       }
+
+       if( $('#sMobile').val() == "" ){
+            error=error+"Please provide mobile.\n";
+       }
+
+       if(!($('#sPassword').val() == "" && $('#sVPassword').val() == "")){
+
+           if( $('#sPassword').val() == "" ){
+                error=error+"Please provide password.\n";
+           }
+
+           if( $('#sVPassword').val() == "" ){
+                error=error+"Please provide verify password.\n";
+           }
+       }
+           if($('#sPassword').val() != "" && $('#sVPassword').val() != "" && $('#sPassword').val() != $('#sVPassword').val()){
+                error=error+"Please provide password and verify password doesn't match.\n";
+            }
 
        if(error==""){
         return( true );

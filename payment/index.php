@@ -117,7 +117,7 @@ mysqli_query($con,$query);
 				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text1">
 					<?php echo $email;?>
 				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text1">43
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text1">
 					Total Amount:
 				</div>
 				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text1">

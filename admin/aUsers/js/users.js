@@ -32,7 +32,7 @@ function getListing(page,order){
     var id                              = (typeof $("#id").val() != 'undefined') ? $("#id").val() : '';
     var name                            = (typeof $("#name").val() != 'undefined') ? trim($("#name").val()) : '';
     var email                           = (typeof $("#email").val() != 'undefined') ? trim($("#email").val()) : '';
-    var isAdmin                         = (typeof $("#isAdmin").val() != 'undefined') ? trim($("#isAdmin").val()) : '';
+    var isAdmin                          = (typeof $("#isAdmin").val() != 'undefined') ? trim($("#isAdmin").val()) : '';
     var cRows                           = (typeof $("#cRows").val() != 'undefined') ? trim($("#cRows").val()) : '';
     var page                            = page;
 
@@ -54,47 +54,16 @@ function getListing(page,order){
     });
 }
 
-
-
-function viewProduct(product_id)
-{
-    window.location.href = "view_product.php?product_id="+product_id;
-}
-
-function updateProduct(id)
-{
-    cQuantity = $('#cQuantity_input_'+id).val();
-    if(trim(cQuantity)!="" && !isNaN(cQuantity))
-    {
-        var iSeller_id  = $("#iSeller_id").val();
-        $.post("ajax_calls.php",{request:'updateQuantity',id_product:id,cQuantity:cQuantity},function(data)
-        {
-           if(trim(data) == "Updated")
-           {
-                alertify.alert("Product number: "+id+" quantity updated", function()
-                {
-                    alertify.success('Success');
-                });
-                $('#cQuantity_'+id).html($('#cQuantity_input_'+id).val());
-                $('#cQuantity_'+id).show();
-                $('#cQuantity_input_'+id).hide();
-                $('#display_'+id).show();
-                $('#edit_'+id).hide();
-           }
-        });
-    }
-    else
-        alert("Please update proper Quantity for respective product.");
-}
 function editUser(id)
 {
-    window.location.href = "register.php?id="+id+"&action=edit";
+    window.location.href = "register.php?id="+id+"&tab=admin&action=edit";
 }
+
 function deleteUser(id)
 {
     if(id != ''){
-        $.post("ajax_calls.php",{request:'deleteUser',id:id},function(data) {
-            alertify.alert("Region ID: "+id+" - "+trim(data)+" has been deleted successfully.", function(){
+        $.post("ajax_calls.php",{request:'delete_admin_user',id:id},function(data) {
+            alertify.alert("Admin User ID: "+id+" - "+trim(data)+" has been deleted successfully.", function(){
                 alertify.success('Success');
                 $('#tr_'+id).remove();
             });

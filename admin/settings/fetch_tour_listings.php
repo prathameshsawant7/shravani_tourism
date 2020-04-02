@@ -23,7 +23,7 @@ $filter = '1 ';
 $OrderBy= "";
 
 
-
+#$_POST['cRows']=2;
 if($_POST['cRows'] != 0)
     $item_per_page = $_POST['cRows'];
 else 
@@ -124,6 +124,14 @@ if(empty($listingHtml)){
     $listingHtml = '<tr><td colspan="9"><center><label><b>No Record Found</b></label></center></t>';
 }
 
+$rows_html = '';
+//$rows_html .= '<option value="1">1</option>';
+for($i=1;$i<6;$i++){
+    $selected = ($item_per_page == ($i*10))?"selected=selected":'';
+    $rows_html .= '<option '.$selected.' value="'.($i*10).'">'.($i*10).'</option>';
+}
+
+
 echo <<<HEREDOC
     <table border="4">
         <tr>
@@ -131,17 +139,8 @@ echo <<<HEREDOC
                 <h3 style="color: #000"><center>Tour Listings</center></h3>
                 <section>
                     <label style="float: left">Number of rows to display: &nbsp;&nbsp;&nbsp;</label>
-                    <select id="cRows" style="width: 50px;float: left" value="10">
-                        <option value="10" selected="selected">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
-                        <option value="60">60</option>
-                        <option value="70">70</option>
-                        <option value="80">80</option>
-                        <option value="90">90</option>
-                        <option value="100">100</option>
+                    <select id="cRows" name="cRows" style="width: 50px;float: left" value="10">
+                        {$rows_html}
                     </select>
                     <span style="float: left;padding-left: 22px;margin-top: -5px;">
                         <a href="add_tour.php" class="small button">Add New Tour</a>

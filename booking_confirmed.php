@@ -1,6 +1,7 @@
 <?php
 include_once("configs/defines.php");
 include("configs/settings.php");
+include("emailer.php");
 $est =new settings();
 $con=$est->connection();
 session_start();
@@ -57,12 +58,20 @@ session_start();
             mysqli_query($con,$query);
             $id = mysqli_insert_id($con);
           }else{
-            $status = 'incomplete';
+            $status = 'payment_failed';
           }
+
+          if($result['status'] == 'incomplete'){
+            $email_data = array("ticket"=>$ticket, "name"=>$name);
+            $emailer = new Emailer($con, "booking_confirmation" , array($email), $email_data);
+            $emailer->generate();
+          }
+
+          $query = "UPDATE ashtavinayak_bookings SET status='$status' WHERE id='$booking_id' AND status='incomplete';";
+          mysqli_query($con,$query);
         }
         
-        $query = "UPDATE ashtavinayak_bookings SET status='$status' WHERE id='$booking_id' AND status='incomplete';";
-        mysqli_query($con,$query);
+        
 
       if($confirmed){
       ?>

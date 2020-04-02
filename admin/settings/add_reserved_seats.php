@@ -79,36 +79,61 @@ $con=$est->connection();
                             <th style="border:1px solid #000000;"><label>ID: </label></th>
                             <td> <input type="text" id="id" name="id" value="<?php echo $reserved_data['id'];?>" disabled /></td>
                         </tr>
-                        <tr>
-                            <th style="border:1px solid #000000;"><label>Date: </label></th>
-                            <td > <input type="text" id="date" name="date" value="<?php echo $reserved_data['date'];?>" /></td>
-                        </tr>
+                        
                        	<tr>
                             <th style="border:1px solid #000000;"><label>Tour: </label></th>
                             <td > 
-                            	<select id="tour_id" name="tour_id" onchange="getTourTypesByTourID()">
-                            		<option value="">Please Select</option>
-	                            <?php
-	                            	$query = "SELECT id,tour_code,tour_name FROM tours WHERE tour_name LIKE '%ASHTAVINAYAK%';";
-					                $fetch_data = mysqli_query($con,$query);
-					                while($ashtavinayak_data  = $fetch_data->fetch_assoc()){ 
-					                	$selected = ($ashtavinayak_data['id'] == $reserved_data['tour_id'])?'selected=selected':'';
-					                	?>
-					                	<option value="<?php echo $ashtavinayak_data['id']; ?>" <?php echo $selected; ?>>
-					                		<?php echo $ashtavinayak_data['tour_code']; ?>
-					                	</option>
-					                	<?php
-					                }
-	                            ?>
-	                        	</select>
+                                <span style="margin-left: 21px;">
+                                	<select id="tour_id" name="tour_id" onchange="getTourTypesByTourID()">
+                                		<option value="">Please Select</option>
+    	                            <?php
+    	                            	$query = "SELECT id,tour_code,tour_name FROM tours WHERE tour_name LIKE '%ASHTAVINAYAK%';";
+    					                $fetch_data = mysqli_query($con,$query);
+    					                while($ashtavinayak_data  = $fetch_data->fetch_assoc()){ 
+    					                	$selected = ($ashtavinayak_data['id'] == $reserved_data['tour_id'])?'selected=selected':'';
+    					                	?>
+    					                	<option value="<?php echo $ashtavinayak_data['id']; ?>" <?php echo $selected; ?>>
+    					                		<?php echo $ashtavinayak_data['tour_code']; ?>
+    					                	</option>
+    					                	<?php
+    					                }
+    	                            ?>
+    	                        	</select>
+                                </span>
                             </td>
                         </tr>
                         <tr>
                             <th style="border:1px solid #000000;"><label>Tour Type: </label></th>
                             <td > 
-                            	<select id="tour_type" name="tour_type">
-                            		<?php echo $bus_html; ?>
-	                        	</select>
+                                <span style="margin-left: 21px;">
+                                	<select id="tour_type" name="tour_type">
+                                		<?php echo $bus_html; ?>
+    	                        	</select>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="border:1px solid #000000;"><label>Date: </label></th>
+                            <td > <input type="text" id="date" name="date" value="<?php echo $reserved_data['date'];?>" /></td>
+                        </tr>
+                        <tr>
+                            <th style="border:1px solid #000000;"><label>Bus Number: </label></th>
+                            <td>
+                                <span style="margin-left: 21px;">
+                                    <select id="bus_no" placeholder="Bus" value=""  name="bus_no">
+                                        <?php 
+                                        $buses = ['1','2'];
+                                        for($i=0;$i<2;$i++){
+                                            $selected = ($buses[$i] == $reserved_data['bus_no'])?'selected=selected':'';
+                                        ?>
+                                            <option value="<?php echo $buses[$i];?>"  <?php echo $selected;?>>
+                                                <?php echo $buses[$i];?>
+                                            </option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </span>
                             </td>
                         </tr>
                         <tr>

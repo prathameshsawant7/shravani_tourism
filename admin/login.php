@@ -36,7 +36,7 @@
     if(mysqli_num_rows($fetch_data)==1)
     {
         $db_pwd=mysqli_fetch_array($fetch_data);
-       
+        //echo $db_pwd['password']."----------".md5(_COOKIE_KEY_.$_POST['cPassword']);
         if($db_pwd['password']== md5(_COOKIE_KEY_.$_POST['cPassword']))
         {
             //session_destroy();

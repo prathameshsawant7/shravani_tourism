@@ -143,26 +143,6 @@ $con=$est->connection();
         <script src="../js/tinymce.min.js"></script>
         <script src="../js/jquery.multi-select.js"></script>
         <script>
-            tinymce.init({ selector:'textarea' });
-        	$('#seats').multiSelect();
-        	$("#date").datepicker({ dateFormat: 'dd/mm/yy' });
-      //   	<?php
-      //   		if(isset($reserved_data[seats])){
-      //   			//echo $seats = str_replace("|", ",",$reserved_data[seats]);
-      //   			//$seats = explode('|', $reserved_data[seats]);
-      //   			//print_r($seats);
-      //   			?>
-      //   				values = "<?php echo $reserved_data[seats]; ?>";
-      //   				$.each(values.split("|"), function(i,e){
-      //   					alert(e);
-						//     $("#seats option[value='" + e + "']").prop("selected", "selected");
-						// });
-      //   		//	$('#seats').val(["A","B","C"]);
-      //   				alert(1);
-      //   			<?php
-      //   		}
-      //   	?>
-
             $(document).ready(function(){
                 getTourTypesByTourID();
                 setTourDate();

@@ -563,7 +563,7 @@ $(document).ready(function(){
             	text = textArr.toString();
 	   			removePassenger($(this).next('span').html());
 	   		}else{
-	   			text += (text == '')?"":", "
+	   			text += (text == '')?"":",";
             	text += $(this).next('span').html();
 	   			$('#passenger').append(createPassenger($(this).next('span').html()));
 	   		}

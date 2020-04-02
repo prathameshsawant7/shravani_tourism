@@ -6,9 +6,9 @@ class settings
     public function connection()
     { 
 
-      	//$con =mysqli_connect("localhost","root","root","shravani_travels");
+      	$con =mysqli_connect("localhost","root","root","shravani_travels");
         //$con =mysqli_connect("localhost","takeabreak","Break@#2016","takeabreak");
-        $con =mysqli_connect("37.59.55.185","7kwifbYZyp","HRWas0Mvyt","7kwifbYZyp");
+        //$con =mysqli_connect("37.59.55.185","7kwifbYZyp","HRWas0Mvyt","7kwifbYZyp");
         // $con =mysqli_connect("sql12.freemysqlhosting.net","sql12324336","bp5MDVq65C","sql12324336");
         if (mysqli_connect_errno()) 
         {
