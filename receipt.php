@@ -16,7 +16,7 @@ if(isset($_GET['ticket'])){
   $rooms  = count(json_decode($result['room_data'],true));
   $cost_data = json_decode($result['cost_data'],true);
 
-  $query = "SELECT t.name FROM `tour_type` as t LEFT JOIN ashtavinayak_bookings as b ON b.tour_type = t.identifier WHERE b.ticket = '".$ticket."' && t.tour_id = ".$result['tour_id'];
+  $query = "SELECT t.name FROM `tour_type` as t LEFT JOIN ashtavinayak_bookings as b ON b.tour_type = t.identifier WHERE b.ticket = '".$ticket."'";
   $fetch_data = mysqli_query($con,$query);
   $tour_type = $fetch_data->fetch_assoc(); 
 

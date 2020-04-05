@@ -12,6 +12,7 @@ $con=$est->connection();
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Shravani Tourism</title>
         <link rel="stylesheet" href="../css/foundation.css" />
         <link rel="stylesheet" href="../css/app.css" />
@@ -75,6 +76,14 @@ $con=$est->connection();
                             <td > <input type="text" id="tour_name" name="tour_name" value="<?php echo $tour_data['tour_name'];?>" /></td>
                         </tr>
                         <tr>
+                            <th style="border:1px solid #000000;"><label>Tour Description: </label></th>
+                            <td> 
+                                <textarea class="mce" id="tour_desc" name="tour_desc"/>
+                                    <?php echo $tour_data['tour_desc'];?>
+                                </textarea>
+                            </td>
+                        </tr>
+                        <tr>
                             <th style="border:1px solid #000000;"><label>Tour Labels: </label></th>
                             <td >
                                 <select id="tour_labels" name="tour_labels[]" multiple="multiple">
@@ -98,7 +107,7 @@ $con=$est->connection();
                             <td >
                                 <?php echo "---".$tour_data['display_image'];?>
                                 <input type="file" id="display_image" onchange="readImage(this)" name="display_image" value="" />
-                                <img id="display_image_preview" src="../../images/tours/<?php echo $tour_data['display_image'];?>" />
+                                <img id="display_image_preview" src="../../images/tours/<?php echo $tour_data['display_image']."?".time();?>" />
 
                             </td>
                         </tr>
@@ -154,6 +163,10 @@ $con=$est->connection();
                             </td>
                         </tr>
                         <tr>
+                            <th style="border:1px solid #000000;"><label>Tour Base Price: </label></th>
+                            <td > <input type="text" id="tour_price" name="tour_price" value="<?php echo $tour_data['tour_price'];?>" /></td>
+                        </tr>
+                        <tr>
                             <th style="border:1px solid #000000;"><label>Tour Places: </label></th>
                             <td > <input type="text" id="tour_places" name="tour_places" value="<?php echo $tour_data['tour_places'];?>" /></td>
                         </tr>
@@ -162,19 +175,19 @@ $con=$est->connection();
                             <td > <input type="text" id="tour_duration" name="tour_duration" value="<?php echo $tour_data['tour_duration'];?>" /></td>
                         </tr>
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Itenerary JSON: </label></th>
+                            <th style="border:1px solid #000000;"><label>Itenerary CSV File: </label></th>
                             <td> 
-                                <textarea id="itenerary_json" name="itenerary_json"/>
-                                    <?php echo $tour_data['itenerary_json'];?>
-                                </textarea>
+                                <input type="file" id="itenerary_upload" onchange="readItenerary(this)" name="itenerary_upload" value="" />
+                                <a href="../files/sample_tour_itenerary.csv" style="font-size: 10px;">Click here to download sample itenerary CSV File</a>
+                                <textarea id="itenerary_json" name="itenerary_json" style="display:none;"><?php echo trim($tour_data['itenerary_json']);?></textarea>
                             </td>
                         </tr>
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Rates JSON: </label></th>
+                            <th style="border:1px solid #000000;"><label>Rates CSV File: </label></th>
                             <td> 
-                                <textarea id="rates_json" name="rates_json"/>
-                                    <?php echo $tour_data['rates_json'];?>
-                                </textarea>
+                                <input type="file" id="rates_upload" onchange="readRates(this)" name="rates_upload" value="" />
+                                <a href="../files/sample_tour_rates.csv" style="font-size: 10px;">Click here to download sample rates CSV File</a>
+                                <textarea id="rates_json" name="rates_json" style="display:none;"><?php echo trim($tour_data['rates_json']);?></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -262,6 +275,62 @@ $con=$est->connection();
                             $('#display_image_preview').attr('src', e.target.result);
                         }
                         reader.readAsDataURL(input.files[0]);
+                    }
+                }
+
+
+                function readItenerary(input){
+                    if (input.files && input.files[0]) {
+                        var file_data = $('#itenerary_upload').prop('files')[0];
+                        var form_data = new FormData();                  
+                        form_data.append('file', file_data);
+                        form_data.append('data', 'readItenerary');
+                        $('#itenerary_json').val('');
+                        $.ajax({
+                            url: 'insert_tour.php', 
+                            dataType: 'text', 
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: form_data,                         
+                            type: 'post',
+                            success: function(response){
+                                data = $.trim(response);
+                                if(data == "invalid"){
+                                    alert("Invalid Itenerary CSV");
+                                }else{
+                                    $('#itenerary_json').val(data);
+                                }
+                            }
+                         });
+                    }
+                }
+
+                function readRates(input){
+                    if (input.files && input.files[0]) {
+                        var file_data = $('#rates_upload').prop('files')[0];
+                        var form_data = new FormData();                  
+                        form_data.append('file', file_data);
+                        form_data.append('data', 'readRates');
+                        $('#rates_json').val('');
+                        $.ajax({
+                            url: 'insert_tour.php', 
+                            dataType: 'text', 
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: form_data,                         
+                            type: 'post',
+                            success: function(response){
+                                data = $.trim(response);
+                                if(data == "invalid"){
+                                    $('#rates_upload').val('');
+                                    alert("Invalid Rates CSV");
+                                }else{
+                                    $('#rates_json').val(data);
+                                }
+                            }
+                         });
                     }
                 }
         </script>

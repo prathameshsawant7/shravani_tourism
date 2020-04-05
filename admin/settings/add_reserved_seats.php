@@ -38,7 +38,7 @@ $con=$est->connection();
                     $reserved_data  = $fetch_data->fetch_assoc();
 
 
-                    $query = "SELECT * FROM tour_type WHERE tour_id = $id;";
+                    $query = "SELECT * FROM tour_type;";
 				    $fetch_data = mysqli_query($con,$query);
 				    $data = [];$i=0;
 				    $bus_html = '';
@@ -181,7 +181,7 @@ $con=$est->connection();
         <script src="../js/tinymce.min.js"></script>
         <script src="../js/jquery.multi-select.js"></script>
         <script>
-            tinymce.init({ selector:'textarea' });
+    //   tinymce.init({ selector:'textarea' });
         	$('#seats').multiSelect();
         	$("#date").datepicker({ dateFormat: 'dd/mm/yy' });
       //   	<?php
@@ -204,7 +204,7 @@ $con=$est->connection();
         	function getTourTypesByTourID(){
         		var tour_id = $('#tour_id').val();
         		if(tour_id != ''){
-        			 $.get("ajax_calls.php",{request:'getTourTypesByTourID',id:tour_id},function(data) {
+        			 $.get("ajax_calls.php",{request:'getTourTypesByTourID'},function(data) {
         			 	var tour_type = JSON.parse(data);
         			 	select_html = "";
         			 	Object.keys(tour_type).forEach(function (key) {

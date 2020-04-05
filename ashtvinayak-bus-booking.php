@@ -24,7 +24,7 @@ if(isset($_GET['date'])){
 
 	$booking_arr  = explode(',', $bookings['bookings']);
 	$reserved_arr = explode(',', $reserved['reserved']);
-	print_r($reserved_arr);
+	//print_r($reserved_arr);
 
 	$total_filled_seats = (count($booking_arr)+count($reserved_arr));
 	if($bus_no == 1){
@@ -145,7 +145,7 @@ if(isset($_GET['date'])){
 					<span class="tour-search text-uppercase">Tour Type</span>
 						 <select class="form-control mod-in dest-text bt-gr-booking" id="tour_type" name="tour_type">
 						 	<?php
-								$query = "SELECT name, identifier FROM tour_type WHERE tour_id=".$_GET['tour_id'].";";
+								$query = "SELECT name, identifier FROM tour_type;";
 					            $fetch_data = mysqli_query($con,$query);    
 					            while($tour_type = $fetch_data->fetch_assoc()){           
 							?>

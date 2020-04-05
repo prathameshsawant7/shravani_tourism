@@ -99,7 +99,9 @@
 <div class="hr hr-bg"></div>
 	<div class="row">
 		<div class="col- col-sm-3 col-md-3 col-lg-3 logo">
-			<img src="images/logo.png" class="img-fluid">
+			<a class="nav-link" href="index.php">
+				<img src="images/logo.png" class="img-fluid">
+			</a>
 		</div>
 		<div class="col- col-sm-9 col-md-9 col-lg-9">
 			<div class="col-sm-12 col-ms-12 col-lg-12 hidden-xs">
@@ -249,7 +251,7 @@
 				  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 				    <ul class="navbar-nav mr-auto">
 				      <li class="nav-item active">
-				        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+				        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 				      </li>
 				      <li class="nav-item space-nav">
 				        <a class="nav-link" href="#">About US</a>

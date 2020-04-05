@@ -45,7 +45,7 @@ $con=$est->connection();
                 $query = "SELECT type,point FROM ashtavinayak_pickup_drop;";
                 $pickup_drop_fetch_data  = mysqli_query($con,$query);
 
-                $query = "SELECT name,identifier FROM tour_type where tour_id =".$booking_data['tour_id'].";";
+                $query = "SELECT name,identifier FROM tour_type;";
                 $tour_type_fetch_data  = mysqli_query($con,$query);
 
                 $room_data_arr = json_decode($booking_data['room_data'], true);

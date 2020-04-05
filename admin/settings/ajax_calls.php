@@ -33,8 +33,8 @@ if($request == 'deleteRegion'){
 
     echo $id;
 }else if($request == 'getTourTypesByTourID'){
-    $id         = $_GET['id'];
-    $query = "SELECT * FROM tour_type WHERE tour_id = ".$id;
+    //$id         = $_GET['id'];
+    $query = "SELECT * FROM tour_type";
     $fetch_data = mysqli_query($con,$query);
     $data = [];$i=0;
     while($order_data = $fetch_data->fetch_assoc()){

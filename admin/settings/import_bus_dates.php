@@ -53,7 +53,10 @@ $con=$est->connection();
                         </tr>
                         
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Select CSV File: </label></th>
+                            <th style="border:1px solid #000000;">
+                                <label>Select CSV File: </label>
+                                <a href="../files/sample_bus_dates.csv" style="font-size: 10px;">Click here to download sample bus dates CSV</a>
+                            </th>
                             <td> 
                                 <input type="file" name="file" id="file" class="input-large">
                                 <input type="submit" class="small button" value="Submit" style="margin-bottom: -4px;"/>

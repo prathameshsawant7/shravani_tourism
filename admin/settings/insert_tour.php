@@ -43,23 +43,24 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$tour_code = mysqli_escape_string($con,$_POST['tour_code']);
 	$tour_labels = implode(',', $_POST['tour_labels']);
 	$tour_name = mysqli_escape_string($con,$_POST['tour_name']);
-	print_r($_FILES);
-	if(isset($_FILES['display_image']['name'])){
+	$tour_desc = mysqli_escape_string($con,$_POST['tour_desc']);
+
+	if(isset($_FILES['display_image']['name']) && $_FILES['display_image']['name']!=''){
 		$displayImageFilename 	= explode(".", $_FILES["display_image"]["name"]);
 		$displayImageextension 	= end($displayImageFilename);
 		$imageNewName = 'display_image_'.$tour_code.".".$displayImageextension;
 		$imageUploadStatus =true;
-		echo "exi-".file_exists("../../images/tours/" .$imageNewName);
 		if (file_exists("../../images/tours/" .$imageNewName)) {
     		unlink("../../images/tours/" .$imageNewName);
-    		echo "In";
     	}
 		if (!move_uploaded_file($_FILES["display_image"]["tmp_name"],"../../images/tours/" .$imageNewName)) {
-			    $imageUploadStatus = false;echo "In1";
+			    $imageUploadStatus = false;
 		}
+		$query_display_image = ",display_image = '".$imageNewName."'";
 		$display_image = $imageNewName;
+
 	}else{
-		$display_image = '';
+		$query_display_image = '';
 	}
 	$tour_region = mysqli_escape_string($con,$_POST['tour_region']);
 	$tour_state = mysqli_escape_string($con,$_POST['tour_state']);
@@ -73,17 +74,48 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$special_note = mysqli_escape_string($con,$_POST['special_note']);
 	$active = mysqli_escape_string($con,$_POST['active']);
 	
+	mysql_set_charset( $con, 'utf8');
 
 	if($page_action == 'edit'){
-		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_labels='".$tour_labels."',display_image='".$display_image."',tour_region=".$tour_region.",tour_state=".$tour_state.",tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary_json='".$itenerary_json."',rates_json='".$rates_json."',inclusive='".$inclusive."',exclusive='".$exclusive."',special_note='".$special_note."',active=".$active." WHERE id=".$id;
+		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_labels='".$tour_labels."'".$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary_json='".$itenerary_json."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
+
 	}else{
-		$query = "INSERT INTO tours (tour_code,tour_name,tour_labels,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary_json,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_labels."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary_json."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
+		$query = "INSERT INTO tours (tour_code,tour_name,tour_desc,tour_labels,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary_json,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_desc."','".$tour_labels."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary_json."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
 	}
 	//echo "<pre>".$query."</pre>";exit;
 	//print($query);exit;
 	mysqli_query($con,$query);
 	$action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
 	$id = ($id == '')? mysqli_insert_id($con):$id;
+
+	$rates = json_decode($_POST['rates_json'],true);
+
+	$tour_rates_query = '';
+	foreach ($rates as $identity => $types) {
+		$identifier = '';
+
+		if(strpos(strtolower($identity), 'double occupancy') !== false){
+			$identifier = 'adult_double';
+		}else if(strpos(strtolower($identity), 'extra person') !== false){
+			$identifier = 'extra_adult';
+		}else if(strpos(strtolower($identity), 'per child') !== false){
+			$identifier = 'child';
+		}else if(strpos(strtolower($identity), 'single occupancy') !== false){
+			$identifier = 'adult_single';
+		}
+
+		foreach ($types as $key => $val) {
+			$tour_rates_query .= "('".$id."','".str_replace(' ', '_', strtolower($key))."','".$identifier."','".$val."',".$_SESSION['cID'].",".$_SESSION['cID']."),";
+		}
+
+	}
+	$query = "DELETE FROM tour_rates WHERE tour_id='".$id."'";
+	mysqli_query($con,$query);
+
+	$tour_rates_query = substr($tour_rates_query, 0, -1);
+	$query = "INSERT INTO tour_rates (tour_id,hotel_type,identifier,rate,added_by,updated_by) VALUES ".$tour_rates_query.";";
+	mysqli_query($con,$query);
+
 	header("Location:index.php");
 	//header("Location:add_tour_rates.php?id=".$id.$action);
 
@@ -114,9 +146,9 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 		$result = [];
 		if($rates_arr[0][0] == 'Tour Type'){
 			for($i=1;$i<count($rates_arr);$i++){
-				$result[$rates_arr[0][$i]] = [];
+				$result[$rates_arr[$i][0]] = [];
 				for($j=1;$j<count($rates_arr[$i]);$j++){
-					$result[$rates_arr[0][$i]][$rates_arr[$j][0]] = $rates_arr[$j][$i];
+					$result[$rates_arr[$i][0]][$rates_arr[0][$j]] = $rates_arr[$j][$i];
 				}
 			}
 			echo json_encode($result);

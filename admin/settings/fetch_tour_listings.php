@@ -96,12 +96,13 @@ $results = $con->query($query);
 while($tour_data = $fetch_data->fetch_assoc()){ //fetch values
     $count++;
     $active = $tour_data['active'] ? 'Yes' : 'No';
+    $cache = "?" . time();
     $listingHtml .= <<<HEREDOC
     <tr id="tr_{$tour_data['id']}" style="border:1px solid #000000;">
         <td><center><label>{$tour_data['id']}</label></center></td>
         <td><center><label>{$tour_data['tour_code']}</label></center></td>
         <td><center><label>{$tour_data['tour_name']}</label></center></td>
-        <td style="width:150px;"><center><img id="display_image_preview" src="../../images/tours/{$tour_data['display_image']}" /></center></td>
+        <td style="width:150px;"><center><img id="display_image_preview" src="../../images/tours/{$tour_data['display_image']}{$cache}" /></center></td>
         <td><center><label>{$tour_data['tour_region']}</label></center></td>
         <td><center><label>{$tour_data['tour_state']}</label></center></td>
         <td><center><label>{$tour_data['tour_duration']}</label></center></td>

@@ -9,7 +9,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Index</title>
+	<title>Shravani-Tourism</title>
 	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
@@ -41,25 +41,25 @@ session_start();
 	<h4 class="text-center text-uppercase pt-4 pb-4">Ashtavinayak Tours</h4>
 		<div class="row">
 			<?php
-			$query = "SELECT id,tour_name,tour_duration FROM tours WHERE tour_name LIKE '%ashtavinayak%';";
+			$query = "SELECT id,tour_code,tour_name,tour_duration,tour_desc,display_image FROM tours WHERE tour_name LIKE '%ashtavinayak%';";
             $fetch_data = mysqli_query($con,$query);    
             while($tour_data = $fetch_data->fetch_assoc()){
-               //	 print_r($tour_data);
             ?>
             
 			<div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-5">
 				<a href="ashtvinayak-package-detail.php?tour_id=<?php echo $tour_data['id'];?>" border="0px">
-			   		 	<img src="images/ashtvinayak0112.jpg" class="img-thumbnail card-img-bor-rad img-fluid" alt="Cinque Terre"  style="width:95%">
+			   		 	<img src="images/tours/<?php echo $tour_data['display_image'];?>" class="img-thumbnail card-img-bor-rad img-fluid" alt="Cinque Terre"  style="width:95%">
 			   		 </a>
 			</div>
 			<div class="col-12 col-sm-8 col-md-8 col-lg-8 mb-5">
-					<div class="tx-al-le text-uppercase col-sm-12 col-md-12 col-lg-12 nopadd-mar"><?php echo $tour_data['tour_name'];?><br><br></div>
-		      		
-		      		<div class="ca-tx nopadd-mar"><?php echo $tour_data['tour_name'];?><?php echo $tour_data['tour_duration'];?><br>Tour Code:
-						STMT-008 / SHASTROKT ASHTAVINAYAK YATRA<br>
-						वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।
-						निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥ Shashtrokt Ashtavinayak Yatra with Shravani Tourism. All Ashtagapati is called Swayambhu Ganpati. These eight very ancient temples are also known as Lord Shakti Peeth of Lord Ganesha. The Darshan Yatra of these temples with Shastrokt Puja is also known as Shastrokt Ashtavinayak Yatra.</div>
-						<div class="nopadd-mar mt-5"><a href="ashtvinayak-package-detail.php?tour_id=<?php echo $tour_data['id'];?>"><button class="btn btn-default more-det">More Details</button></a></div>
+				<div class="tx-al-le text-uppercase col-sm-12 col-md-12 col-lg-12 nopadd-mar"><?php echo $tour_data['tour_code'];?> / <?php echo $tour_data['tour_name'];?><br></div>
+	      		
+	      		<div class="ca-tx nopadd-mar"><?php echo $tour_data['tour_duration'];?><br><br>
+				<?php echo $tour_data['tour_desc'];?></div>
+				<div class="nopadd-mar mt-5">
+					<a href="ashtvinayak-package-detail.php?tour_id=<?php echo $tour_data['id'];?>"><label class="btn btn-default more-det">More Details</label>
+					</a>
+				</div>
 			</div>
 				
 	  		<?php
@@ -72,7 +72,7 @@ session_start();
 	</div>
 </div>
 	<!--Pagination-->
-	<div class="col- col-sm-12 col-md-12 col-lg-12">
+	<!-- <div class="col- col-sm-12 col-md-12 col-lg-12">
 		<ul class="pagination pagination-sm">
 		    <li class="page-item"><a class="page-link pg-link" href="#">Previous</a></li>
 		    <li class="page-item"><a class="page-link pg-link" href="#">1</a></li>
@@ -80,7 +80,7 @@ session_start();
 		    <li class="page-item"><a class="page-link pg-link" href="#">3</a></li>
 		    <li class="page-item"><a class="page-link pg-link" href="#">Next</a></li>
 		</ul>
-	</div>
+	</div> -->
 	<!--Pagination-->
 	</div>
 	<!--Package list-->
