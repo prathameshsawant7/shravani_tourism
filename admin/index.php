@@ -8,7 +8,7 @@
 <?php 
 session_start();
 if(isset($_SESSION['cID']))
-    {header('Location:home/index.php'); }
+    {header('Location:settings/index.php'); }
 ?>
 <!doctype html>
 <html class="no-js" lang="en">

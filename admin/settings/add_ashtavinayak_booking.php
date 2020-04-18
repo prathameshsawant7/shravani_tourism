@@ -35,11 +35,12 @@ $con=$est->connection();
                     $query = "SELECT * FROM ashtavinayak_bookings WHERE ticket='$ticket' AND active=1;";
                     $fetch_data  = mysqli_query($con,$query);
                     $booking_data = $fetch_data->fetch_assoc();
+                    $page_action = 'update_booking';
                 }else{
-                    echo "Invalid Booking.";
+                    $page_action = 'add_booking';
                 }
 
-                $query = "SELECT id, CONCAT(tour_code,' - ',tour_name) AS tour FROM tours WHERE tour_name LIKE '%ASHTAVINAYAK%';";
+                $query = "SELECT DISTINCT t.id, CONCAT(t.tour_code,' - ',t.tour_name) AS tour FROM tours as t LEFT JOIN bus_dates as d ON d.tour_id = t.id WHERE tour_name LIKE '%ASHTAVINAYAK%' AND date_format(STR_TO_DATE(d.date, '%d/%m/%Y'), '%Y%m%d') > date_format(curdate(), '%Y%m%d');";
                 $tour_fetch_data  = mysqli_query($con,$query);
                 
                 $query = "SELECT type,point FROM ashtavinayak_pickup_drop;";
@@ -319,22 +320,7 @@ $con=$est->connection();
                                     <tr>
                                         <th colspan="2" width="100%">
                                          Calculate / Edit Cost
-                                         <!-- <div class="switch small" style="color: black;text-align: end;font-size: small;">
-                                             <label>
-                                                 Auto Calculate
-                                             </label>
-                                             
-                                              <input class="switch-input" id="auto_calculate" type="checkbox" name="auto_calculate" checked="checked" onchange="auto_cost_calculations(this)">
-                                              <label class="switch-paddle" for="auto_calculate" style="right:10px;color: white;">
-                                                <span class="switch-active" aria-hidden="true" >Yes</span>
-                                                <span class="switch-inactive" aria-hidden="true">No</span>
-                                              </label>
-
-                                            </div> -->
-
-
                                         </th>
-
                                     </tr>
                                     <tr>
                                         <th style="border:1px solid #000000;"><label>Update Package Cost: </label></th>
@@ -376,6 +362,7 @@ $con=$est->connection();
                                 </table>
                             </td>
                         </tr>
+                        <?php if($page_action == 'update_booking'){ ?>
                         <tr>
                             <td colspan="2">
                                 <table  border="3px" >
@@ -413,6 +400,7 @@ $con=$est->connection();
                                 </table>
                             </td>
                         </tr>
+                        <?php } ?>
                         <tr>
                             <td colspan="2">
                                 <table  border="3px" >
@@ -499,12 +487,14 @@ $con=$est->connection();
         <script type="text/javascript">
             var room_counter = '<?php echo $room_counts;?>';
             var seat_tracker = '';
+            var page_action = '<?php echo $page_action;?>';
             $(document).ready(function(){
                 setTourDate();
-                //addRoom();
                 resetCost();
-                calculate_tour_cost();
-              //  checkSeatsAvailability();
+                if(page_action == 'update_booking'){
+                    calculate_tour_cost();
+                }
+                
             });
 
             $('input[type=radio][name=update_cost]').change(function() {
@@ -519,7 +509,6 @@ $con=$est->connection();
 
             function submitBooking(){
                 var data = {}
-                data['action'] = 'create_booking';
                 data['updated_by'] = "<?php echo !empty($_SESSION['cID'])?$_SESSION['cID']:''; ?>";
                 data['contact_name'] = $('#contact_name').val();
                 data['contact_phone'] = $('#contact_phone').val();
@@ -570,10 +559,15 @@ $con=$est->connection();
 
                 console.log(data);
 
-                $.post("ajax_calls.php",{request:'update_booking',data:data},function(data) {
+                $.post("ajax_calls.php",{request:page_action,data:data},function(data) {
                         if(data.trim() == 'success'){
-                            alert("Booking Updated");
-                            location.reload();
+                            if(page_action == 'update_booking'){
+                                alert("Booking Updated");
+                            }else{
+                                alert("Booking Created");
+                            }
+                            
+                            window.location.href = "../orders/ashtavinayak.php";
                         }
                     }); 
             }
@@ -600,7 +594,7 @@ $con=$est->connection();
                         rooms[i]['child'] = $('#room_child_'+(i+1)).val();
                     }
                 }
-                console.log(rooms);
+               // console.log(rooms);
 
                 var tour_id     = $('#tour_id').val();
                 var tour_type   = $('#tour_type').val();

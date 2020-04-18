@@ -74,7 +74,7 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$special_note = mysqli_escape_string($con,$_POST['special_note']);
 	$active = mysqli_escape_string($con,$_POST['active']);
 	
-	mysql_set_charset( $con, 'utf8');
+	//mysql_set_charset( $con, 'utf8');
 
 	if($page_action == 'edit'){
 		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_labels='".$tour_labels."'".$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary_json='".$itenerary_json."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
