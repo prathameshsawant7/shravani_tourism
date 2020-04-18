@@ -52,6 +52,12 @@ $con=$est->connection();
                 
                            </th> 
                         </tr>
+                        <tr>
+                            <th style="border:1px solid #000000;"><label>GSTIN Number: </label></th>
+                            <td> 
+                                <input type="text" id="gst_no" class="filter" placeholder="GSTIN Number" name="gst_no" value="<?php echo $data['gst_no'];?>"/>
+                            </td>
+                        </tr>
                         
                         <tr>
                             <th style="border:1px solid #000000;"><label>GST Percent: </label></th>
