@@ -4,7 +4,7 @@ include("configs/settings.php");
 include("functions.php");
 $est =new settings();
 $con=$est->connection();
-session_start(); 
+#session_start(); 
 
 if(isset($_GET['ticket'])){
   $ticket = $_GET['ticket'];

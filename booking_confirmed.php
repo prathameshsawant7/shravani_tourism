@@ -119,7 +119,9 @@ session_start();
       </table>
       <h2>
         <center>
+          <a href="receipt.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Ticket</a>
           <a href="receipt.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Receipt</a>
+          <a href="receipt.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Invoice</a>
         </center>
       </h2>
 

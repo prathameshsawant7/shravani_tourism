@@ -120,6 +120,8 @@ $con=$est->connection();
                         <tr>
                             <td colspan="2">
                                 <center>
+                                    <label id="error_msg" style="color: red;"></label>
+                                    <BR>
                                     <input type="submit" class="small button" value="Submit" style="margin-bottom: -4px;"/>
                                 </center>
                             </td>
@@ -147,6 +149,31 @@ $con=$est->connection();
                 getTourTypesByTourID();
                 setTourDate();
             });
+
+            // function enableFields(){
+            //     tour = $('#tour_id').val();
+            //     tour_type = $('#tour_type').val();
+            //     tour_date = $('#tour_date').val();
+            //     bus_no = $('#bus_no').val();
+            //     if(tour != '' && tour_type!= '' && tour_date != '' && bus_no)
+            // }
+
+            $('form').submit(function () {
+                $('#error_msg').html("");
+                tour_id = $.trim($('#tour_id').val());
+                tour_type = $.trim($('#tour_type').val());
+                tour_date = $.trim($('#tour_date').val());
+                bus_no = $.trim($('#bus_no').val());
+                if(tour_id != '' && tour_type!= '' && tour_date != '' && bus_no!=''){
+                    window.open(
+                      'chart.php?tour_id='+tour_id+'&tour_type='+tour_type+'&tour_date='+tour_date+'&bus_no='+bus_no,
+                      '_blank' // <- This is what makes it open in a new window.
+                    );
+                }
+                $('#error_msg').html("No booking available for current selections."); 
+                return false;
+            });
+
             $('#tour_id').on('change',function() {
                 getTourTypesByTourID();
                 setTourDate();

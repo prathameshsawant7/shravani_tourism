@@ -58,6 +58,10 @@ class Functions
 				}
 			}
 
+			if($adult_single_rate == 0){
+				$adult_single_rate = $adult_double_rate;
+			}
+
 			for($i=0;$i<count($rooms);$i++){
 				$cost = 0;
 				$service = 0;

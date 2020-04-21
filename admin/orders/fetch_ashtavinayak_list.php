@@ -47,8 +47,8 @@ if(isset($_POST['tour_type']) && $_POST['tour_type'] != '')
 if(isset($_POST['seat_no']) && $_POST['seat_no'] != '')
     $filter  .= "AND o.seat_no LIKE '%".$_POST['seat_no']."%' ";
 
-if(isset($_POST['tour_pickup']) && $_POST['tour_pickup'] != '')
-    $filter  .= "AND o.tour_pickup LIKE '%".$_POST['tour_pickup']."%' ";
+// if(isset($_POST['tour_pickup']) && $_POST['tour_pickup'] != '')
+//     $filter  .= "AND o.tour_pickup LIKE '%".$_POST['tour_pickup']."%' ";
 
 // if(isset($_POST['travellers']) && $_POST['travellers'] != '')
 //     $filter  .= "AND t.travellers LIKE '%".$_POST['travellers']."%' ";
@@ -138,16 +138,18 @@ while($order_data = $fetch_data->fetch_assoc()){ //fetch values
         <td><center><label>{$order_data['tour_date']}</label></center></td>
         <td><center><label>{$order_data['tour_type']}</label></center></td>
         <td><center><label>{$order_data['seat_no']}</label></center></td>
-        <td><center><label>{$order_data['tour_pickup']}</label></center></td>
-        <td><center><label>{$order_data['tour_drop']}</label></center></td>
-        <td><center><label>{$seat_text}</label></center></td>
-        <td><center><label>{$room_text}</label></center></td>
         <td><center><label>{$order_data['total_cost']}</label></center></td>
         <td><center><label>{$added_by}</label></center></td>
         <td><center><label>{$order_data['status']}</label></center></td>
         <td><center><label>{$updated_by}</label></center></td>
         <td><center><label>{$updated_on}</label></center></td>
-        <td><center><a href="../../receipt.php?ticket={$order_data['ticket']}"  target="_blank">Receipt</a></center></td>
+        <td>
+        <center>
+        <a href="../../ticket.php?ticket={$order_data['ticket']}"  target="_blank">Ticket</a>
+        <a href="../../receipt.php?ticket={$order_data['ticket']}"  target="_blank">Receipt</a>
+        <a href="../../invoice.php?ticket={$order_data['ticket']}"  target="_blank">Invoice</a>
+        </center>
+        </td>
          <td>
             <center>
                 <a href="../settings/add_ashtavinayak_booking.php?ticket={$order_data['ticket']}" class="small button" style="margin-bottom: -5px;">Update Booking</a>
@@ -211,22 +213,6 @@ echo <<<HEREDOC
             <td>
                 <center><label><b>Seats</b></label></center>
                 <input type="text" id="seat_no" class="filter" placeholder="Seats" name="seat_no"/>
-            </td>
-            <td>
-                <center><label><b>Pickup Points</b></label></center>
-                <input type="text" id="tour_pickup" class="filter" placeholder="Pickup Points"  name="tour_pickup"/>
-            </td>
-            <td>
-                <center><label><b>Drop Points</b></label></center>
-                <input type="text" id="tour_drop" class="filter" placeholder="Drop Points"  name="tour_drop"/>
-            </td>
-            <td>
-                <center><label><b>Travellers</b></label></center>
-                <input type="text" id="seat_data" class="filter" placeholder="Travellers" name="seat_data"/>
-            </td>
-            <td>
-                <center><label><b>Rooms</b></label></center>
-                <input type="text" id="room_data" class="filter" placeholder="Travellers" name="room_data"/>
             </td>
             <td>
                 <center><label><b>Total Cost</b></label></center>
