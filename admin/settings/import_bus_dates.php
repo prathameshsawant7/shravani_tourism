@@ -41,7 +41,7 @@ $con=$est->connection();
         <form action="insert_tour.php" name="register" method="post" enctype="multipart/form-data">
         <input type="hidden" id="data" name="data" value="import_bus_dates" />
         <div class="medium-9 columns">
-            <div class="tabs-content vertical" data-tabs-content="example-vert-tabs" style="margin-left: 30%;">
+            <div class="tabs-content vertical" data-tabs-content="example-vert-tabs" style="margin-left: 5%;width:125%;">
                 <BR>
                 <table border="4">
                     <tbody>
@@ -64,6 +64,67 @@ $con=$est->connection();
                         </tr>
                     </tbody>
                 </table>
+                <style>
+                    .col-txt-1-cen{
+                        padding:5px;
+                        text-transform: uppercase;
+                        color:434343;
+                        font-size: 0.9rem;
+                        line-height: 1.5rem;
+                        height:2rem;
+                        text-align: center;
+                    }
+
+                .table-head{
+                        padding:5px;
+                        text-transform: uppercase;
+                        color:434343;
+                        font-size: 0.9rem;
+                        line-height: 1.5rem;
+                        height:2rem;
+                        text-align: center;
+                        font-weight: 600;
+                        background-color: #f1f1f1;
+                    }
+                    
+                </style>
+                <BR>
+                <input type="button" onclick="delete_dates()" value="Delete selected dates" style="float: right;">
+                <BR><BR>
+                <table class="table table-bordered table-sm">
+                <thead>
+                  <tr>
+                    <th class="table-head">ID</th>
+                    <th class="table-head">Tour</th>
+                    <th class="table-head">Tour Type</th>
+                    <th class="table-head">Date</th>
+                    <th class="table-head">Buses</th>
+                    <th class="table-head">Added By</th>
+                    <th class="table-head">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $query = "SELECT CONCAT(t.tour_code,' - ',t.tour_name) AS tour, b.*FROM bus_dates as b LEFT JOIN tours as t ON t.id = b.tour_id WHERE b.is_ashtavinayak = 'yes' AND b.active=1  AND date_format(STR_TO_DATE(b.date, '%d/%m/%Y'), '%Y%m%d') > date_format(curdate(), '%Y%m%d') ORDER BY b.date DESC;";
+                    $fetch_data  = mysqli_query($con,$query);
+                    while ($data = $fetch_data->fetch_assoc()) {
+                    ?>
+                    <tr>
+                        <td class="col-txt-1-cen"><?php echo $data['id']; ?></td>
+                        <td class="col-txt-1-cen"><?php echo $data['tour']; ?></td>
+                        <td class="col-txt-1-cen"><?php echo $data['tour_type']; ?></td>
+                        <td class="col-txt-1-cen"><?php echo $data['date']; ?></td>
+                        <td class="col-txt-1-cen"><?php echo $data['buses']; ?></td> 
+                        <td class="col-txt-1-cen"><?php echo $data['added_by']; ?></td> 
+                        <td class="col-txt-1-cen">
+                            <input type="checkbox" name="delete" value="<?php echo $data['id']; ?>">
+                        </td> 
+                      </tr>
+                    <?php } ?>
+                  
+                </tbody>
+                </table>
+                <input type="button" onclick="delete_dates()" value="Delete selected dates" style="float: right;"><BR><BR>
             </div>
         </div>
         <script src="../js/jquery-1.11.2.min.js"></script>
@@ -74,11 +135,27 @@ $con=$est->connection();
         <script src="../js/jquery.reveal.js"></script>
         <script src="../js/app.js"></script>
         <script src="../js/sol.js"></script>
-        <script src="../js/tinymce.min.js"></script>
-        <script src="../js/jquery.multi-select.js"></script>
-        <script>
-                tinymce.init({ selector:'textarea' });
-            $('#id_category').multiSelect();
+        <script type="text/javascript">
+            function delete_dates(){
+                var ids = [];
+                $(':checkbox:checked').each(function(i){
+                    ids[i] = $(this).val();
+                });
+                console.log(ids);
+                if (typeof ids !== 'undefined' && ids.length > 0) {
+                    page_action = 'delete_bus_dates';
+                    $.post("ajax_calls.php",{request:page_action,data:ids},function(data){
+                        if($.trim(data) == 'success'){
+                            alert("Deleted successfully");
+                        }else{
+                            alert("Something went wrong. Please try again.");
+                        }
+                        location.reload();
+                    });
+                }else{
+                    alert("Please select checkboxes to delete dates.");
+                }
+            }
         </script>
     </body>
 </html>

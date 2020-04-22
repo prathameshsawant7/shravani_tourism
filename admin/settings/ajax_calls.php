@@ -20,6 +20,12 @@ if($request == 'deleteRegion'){
     mysqli_query($con,$query);  
 
     echo $id;
+}else if($request == 'delete_bus_dates'){
+    $ids         = implode(",",$_POST['data']);
+    $query      = "UPDATE bus_dates SET active=-1 WHERE id IN (".$ids.")";
+    mysqli_query($con,$query);  
+
+    echo 'success';
 }else if($request == 'deleteAshtavinayakPickup' || $request == 'deleteAshtavinayakDrop'){
     $id         = $_POST['id'];
     $query      = "DELETE FROM ashtavinayak_pickup_drop WHERE id = '".$id."'";

@@ -560,16 +560,16 @@ $con=$est->connection();
                 console.log(data);
 
                 $.post("ajax_calls.php",{request:page_action,data:data},function(data) {
-                        if(data.trim() == 'success'){
-                            if(page_action == 'update_booking'){
-                                alert("Booking Updated");
-                            }else{
-                                alert("Booking Created");
-                            }
-                            
-                            window.location.href = "../orders/ashtavinayak.php";
+                    if(data.trim() == 'success'){
+                        if(page_action == 'update_booking'){
+                            alert("Booking Updated");
+                        }else{
+                            alert("Booking Created");
                         }
-                    }); 
+                        
+                        window.location.href = "../orders/ashtavinayak.php";
+                    }
+                }); 
             }
 
 
