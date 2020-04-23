@@ -53,30 +53,6 @@
 			<div class="col-sm-2 col-md-2 col-lg-2 align-self-center bknowbox">
 				<a href="ashtvinayak-bus-booking.php?tour_id=<?php echo $_GET['tour_id']; ?>" class="btn btn-primary bknow-butt">BOOK NOW</a>
 			</div>
-			<div class="col-sm-2 col-md-2 col-lg-2 bknowbox">
-			<span class="tour-search text-uppercase">Group Tour Dates</span>
-				<a href="#"><i class="fa fa-calendar fa-2x fa-purple" aria-hidden="true" data-toggle="modal" data-target="#myModal"></i></a>
-				 <!-- The Modal -->
-					  <div class="modal fade" id="myModal">
-					    <div class="modal-dialog modal-sm">
-					      <div class="modal-content gr-dt-modal">
-					      
-					        <!-- Modal Header -->
-					        <div class="modal-header gr-dt-top">
-					          <h6 class="modal-title text-uppercase">Group Tour Dates</h6>
-					          <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        </div>
-					        
-					        <!-- Modal body -->
-					        <div class="modal-body text-left">
-					          November 2019 : 1, 8, 15, 22, 29<br/>
-					          December 2019 : 7, 14, 21, 28
-					        </div>
-					       				       		        
-					      </div>
-					    </div>
-					  </div>
-			</div>
 		</div>
 	</div>
 	<!--Package Details-->
@@ -105,14 +81,22 @@
 				      <a class="nav-link pan-tab text-uppercase" data-toggle="tab" href="#menu5">Terms & Conditions</a>
 				    </li> -->
 				    <li class="nav-item">
-				      <a class="nav-link pan-tab text-uppercase" data-toggle="tab" href="#menu6">PickUp-Drop Point & Timing</a>
+				      <a class="nav-link pan-tab text-uppercase" data-toggle="tab" href="#menu6">Terms and conditions</a>
 				    </li>
+				    <?php
+				    	if(isset($tour_data['special_note']) && $tour_data['special_note']!=''){ ?>
+				    <li class="nav-item">
+				      <a class="nav-link pan-tab text-uppercase" data-toggle="tab" href="#menu7">Special Note</a>
+				    </li>	
+
+				    <?php } ?>
 				  </ul>
 		</div>
   <!-- Tab panes -->
 			  <div class="tab-content d-none d-sm-block">
 			    <div id="home" class="container tab-pane active"><br>
-			      <h3>Itinerary</h3>
+			    	<?php echo $tour_data['itenerary'];?>
+			      <!-- <h3>Itinerary</h3>
 			      	<?php 
 			      		$itenerary = json_decode($tour_data['itenerary_json']);
 			      		foreach ($itenerary as $key => $val){
@@ -125,33 +109,34 @@
                             <p><?php echo $val->Description;?></p>                 
                           </div>
                      	</div>
-                     <?php } ?>
+                     <?php } ?> -->
 			    </div>
 			    <div id="menu1" class="container tab-pane fade"><br>
 			      <h3>Hotel Details</h3>
 			      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 			    </div>
 			    <div id="menu2" class="container tab-pane fade"><br>
-			      <h3>Tour Cost</h3>
 			      <table border="1" style="width: 100%;">
 			      	<?php 
-			      		$rates = json_decode($tour_data['rates_json']);
-			      		
+			      		$rates = json_decode($tour_data['rates_json'],true);
 			      	?>
 			      	<tr>
 				      	<th width="45%"></th>
 				      	<?php foreach ($rates as $key => $val){ 
-				      		foreach ($val as $type => $price){ 
+				      			foreach ($val as $type => $price){ 
 				      	?>
-				      		<th><center><?php echo $type;?></center></th>
+				      			<th><center><?php echo strtoupper(str_replace("_"," ",$type));?></center></th>
 				      	<?php } break; }?>
 				    </tr>
 				    <?php foreach ($rates as $key => $val){?>
 			    		<tr>
-			    			<th><?php echo $key;?></th>
+			    			<?php
+			    				if($val['standard'] != '' && $val['deluxe'] != '' && $val['super_deluxe'] != '' ){
+			    			?>
+			    			<th><?php echo $rate_identifiers[$key];?></th>
 			    			<?php foreach ($val as $type => $price){ ?>
-			    				<th><center><h6>Rs.<?php echo $price;?>/-</h6></center></th>
-			    			<?php } ?>
+			    				<th><center><h6><?php echo '₹ '.money_format('%!i', $price);?>/-</h6></center></th>
+			    			<?php  } } ?>
 			    		</tr>
 				    <?php } ?>	
 				    
@@ -166,47 +151,14 @@
 			      <span><?php echo $tour_data['exclusive'];?></span>
 			    </div>
 			    
-			    <div id="menu5" class="container tab-pane fade"><br>
-			      <h3>Terms & Conditions</h3>
-			      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-			    </div>
 			    <div id="menu6" class="container tab-pane fade"><br>
-			      <div class="row">
-					<div class="col-sm-6 col-lg-6">
-					   <div class="card card-bor">
-					   		<table border="1">
-					   			<tr>
-					   				<thead><center><h5>PickUp Point & Timing</h5></center></thead>
-					   			</tr>
-					   			<?php
-								$query = "SELECT * FROM ashtavinayak_pickup_drop WHERE type='pickup';";
-					            $fetch_data = mysqli_query($con,$query);    
-					            while($pick_drop = $fetch_data->fetch_assoc()){           
-							    ?>
-							    	<tr>
-					   					<th><center><h6><?php echo $pick_drop['point'];?></h6></center></th>
-					   				</tr>
-								<?php } ?>
-					   		</table>
-				  		</div>
-					</div>	
-					<div class="col-sm-6 col-lg-6">
-					    <div class="card card-bor">
-					   		 <table border="1">
-					   			<tr>
-					   				<thead><center><h5>Drop Point & Timing</h5></center></thead>
-					   			</tr>
-					   			<?php
-								$query = "SELECT * FROM ashtavinayak_pickup_drop WHERE type='drop';";
-					            $fetch_data = mysqli_query($con,$query);    
-					            while($pick_drop = $fetch_data->fetch_assoc()){           
-							    ?>
-							    	<tr>
-					   					<th><center><h6><?php echo $pick_drop['point'];?></h6></center></th>
-					   				</tr>
-								<?php } ?>
-					   		</table>
-				  		</div>
+			     	<div class="row">
+						<?php echo $site_cms['atnc'];?>
+					</div>
+				</div>
+				<div id="menu7" class="container tab-pane fade"><br>
+			     	<div class="row">
+						<?php echo $tour_data['special_note'];?>
 					</div>
 				</div>
 			    </div>

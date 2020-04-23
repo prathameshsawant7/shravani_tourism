@@ -46,5 +46,13 @@ if(EXEC == 0){
 	define('_COOKIE_KEY_', 'Tnrz1a2GiemITuj3myqm4k1YcdtIJ4TtutUFaqru33e18nuHOtrW7193');
 }
 
+
+#GLOBALS
+$rate_identifiers = [];
+$rate_identifiers['adult_double'] = 'Rate Per Person with Double Occupancy';
+$rate_identifiers['extra_adult'] = 'Extra Person with Same Room Sharing (Above+ 8yrs) with Extra Mattress';
+$rate_identifiers['child'] = 'Per Child with Same Room Sharing (Above+ 4yrs) without Extra Mattress.';
+$rate_identifiers['adult_single'] = 'Rate Per Person with Single Occupancy';
+
 ?>
 

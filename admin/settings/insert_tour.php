@@ -67,53 +67,48 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$tour_places = mysqli_escape_string($con,$_POST['tour_places']);
 	$tour_duration = mysqli_escape_string($con,$_POST['tour_duration']);
 	$tour_price = mysqli_escape_string($con,$_POST['tour_price']);
-	$itenerary_json = trim(mysqli_escape_string($con,$_POST['itenerary_json']));
-	$rates_json = trim(mysqli_escape_string($con,$_POST['rates_json']));
+	$itenerary= mysqli_escape_string($con,$_POST['itenerary']);
+	#$itenerary_json = trim(mysqli_escape_string($con,$_POST['itenerary_json']));
+	$rates_json = json_encode($_POST['rates']);
 	$inclusive = mysqli_escape_string($con,$_POST['inclusive']);
 	$exclusive = mysqli_escape_string($con,$_POST['exclusive']);
 	$special_note = mysqli_escape_string($con,$_POST['special_note']);
 	$active = mysqli_escape_string($con,$_POST['active']);
 	
 	//mysql_set_charset( $con, 'utf8');
+	
 
 	if($page_action == 'edit'){
-		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_labels='".$tour_labels."'".$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary_json='".$itenerary_json."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
+		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_labels='".$tour_labels."'".$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary='".$itenerary."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
 
 	}else{
-		$query = "INSERT INTO tours (tour_code,tour_name,tour_desc,tour_labels,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary_json,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_desc."','".$tour_labels."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary_json."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
+		$query = "INSERT INTO tours (tour_code,tour_name,tour_desc,tour_labels,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_desc."','".$tour_labels."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
 	}
 	//echo "<pre>".$query."</pre>";exit;
 	//print($query);exit;
+	
 	mysqli_query($con,$query);
 	$action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
 	$id = ($id == '')? mysqli_insert_id($con):$id;
 
-	$rates = json_decode($_POST['rates_json'],true);
+	$rates = $_POST['rates'];
 
 	$tour_rates_query = '';
-	foreach ($rates as $identity => $types) {
-		$identifier = '';
+	foreach ($rates as $identifier => $values) {
+		foreach ($values as $type => $rate) {
+			if($rate != 0){
+				$tour_rates_query .= "('".$id."','".$identifier."','".$type."',".$rate."),";
 
-		if(strpos(strtolower($identity), 'double occupancy') !== false){
-			$identifier = 'adult_double';
-		}else if(strpos(strtolower($identity), 'extra person') !== false){
-			$identifier = 'extra_adult';
-		}else if(strpos(strtolower($identity), 'per child') !== false){
-			$identifier = 'child';
-		}else if(strpos(strtolower($identity), 'single occupancy') !== false){
-			$identifier = 'adult_single';
+			}
 		}
-
-		foreach ($types as $key => $val) {
-			$tour_rates_query .= "('".$id."','".str_replace(' ', '_', strtolower($key))."','".$identifier."','".$val."',".$_SESSION['cID'].",".$_SESSION['cID']."),";
-		}
-
 	}
+
 	$query = "DELETE FROM tour_rates WHERE tour_id='".$id."'";
 	mysqli_query($con,$query);
 
 	$tour_rates_query = substr($tour_rates_query, 0, -1);
-	$query = "INSERT INTO tour_rates (tour_id,hotel_type,identifier,rate,added_by,updated_by) VALUES ".$tour_rates_query.";";
+
+	$query = "INSERT INTO tour_rates (tour_id,hotel_type,identifier,rate) VALUES ".$tour_rates_query.";";
 	mysqli_query($con,$query);
 
 	header("Location:index.php");

@@ -52,7 +52,7 @@ $con=$est->connection();
         <form action="insert_tour.php" name="register" method="post" enctype="multipart/form-data">
         <input type="hidden" id="data" name="data" value="tour" />
         <div class="medium-9 columns">
-            <div class="tabs-content vertical" data-tabs-content="example-vert-tabs" style="margin-left: 30%;">
+            <div class="tabs-content vertical" data-tabs-content="example-vert-tabs" style="margin-left: 17%;width: 100%">
                 <BR>
                 <table border="4">
                     <tbody>
@@ -64,7 +64,7 @@ $con=$est->connection();
                         </tr>
                         
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Tour ID: </label></th>
+                            <th style="border:1px solid #000000;width: 25%;"><label>Tour ID: </label></th>
                             <td> <input type="text" id="id" name="id" value="<?php echo $tour_data['id'];?>" disabled /></td>
                         </tr>
                         <tr>
@@ -175,21 +175,67 @@ $con=$est->connection();
                             <td > <input type="text" id="tour_duration" name="tour_duration" value="<?php echo $tour_data['tour_duration'];?>" /></td>
                         </tr>
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Itenerary CSV File: </label></th>
+                            <th style="border:1px solid #000000;"><label>Itenerary: </label></th>
                             <td> 
-                                <input type="file" id="itenerary_upload" onchange="readItenerary(this)" name="itenerary_upload" value="" />
+                                <textarea class="mce" id="itenerary" name="itenerary"/>
+                                    <?php echo $tour_data['itenerary'];?>
+                                </textarea>
+                                <!-- <input type="file" id="itenerary_upload" onchange="readItenerary(this)" name="itenerary_upload" value="" />
                                 <a href="../files/sample_tour_itenerary.csv" style="font-size: 10px;">Click here to download sample itenerary CSV File</a>
-                                <textarea id="itenerary_json" name="itenerary_json" style="display:none;"><?php echo trim($tour_data['itenerary_json']);?></textarea>
+                                <textarea id="itenerary_json" name="itenerary_json" style="display:none;"><?php echo trim($tour_data['itenerary_json']);?></textarea> -->
                             </td>
                         </tr>
                         <tr>
+                            <th style="border:1px solid #000000;"><label>Rates: </label></th>
+                            <td>
+                                <label>* Please enter numbers only <b>(Example Price= 4563)</b></label>
+                                <label>* Keep fields blank if not required.</b></label>
+                                <?php
+                                    $rates =  json_decode($tour_data['rates_json'],true);
+                                 ?>
+                                <table border=3>
+                                    <tr>
+                                        <th></th>
+                                        <th><label>STANDARD</label></th>  
+                                        <th><label>DELUXE</label></th>
+                                        <th><label>SUPER DELUXE</label></th>  
+                                    </tr>
+                                    <tr>
+                                        <th><label>SINGLE OCCUPANCY</label></th>
+                                        <td><input type="input" name="rates[adult_single][standard]" value="<?php echo $rates['adult_single']['standard'];?>"></td>
+                                        <td><input type="input" name="rates[adult_single][deluxe]" value="<?php echo $rates['adult_single']['deluxe'];?>"></td>
+                                        <td><input type="input" name="rates[adult_single][super_deluxe]" value="<?php echo $rates['adult_single']['super_deluxe'];?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label>DOUBLE OCCUPANCY</label></th>
+                                        <td><input type="input" name="rates[adult_double][standard]" value="<?php echo $rates['adult_double']['standard'];?>"></td>
+                                        <td><input type="input" name="rates[adult_double][deluxe]" value="<?php echo $rates['adult_double']['deluxe'];?>"></td>
+                                        <td><input type="input" name="rates[adult_double][super_deluxe]" value="<?php echo $rates['adult_double']['super_deluxe'];?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label>CHILD</label></th>
+                                        <td><input type="input" name="rates[child][standard]" value="<?php echo $rates['child']['standard'];?>"></td>
+                                        <td><input type="input" name="rates[child][deluxe]" value="<?php echo $rates['child']['deluxe'];?>"></td>
+                                        <td><input type="input" name="rates[child][super_deluxe]" value="<?php echo $rates['child']['super_deluxe'];?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label>EXTRA ADULT</label></th>
+                                        <td><input type="input" name="rates[extra_adult][standard]" value="<?php echo $rates['extra_adult']['standard'];?>"></td>
+                                        <td><input type="input" name="rates[extra_adult][deluxe]" value="<?php echo $rates['extra_adult']['deluxe'];?>"></td>
+                                        <td><input type="input" name="rates[extra_adult][super_deluxe]" value="<?php echo $rates['extra_adult']['super_deluxe'];?>"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <!-- <tr>
                             <th style="border:1px solid #000000;"><label>Rates CSV File: </label></th>
                             <td> 
                                 <input type="file" id="rates_upload" onchange="readRates(this)" name="rates_upload" value="" />
                                 <a href="../files/sample_tour_rates.csv" style="font-size: 10px;">Click here to download sample rates CSV File</a>
                                 <textarea id="rates_json" name="rates_json" style="display:none;"><?php echo trim($tour_data['rates_json']);?></textarea>
                             </td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <th style="border:1px solid #000000;"><label>Inclusive: </label></th>
                             <td> 
