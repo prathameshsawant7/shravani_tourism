@@ -1,11 +1,3 @@
-<?php
-
-include_once("configs/defines.php");
-include("configs/settings.php");
-$est =new settings();
-$con=$est->connection();
-session_start(); 
-?>
 <!DOCTYPE html>
 <html>
 <head>

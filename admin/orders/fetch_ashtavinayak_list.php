@@ -27,7 +27,7 @@ $OrderBy= "";
 if($_POST['cRows'] != 0)
     $item_per_page = $_POST['cRows'];
 else 
-    $item_per_page = 10;
+    $item_per_page = 20;
 
 if(isset($_POST['id']) && $_POST['id'] != '')
     $filter  .= "AND o.id = ".$_POST['id']." ";
@@ -179,7 +179,9 @@ echo <<<HEREDOC
                     <select id="cRows" style="width: 50px;float: left" value="10">
                         {$rows_html}
                     </select>
-                    
+                    <span style="float: left;padding-left: 22px;margin-top: -5px;">
+                        <a href="../settings/add_ashtavinayak_booking.php" class="small button">New Booking</a>
+                    </span>
 
                </section>
            </th> 

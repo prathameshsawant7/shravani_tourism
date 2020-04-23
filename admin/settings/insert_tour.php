@@ -290,5 +290,24 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	    $query = "UPDATE configurations SET gst_no='".$gst_no."',gst=".$gst.",service_charge=".$service_charge.",discount=".$discount.",updated_by=".$user_id." WHERE id=1";
 	    $result = mysqli_query($con, $query);
 	    header("Location:configurations.php?msg=Updated successfully");
+	}else if(isset($_POST['data']) && $_POST['data'] == "site_cms") {
+		// $user_id = $_SESSION['cID'];
+		// $gst_no         = mysqli_escape_string($con,$_POST['gst_no']);
+		// $gst            = mysqli_escape_string($con,$_POST['gst']);
+	 //    $service_charge	= mysqli_escape_string($con,$_POST['service_charge']);
+	 //    $discount       = mysqli_escape_string($con,$_POST['discount']);
+
+	 //    $query = "UPDATE configurations SET gst_no='".$gst_no."',gst=".$gst.",service_charge=".$service_charge.",discount=".$discount.",updated_by=".$user_id." WHERE id=1";
+	 //    $result = mysqli_query($con, $query);
+	 //    header("Location:configurations.php?msg=Updated successfully");
+		$data = $_POST;
+		foreach ($data as $key => $value) {
+			if($key != 'data'){
+				$query = "UPDATE site_cms SET content='".mysqli_escape_string($con,$value)."' WHERE name='".mysqli_escape_string($con,$key)."'";
+				mysqli_query($con, $query);
+			}
+		}
+		header("Location:site_cms.php?msg=Updated successfully");
+
 	}
 ?>

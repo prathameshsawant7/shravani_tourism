@@ -120,7 +120,7 @@ if($request == 'deleteRegion'){
 
         $ticket = $func->generate_ticket();
 
-        $query = "INSERT INTO ashtavinayak_bookings(ticket,tour_id,tour_date,tour_type,tour_pickup,tour_drop,seat_no,seat_data, room_data, cost_data, total_cost, contact_name, contact_phone, contact_email, contact_address, status , added_by, added_on) VALUE 
+        $query = "INSERT INTO ashtavinayak_bookings(ticket,tour_id,tour_date,tour_type,tour_pickup,tour_drop,seat_no,seat_data, room_data, cost_data, total_cost, contact_name, contact_phone, contact_email, contact_address, status , updated_by, updated_on) VALUE 
                     ('".$ticket."',".$data['tour_id'].",'".$data['tour_date']."','".$data['tour_type']."','".$data['pickup_point']."','".$data['drop_point']."','".$data['seat_no']."','".json_encode($data['seat_data'])."','".json_encode($data['room_data'])."','".json_encode($cost_data)."',".$cost_data['total_cost'].",'".$data['contact_name']."','".$data['contact_phone']."','".$_POST['contact_email']."','".$data['contact_address']."','confirmed',".$data['updated_by'].",now())";
         mysqli_query($con,$query);
         $id = mysqli_insert_id($con);

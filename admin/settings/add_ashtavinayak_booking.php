@@ -442,7 +442,7 @@ $con=$est->connection();
                                          <td>
                                              <select id="status" name="status">
                                                 <?php
-                                                $status = ['new','incomplete','confirmed','cancelled'];
+                                                $status = ['confirmed','cancelled','incomplete'];
                                                 foreach ($status as $k => $v) {
                                                 $selected = ($booking_data['status'] == $v)?'selected="selected"':'';
                                                 ?>

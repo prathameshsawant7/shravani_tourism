@@ -8,13 +8,10 @@
         <ul>
           <li class="col-heading">Reach Us</li>
           <li>
-            <i class="fa fa-phone" aria-hidden="true"></i><a href="tel:99-999-999-9999" class="foo">09689507349 / 09225140089</a>
+            <i class="fa fa-phone" aria-hidden="true"></i><a href="tel:99-999-999-9999" class="foo"><?php echo $site_cms['site_phone'];?></a>
           </li>
           <li>
-            <i class="fa fa-mobile" aria-hidden="true"></i><a href="sms:99-999-999-9999" class="foo">09689507349 / 09225140089</a>
-          </li>
-          <li>
-             <i class="fa fa-envelope-square" aria-hidden="true"></i><a href="mailto:tours@shravanitourism.co.in" class="foo">tours@shravanitourism.co.in</a>  
+             <i class="fa fa-envelope-square" aria-hidden="true"></i><a href="mailto:<?php echo $site_cms['site_email'];?>" class="foo"><?php echo $site_cms['site_email'];?></a>  
           </li> 
         </ul>
       </div>     
@@ -59,7 +56,7 @@
      
       <div class="col-xs-12  col-sm-12 col-md-12 col-lg-12 text-center" >
         <ul>
-          <li class="small">© Copyright 2019 Website by <a href="#" style="color:white;font-weight:500;">Developr</a>. All Rights reserved.</li>
+          <li class="small">© Copyright  Website by Shravani Tourism. All Rights reserved.</li>
         </ul>
       </div>
     </div> <!--  end row  -->
@@ -85,5 +82,5 @@ function topFunction() {
 }
 </script>
 
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery-3.4.1.min.js"></script>
+<!-- <script src="js/bootstrap.min.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script> -->

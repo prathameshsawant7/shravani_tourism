@@ -24,6 +24,7 @@
           <li class='has-sub'><a href='#'><span>Settings</span></a>
               <ul class="menu vertical" style="z-index: 9999999;">
                     <li><a href='\<?php echo ADMINROOT;?>\settings\configurations.php'><span>Package Configurations</span></a></li>
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\site_cms.php'><span>Site Pages CMS</span></a></li>
                     <li>
                         <a href='#'><span>Bus Settings</span></a>
                         <ul class="menu vertical" style="z-index: 9999999;">
