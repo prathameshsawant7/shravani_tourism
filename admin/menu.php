@@ -61,6 +61,7 @@
                         <li><a href='#'><span>Cancelled Orders</span></a></li>
                     </ul> -->
                 </li>
+                <li class='has-sub'><a href='\<?php echo ADMINROOT;?>\enquiry\index.php'><span>Enquires</span></a></li>
                 <li class='has-sub'><a href='#'><span>Reports</span></a>
                     <ul class="menu vertical"  style="z-index: 9999999;">
                         <li><a href='\<?php echo ADMINROOT;?>\reports\bus_chart.php'><span>Generate Bus Chart</span></a></li>

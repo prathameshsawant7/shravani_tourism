@@ -54,5 +54,8 @@ $rate_identifiers['extra_adult'] = 'Extra Person with Same Room Sharing (Above+ 
 $rate_identifiers['child'] = 'Per Child with Same Room Sharing (Above+ 4yrs) without Extra Mattress.';
 $rate_identifiers['adult_single'] = 'Rate Per Person with Single Occupancy';
 
+
+$enquiry_statuses = ['new','processing','contacted','invalid','duplicate','closed'];
+
 ?>
 

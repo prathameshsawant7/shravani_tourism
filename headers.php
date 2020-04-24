@@ -11,8 +11,26 @@
     while($fields  = $fetch_data->fetch_assoc()) {
         $site_cms[$fields['name']] = $fields['content'];
     } 
+
+    $query = "SELECT state FROM states WHERE id_state IN (SELECT DISTINCT tour_state FROM tours WHERE active=1);";
+    $place_to_travel_data = mysqli_query($con,$query);
+
 ?>
 <header>
+<style type="text/css">
+	.field-error{
+		font-size: 10px;
+    	color: red;
+    	float: right;
+	}
+
+	.enquiry-msg{
+		padding: 50px;
+	    font-family: auto;
+	    color: darkmagenta;
+	    font-size: 21px;
+	}
+</style>
 <!--fixed-position-->
 <div class="enquiryHover">
 	  <div class="enquiryContain">
@@ -34,66 +52,64 @@
         </div>
         
         <!-- Modal body -->
-        <form>
+        <form method="post" name="enquiry_form" id="enquiry_form" >
         <div class="modal-body">
-	        <div class="row form-group">
-	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<input type="Name" class="form-control mod-in" id="name" placeholder="Name">
+        	<div class="row form-group">
+        		<label id="enquiry_form_msg" class="enquiry-msg" style="display:none;"></label>
+        	</div>
+	        <div class="row form-group" id="enquiry_form_div">
+	        	<input type="hidden" name="action" value="enquiry">
+	        	<div class="col-sm-12 col-md-12 col-lg-12">
+	        		<input type="Name" class="form-control mod-in" id="enquiry_name" name="name" placeholder="Name">
+	        		<p class="field-error"></p>
+	        	</div>
+	        	<div class="col-sm-12 col-md-12 col-lg-12">
+	        		<input type="text" class="form-control mod-in" id="enquiry_email" name="email" placeholder="Email Id">
+	        		<p class="field-error"></p>
 	        	</div>
 	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<input type="Last name" class="form-control mod-in" id="lname" placeholder="Last Name">
-	        	</div><br/>
-	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<input type="text" class="form-control mod-in" id="name" placeholder="Mobile Number">
+	        		<input type="text" class="form-control mod-in" id="enquiry_mobile" name="mobile" placeholder="Mobile Number">
+	        		<p class="field-error"></p>
 	        	</div>
 	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<input type="text" class="form-control mod-in" id="lname" placeholder="Email Id">
+	        		<input type="text" class="form-control mod-in" id="enquiry_city_of_guest" name="city_of_guest" placeholder="City of Residence">
+	        		<p class="field-error"></p>
+	        	</div>
+	        	
+	        	<div class="col-sm-6 col-md-6 col-lg-6">
+	        		<input type="text" class="form-control mod-in" id="enquiry_time_to_travel" name="time_to_travel" placeholder="Time To Travel">
 	        	</div>
 	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<input type="text" class="form-control mod-in" id="name" placeholder="Time To Travel">
+	        		<input type="text" class="form-control mod-in" id="enquiry_duration" name="duration" placeholder="Travel Duration">
 	        	</div>
 	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<input type="text" class="form-control mod-in" id="lname" placeholder="Travel Duration">
-	        	</div>
-	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<input type="text" class="form-control mod-in" id="name" placeholder="City of Residence">
-	        	</div>
-	        	<div class="col-sm-6 col-md-6 col-lg-6">
-	        		<select class="form-control mod-in dest-text bt-gr" id="sel1" name="sellist1">
-				        <option>Mahabaleshwar</option>
-				        <option>Kokan</option>
-				        <option>Goa</option>
-				        <option>Rajasthan</option>
-				        <option>Kerala</option>
-				        <option>Hyderabad</option>
-				        <option>Shimla</option>
-				        <option>Manali</option>
-				        <option>Darjeeling</option>
-				        <option>Sikkim</option>
-				        <option>Gujrath</option>
-				        <option>Mysore</option>
-				        <option>Ooty</option>
-				        <option>Mumbai</option>
+	        		<select class="form-control mod-in dest-text bt-gr" id="enquiry_place_to_travel" name="place_to_travel">
+	        			<option value="">Place to Travel</option>
+	        			<?php 
+				        while($fields  = $place_to_travel_data->fetch_assoc()) { ?>
+				        	<option value="<?php echo $fields['state'];?>"><?php echo $fields['state'];?></option>
+					    <?php } ?>
 				     </select>
 
 	        	</div>
-	        	<div class="col-sm-12 col-md-12 col-lg-12">
-	        		<select class="form-control mod-in dest-text bt-gr" id="sel1" name="sellist1">
-	        			<option>Type Of Travel</option>
-				        <option>Group Tour</option>
-				        <option>Customized Tour</option>
-				        <option>Honeymoon Tour</option>
-				        <option>Speciality Tour</option>
-				        <option>Maharashtra Tours</option>
-				        <option>International Tours</option>
+	        	<div class="col-sm-6 col-md-6 col-lg-6">
+	        		<select class="form-control mod-in dest-text bt-gr" id="enquiry_travel_type" name="travel_type">
+	        			<option value="">Type Of Travel</option>
+				        <option value="Group Tour">Group Tour</option>
+				        <option value="Customized Tour">Customized Tour</option>
+				        <option value="Honeymoon Tour">Honeymoon Tour</option>
+				        <option value="Speciality Tour">Speciality Tour</option>
+				        <option value="Maharashtra Tours">Maharashtra Tours</option>
+				        <option value="International Tours">International Tours</option>
 				    </select>
 	        	</div>
 	        	<div class="col-sm-12 col-md-12 col-lg-12">
-	        		<select class="form-control mod-in dest-text bt-gr" id="sel1" name="sellist1">
-	        			<option>Prefferd mode of communication</option>
-				        <option>Call Me</option>
-				        <option>Email Me</option>
-				        <option>Msg/What's App Me</option>
+	        		<select class="form-control mod-in dest-text bt-gr" id="enquiry_mode_to_contact" name="mode_to_contact">
+	        			<option value="">Prefered mode of communication</option>
+				        <option value="Call">Call Me</option>
+				        <option value="Email">Email Me</option>
+				        <option value="Text Message">Text Message Me</option>
+				        <option value="Whatsapp">Whatsapp Me</option>
 				    </select>
 	        	</div>
 	        </div>	         
@@ -101,7 +117,7 @@
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="button" id="enquiry_submit" class="btn btn-success" onclick="submitEnquiry()">Submit</button>
         </div>
         </form>
       </div>
@@ -352,6 +368,66 @@
 		
 
 	});
+
+	function submitEnquiry(){
+		error = false;
+		$('.field-error').html("");
+		var name = trim($('#enquiry_name').val());
+		var email = trim($('#enquiry_email').val());
+		var mobile = trim($('#enquiry_mobile').val());
+		var city_of_guest = trim($('#enquiry_city_of_guest').val());
+		var time_to_travel = trim($('#enquiry_time_to_travel').val());
+		var duration = trim($('#enquiry_duration').val());
+		var place_to_travel = trim($('#enquiry_place_to_travel').val());
+		var travel_type = trim($('#enquiry_travel_type').val());
+		var mode_to_contact = trim($('#enquiry_mode_to_contact').val());
+
+		if(name == ''){
+			$('#enquiry_name').next().html("Required field");
+			error = true;
+		}
+
+		if(email == ''){
+			$('#enquiry_email').next().html("Required field");
+			error = true;
+		}
+
+		if(mobile == ''){
+			$('#enquiry_mobile').next().html("Required field");
+			error = true;
+		}
+
+		if(city_of_guest == ''){
+			$('#enquiry_city_of_guest').next().html("Required field");
+			error = true;
+		}
+
+		if(!error){
+			$.ajax({
+				url:'requests.php',
+				type: 'POST',
+			    data:$('#enquiry_form').serialize(),
+			    success: function (data,status,xhr) {   // success callback function
+			        console.log(data);
+			        msg = "";
+			        if(data.indexOf("token=") !== -1){
+			        	token = data.replace("token=", "");
+			        	msg = "Token "+token+" generated for the enquiry. Tour specialist will get in touch with you shorty.";
+			        }else{
+			        	msg = "Something went wrong. Please reload the page and try again.";
+			        }
+			        $('#enquiry_form_div').hide();
+			        $('#enquiry_submit').hide();
+			        $('#enquiry_form_msg').html(msg).show();
+			    },
+			    error: function (jqXhr, textStatus, errorMessage) { // error callback 
+			        console.log('Error: ' + errorMessage);
+			    }
+			});
+		}
+
+
+	}
 
 	function register() {
 		var error = false;
