@@ -108,7 +108,7 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 
 	$tour_rates_query = substr($tour_rates_query, 0, -1);
 
-	$query = "INSERT INTO tour_rates (tour_id,hotel_type,identifier,rate) VALUES ".$tour_rates_query.";";
+	$query = "INSERT INTO tour_rates (tour_id,identifier,hotel_type,rate) VALUES ".$tour_rates_query.";";
 	mysqli_query($con,$query);
 
 	header("Location:index.php");

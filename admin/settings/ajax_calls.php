@@ -2,6 +2,8 @@
 include_once("../../configs/defines.php");
 include("../../configs/settings.php");
 include("../../functions.php");
+include("../../emailer.php");
+
 
 $est =new settings();
 $con=$est->connection();
@@ -96,6 +98,13 @@ if($request == 'deleteRegion'){
         $query = "UPDATE ashtavinayak_bookings SET ticket = '".$data['ticket']."', tour_id = '".$data['tour_id']."', tour_date = '".$data['tour_date']."', tour_type = '".$data['tour_type']."', tour_pickup = '".$data['pickup_point']."', tour_drop = '".$data['drop_point']."', bus_no = '".$data['bus_no']."', seat_no = '".$data['seat_no']."', seat_data = '".json_encode($data['seat_data'])."', room_data = '".json_encode($data['room_data'])."', contact_name = '".$data['contact_name']."', contact_phone = '".$data['contact_phone']."', contact_email = '".$data['contact_email']."', contact_address = '".$data['contact_address']."',status = '".$data['status']."', updated_by = '".$data['updated_by']."', updated_on = now()".$update_cost_fields." WHERE id = ".$new_id.";";
         mysqli_query($con,$query);
 
+        if($data['notify'] == 'y'){
+            $email_data = array("ticket"=>$data['ticket'], "name"=>$data['contact_name'], "booking"=>"update");
+            $emailer = new Emailer($con, "booking_confirmation" , array($data['contact_email']), $email_data);
+            $emailer->generate();
+        }
+        
+
         echo "success";
     }catch(Exception $e){
         echo 'fail';
@@ -114,15 +123,20 @@ if($request == 'deleteRegion'){
             $cost_data['total_cost']        = $data['total_cost'];
         }else{
            $cost_data = $func->calculate_tour_cost($data['tour_id'],$data['tour_type'], $data['room_data']); 
-        }
-
-        
+        }     
 
         $ticket = $func->generate_ticket();
 
         $query = "INSERT INTO ashtavinayak_bookings(ticket,tour_id,tour_date,tour_type,tour_pickup,tour_drop,seat_no,seat_data, room_data, cost_data, total_cost, contact_name, contact_phone, contact_email, contact_address, status , updated_by, updated_on) VALUE 
-                    ('".$ticket."',".$data['tour_id'].",'".$data['tour_date']."','".$data['tour_type']."','".$data['pickup_point']."','".$data['drop_point']."','".$data['seat_no']."','".json_encode($data['seat_data'])."','".json_encode($data['room_data'])."','".json_encode($cost_data)."',".$cost_data['total_cost'].",'".$data['contact_name']."','".$data['contact_phone']."','".$_POST['contact_email']."','".$data['contact_address']."','confirmed',".$data['updated_by'].",now())";
+                    ('".$ticket."',".$data['tour_id'].",'".$data['tour_date']."','".$data['tour_type']."','".$data['pickup_point']."','".$data['drop_point']."','".$data['seat_no']."','".json_encode($data['seat_data'])."','".json_encode($data['room_data'])."','".json_encode($cost_data)."',".$cost_data['total_cost'].",'".$data['contact_name']."','".$data['contact_phone']."','".$data['contact_email']."','".$data['contact_address']."','confirmed',".$data['updated_by'].",now())";
         mysqli_query($con,$query);
+
+        if($data['notify'] == 'y'){
+            $email_data = array("ticket"=>$ticket, "name"=>$data['contact_name'], "booking"=>"new");
+            $emailer = new Emailer($con, "booking_confirmation" , array($data['contact_email']), $email_data);
+            $emailer->generate();
+        }
+
         $id = mysqli_insert_id($con);
         echo "success";
     }catch(Exception $e){

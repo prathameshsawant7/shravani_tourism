@@ -27,7 +27,7 @@ define('MAIL_ADDRESS', 'support@shravanitourism.com');
 
 
 if(EXEC == 0){
-	define("LIVEROOT", 'http://www.shravanitourism.com/');
+	define("LIVEROOT", 'http://localhost/shravani_tourism/');
 	define("FULLROOT", ''); #Please set up this accordingly..
 	define("WEBROOT", '/shravani_tourism/'); #Please set up this accordingly..
 	define("ADMINROOT", 'shravani_tourism\admin');

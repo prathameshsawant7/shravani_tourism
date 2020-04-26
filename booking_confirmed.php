@@ -1,3 +1,6 @@
+<?php
+   include("emailer.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +57,7 @@
           }
 
           if($result['status'] == 'incomplete'){
-            $email_data = array("ticket"=>$ticket, "name"=>$name);
+            $email_data = array("ticket"=>$ticket, "name"=>$name, "booking"=>"new");
             $emailer = new Emailer($con, "booking_confirmation" , array($email), $email_data);
             $emailer->generate();
           }
@@ -111,9 +114,9 @@
       </table>
       <h2>
         <center>
-          <a href="receipt.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Ticket</a>
+          <a href="ticket.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Ticket</a>
           <a href="receipt.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Receipt</a>
-          <a href="receipt.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Invoice</a>
+          <a href="invoice.php?ticket=<?php echo $ticket;?>" target="_blank" class="btn btn-primary">View Invoice</a>
         </center>
       </h2>
 

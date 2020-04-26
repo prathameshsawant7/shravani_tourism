@@ -314,54 +314,6 @@ $con=$est->connection();
                             </table>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="2">
-                                <table id="passenger" border="3px">
-                                    <tr>
-                                        <th colspan="2" width="100%">
-                                         Calculate / Edit Cost
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th style="border:1px solid #000000;"><label>Update Package Cost: </label></th>
-                                        <td>
-                                            <input type="radio" name="update_cost" name="update_cost" value="y">Yes 
-                                            <input type="radio" name="update_cost" value="n" checked="checked">No
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="border:1px solid #000000;"><label>Tour Cost: </label></th>
-                                        <td>
-                                            <input class="auto_costs" type="text" id="cost" name="cost" value="<?php echo $costs['cost'];?>" disabled>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="border:1px solid #000000;"><label>Service Charge: </label></th>
-                                        <td>
-                                             <input class="auto_costs" type="text" id="service_charge" name="service_charge" value="<?php echo $costs['service_charge'];?>" disabled>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="border:1px solid #000000;"><label>Discount: </label></th>
-                                        <td>
-                                            <input class="auto_costs" type="text" id="discount" name="discount" value="<?php echo $costs['discount'];?>" disabled>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="border:1px solid #000000;"><label>GST <input class="auto_costs" type="text" id="gst_percent" name="gst_percent" value="<?php echo $costs['gst_percent'];?>" style="width: 54px;text-align: center;" disabled>%: </label></th>
-                                        <td>
-                                            <input class="auto_costs" type="text" id="gst" name="gst" value="<?php echo $costs['gst'];?>" disabled>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="border:1px solid #000000;"><label>Total Cost: </label></th>
-                                        <td>
-                                            <input class="auto_costs" type="text" id="total_cost" name="total_cost" value="<?php echo $costs['total_cost'];?>" disabled>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
                         <?php if($page_action == 'update_booking'){ ?>
                         <tr>
                             <td colspan="2">
@@ -403,6 +355,55 @@ $con=$est->connection();
                         <?php } ?>
                         <tr>
                             <td colspan="2">
+                                <table id="passenger" border="3px">
+                                    <tr>
+                                        <th colspan="2" width="100%">
+                                         Auto recalculate / manually update cost
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="border:1px solid #000000;"><label>Update Package Cost: </label></th>
+                                        <td>
+                                            <input type="radio" name="update_cost" value="y">Yes 
+                                            <input type="radio" name="update_cost" value="n" checked="checked">No
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="border:1px solid #000000;"><label>Tour Cost: </label></th>
+                                        <td>
+                                            <input class="auto_costs" type="text" id="cost" name="cost" value="<?php echo $costs['cost'];?>" disabled>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="border:1px solid #000000;"><label>Service Charge: </label></th>
+                                        <td>
+                                             <input class="auto_costs" type="text" id="service_charge" name="service_charge" value="<?php echo $costs['service_charge'];?>" disabled>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="border:1px solid #000000;"><label>Discount: </label></th>
+                                        <td>
+                                            <input class="auto_costs" type="text" id="discount" name="discount" value="<?php echo $costs['discount'];?>" disabled>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="border:1px solid #000000;"><label>GST <input class="auto_costs" type="text" id="gst_percent" name="gst_percent" value="<?php echo $costs['gst_percent'];?>" style="width: 54px;text-align: center;" disabled>%: </label></th>
+                                        <td>
+                                            <input class="auto_costs" type="text" id="gst" name="gst" value="<?php echo $costs['gst'];?>" disabled>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="border:1px solid #000000;"><label>Total Cost: </label></th>
+                                        <td>
+                                            <input class="auto_costs" type="text" id="total_cost" name="total_cost" value="<?php echo $costs['total_cost'];?>" disabled>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="2">
                                 <table  border="3px" >
                                     <tr>
                                          <th colspan="2" width="100%">Contact Details</th>
@@ -438,7 +439,7 @@ $con=$est->connection();
                             <td colspan="2">
                                 <table  border="3px" >
                                     <tr>
-                                         <td width="33%"><center>Status</center></td>
+                                         <td width="33%"><label><center>Status</center></label></td>
                                          <td>
                                              <select id="status" name="status">
                                                 <?php
@@ -452,6 +453,13 @@ $con=$est->connection();
                                                 ?>
                                              </select>
                                          </td>
+                                    </tr>
+                                    <tr>
+                                         <td width="33%"><label><center>Notify Customer (Email)</center></label></td>
+                                         <td>
+                                            <input type="radio" name="notify"  value="y" checked="checked">Yes 
+                                            <input type="radio" name="notify" value="n">No
+                                        </td>
                                     </tr>
                                 </table>
                             </td>
@@ -524,6 +532,7 @@ $con=$est->connection();
                 data['bus_no'] = $('#bus_no').val();
                 data['seat_no'] = $('#seats').val().toString();
                 data['status'] = $('#status').val();
+                data['notify'] = $('input[name=notify]').val();
 
                 data['seat_data'] = {};
                 counter = 0;

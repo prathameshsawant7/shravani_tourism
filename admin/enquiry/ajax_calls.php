@@ -2,7 +2,7 @@
 include_once("../../configs/defines.php");
 include("../../configs/settings.php");
 include("../../functions.php");
-
+include("../../emailer.php");
 $est =new settings();
 $con=$est->connection();
 session_start();
@@ -31,6 +31,9 @@ if($request == 'add_enquiry'){
     //echo $query;exit;
     if(!empty($id)){
         echo "id=".$id;
+        $email_data = array("token"=>$token, "name"=>$name);
+        $emailer = new Emailer($con, "enquiry" , array($email), $email_data);
+        $emailer->generate();
     }else{
         echo "fail";
     }
