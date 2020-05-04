@@ -20,10 +20,17 @@
       <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
           <!-- <li><a href='\<?php echo ADMINROOT;?>/home/index.php'><span>Home</span></a></li>  -->
-          <li><a href='\<?php echo ADMINROOT;?>\settings\index.php'><span>Packages</span></a></li>
-          <li class='has-sub'><a href='#'><span>Settings</span></a>
-              <ul class="menu vertical" style="z-index: 9999999;">
-                    <li><a href='\<?php echo ADMINROOT;?>\settings\configurations.php'><span>Package Configurations</span></a></li>
+            <li class='has-sub'><a href='#'><span>Tours</span></a>
+                <ul class="menu vertical" style="z-index: 9999999;">
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\index.php'><span>Tour Packages</span></a></li>
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\configurations.php'><span>Tour Configurations</span></a></li>
+                    <li>
+                        <a href='#'><span>Tour Categories</span></a>
+                        <ul class="menu vertical" style="z-index: 9999999;">
+                            <li><a href='\<?php echo ADMINROOT;?>\settings\categories.php'><span>Categories</span></a></li>
+                            <li><a href='\<?php echo ADMINROOT;?>\settings\sub_categories.php'><span>Sub Categories</span></a></li>
+                        </ul>
+                    </li>
                     <li><a href='\<?php echo ADMINROOT;?>\settings\site_cms.php'><span>Site Pages CMS</span></a></li>
                     <li>
                         <a href='#'><span>Bus Settings</span></a>
@@ -39,7 +46,6 @@
                             <li><a href='\<?php echo ADMINROOT;?>\settings\ashtavinayak_pickup.php'><span>Pickup Points</span></a></li>
                             <li><a href='\<?php echo ADMINROOT;?>\settings\ashtavinayak_drop.php'><span>Drop Points</span></a></li>
                         </ul>
-                        <!-- <a href='\<?php echo ADMINROOT;?>\settings\ashtavinayak_pickup.php'><span>Pickup Points</span></a> -->
                     </li>
                     
                     <li><a href='\<?php echo ADMINROOT;?>\settings\region_list.php'><span>Regions</span></a></li>

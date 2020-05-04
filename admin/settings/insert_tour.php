@@ -41,7 +41,8 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$page_action = mysqli_escape_string($con,$_POST['page_action']);
 	$id = mysqli_escape_string($con,$_POST['id']);
 	$tour_code = mysqli_escape_string($con,$_POST['tour_code']);
-	$tour_labels = implode(',', $_POST['tour_labels']);
+	$tour_categories = implode(',', $_POST['tour_categories']);
+	$tour_subcategories = implode(',', $_POST['tour_subcategories']);
 	$tour_name = mysqli_escape_string($con,$_POST['tour_name']);
 	$tour_desc = mysqli_escape_string($con,$_POST['tour_desc']);
 
@@ -77,12 +78,13 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	
 	//mysql_set_charset( $con, 'utf8');
 	
+	print_r($rates_json);
 
 	if($page_action == 'edit'){
-		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_labels='".$tour_labels."'".$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary='".$itenerary."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
+		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_categories='".$tour_categories."',tour_subcategories='".$tour_subcategories."'".$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary='".$itenerary."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
 
 	}else{
-		$query = "INSERT INTO tours (tour_code,tour_name,tour_desc,tour_labels,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_desc."','".$tour_labels."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
+		$query = "INSERT INTO tours (tour_code,tour_name,tour_desc,tour_categories,tour_subcategories,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_desc."','".$tour_categories."','".$tour_subcategories."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
 	}
 	//echo "<pre>".$query."</pre>";exit;
 	//print($query);exit;
@@ -215,6 +217,37 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
     $id = ($id == '')? mysqli_insert_id($con):$id;
     header("Location:add_ashtavinayak_drop.php?id=".$id.$action);
+}else if(isset($_POST['data']) && $_POST['data'] == "categories") {
+    $id             = mysqli_escape_string($con,$_POST['id']);
+    $name          = mysqli_escape_string($con,$_POST['name']);
+    $user_id        = $_SESSION['cID'];
+    $page_action    = mysqli_escape_string($con,$_POST['page_action']);
+
+    if($page_action == 'edit'){
+       $query = "UPDATE tour_categories SET name='".$name."' WHERE id=".$id;
+    }else{
+        $query = "INSERT INTO tour_categories (name,added_by) VALUES ('".$name."','".$user_id."');";
+    }
+    mysqli_query($con,$query);
+	$action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
+    $id = ($id == '')? mysqli_insert_id($con):$id;
+    header("Location:add_categories.php?id=".$id.$action);
+}else if(isset($_POST['data']) && $_POST['data'] == "subcategories") {
+    $id             = mysqli_escape_string($con,$_POST['id']);
+    $category_id    = mysqli_escape_string($con,$_POST['category_id']);
+    $name           = mysqli_escape_string($con,$_POST['name']);
+    $user_id        = $_SESSION['cID'];
+    $page_action    = mysqli_escape_string($con,$_POST['page_action']);
+
+    if($page_action == 'edit'){
+       $query = "UPDATE tour_subcategories SET category_id=".$category_id.",name='".$name."' WHERE id=".$id;
+    }else{
+        $query = "INSERT INTO tour_subcategories (category_id,name,added_by) VALUES (".$category_id.",'".$name."','".$user_id."');";
+    }
+    mysqli_query($con,$query);
+	$action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
+    $id = ($id == '')? mysqli_insert_id($con):$id;
+    header("Location:add_subcategories.php?id=".$id.$action);
 }else if(isset($_POST['data']) && $_POST['data'] == "reserved_seats") {
     $id             = mysqli_escape_string($con,$_POST['id']);
     $date          	= mysqli_escape_string($con,$_POST['date']);

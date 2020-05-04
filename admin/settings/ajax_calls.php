@@ -34,6 +34,18 @@ if($request == 'deleteRegion'){
     mysqli_query($con,$query);  
 
     echo $id;
+}else if($request == 'deleteCategory'){
+    $id         = $_POST['id'];
+    $query      = "DELETE FROM tour_categories WHERE id = '".$id."'";
+    mysqli_query($con,$query);  
+
+    echo $id;
+}else if($request == 'deleteSubCategory'){
+    $id         = $_POST['id'];
+    $query      = "DELETE FROM tour_subcategories WHERE id = '".$id."'";
+    mysqli_query($con,$query);  
+
+    echo $id;
 }else if($request == 'deleteReservedSeats'){
     $id         = $_POST['id'];
     $query      = "DELETE FROM reserved_seats WHERE id = '".$id."'";
@@ -70,6 +82,17 @@ if($request == 'deleteRegion'){
     $func = new Functions();
     $data = $func->get_non_available_seats($id, $date, $type, $bus_no, $ticket);
     echo json_encode($data);
+}else if($request == 'getSubcategories'){
+    $categories  = $_GET['categories'];
+    $query = "SELECT t.*,c.name as category_name FROM `tour_subcategories` as t  LEFT JOIN tour_categories as c ON c.id = t.category_id WHERE t.category_id IN (".$categories.");";
+    $fetch_data = mysqli_query($con,$query);
+    $data = [];$i=0;
+    while($tour_data = $fetch_data->fetch_assoc()){
+        $data[$i] = $tour_data;
+        $i++;
+    }
+    echo json_encode($data);
+
 }else if($request == 'update_booking'){
     try{
         $data = $_POST['data'];

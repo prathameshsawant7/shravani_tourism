@@ -84,14 +84,14 @@ $con=$est->connection();
                             </td>
                         </tr>
                         <tr>
-                            <th style="border:1px solid #000000;"><label>Tour Labels: </label></th>
+                            <th style="border:1px solid #000000;"><label>Tour Categories: </label></th>
                             <td >
-                                <select id="tour_labels" name="tour_labels[]" multiple="multiple">
+                                <select id="tour_categories" name="tour_categories[]" multiple="multiple" onchange="build_subcategory();">
                                     <?php
-                                        $query = "SELECT id,name FROM tour_labels;";
+                                        $query = "SELECT id,name FROM tour_categories;";
                                         $fetch_data = mysqli_query($con,$query);
                                         while($label_data  = $fetch_data->fetch_assoc()){ 
-                                            $selected = (in_array($label_data['id'], explode(",",$tour_data['tour_labels'])))?'selected=selected':'';
+                                            $selected = (in_array($label_data['id'], explode(",",$tour_data['tour_categories'])))?'selected=selected':'';
                                             ?>
                                             <option value="<?php echo $label_data['id']; ?>" <?php echo $selected; ?>>
                                                 <?php echo $label_data['name']; ?>
@@ -103,9 +103,18 @@ $con=$est->connection();
                             </td>
                         </tr>
                         <tr>
+                            <th style="border:1px solid #000000;"><label>Tour Sub Categories: </label></th>
+                            <td >
+                                <div id="subcategory_div">
+                                    <select id="tour_subcategories" name="tour_subcategories[]" multiple="multiple">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
                             <th style="border:1px solid #000000;"><label>Display Image: </label></th>
                             <td >
-                                <?php echo "---".$tour_data['display_image'];?>
                                 <input type="file" id="display_image" onchange="readImage(this)" name="display_image" value="" />
                                 <img id="display_image_preview" src="../../images/tours/<?php echo $tour_data['display_image']."?".time();?>" />
 
@@ -311,9 +320,36 @@ $con=$est->connection();
         <script src="../js/jquery.multi-select.js"></script>
         <script>
             tinymce.init({ selector:'textarea.mce' });
-            $('#tour_labels').multiSelect();
+            $('#tour_categories').multiSelect();
+            $('#tour_subcategories').multiSelect();
         </script>
         <script>
+            var tour_categories = '<?php echo $tour_data['tour_subcategories'];?>'.split(",");
+                $(document).ready(function(){
+                    
+                    console.log(tour_categories);
+                    build_subcategory();
+                });
+                function build_subcategory(){
+                    var categories = String($('#tour_categories').val());
+                    $.get("ajax_calls.php",{request:'getSubcategories',categories:categories},
+                    function(data) {
+                        console.log(data);
+                        var select_subcategory = '<select id="tour_subcategories" name="tour_subcategories[]" multiple="multiple"><option value=""></option>';
+                        var data_arr = JSON.parse(data);
+                        $.each(data_arr, function (index, value) {
+                            var selected =  (tour_categories.includes(value['id']))?'selected="selected"':'';
+                            select_subcategory += '<option value="'+value['id']+'" '+selected+'>'+value['category_name']+" >> "+value['name']+'</option>';
+                        });
+                        select_subcategory += '</select>';
+                        console.log(select_subcategory);
+                        $('#ms-tour_subcategories').remove();
+                        $('#subcategory_div').html(select_subcategory);
+                        $('#tour_subcategories').multiSelect();
+                    }); 
+                }
+
+
                 function readImage(input) {
                     if (input.files && input.files[0]) {
                         var reader = new FileReader();
