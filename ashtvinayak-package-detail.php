@@ -1,3 +1,4 @@
+<?php include 'queries.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>

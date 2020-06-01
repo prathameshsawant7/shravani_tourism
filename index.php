@@ -1,3 +1,4 @@
+<?php include 'queries.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,11 +7,13 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/shravani.css" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="images/tours/<?php echo $site_images['favicon'];?>">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+      
 
 </head>
 <body>
@@ -41,27 +44,25 @@
       <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
     </ol>
     <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="images/Image 02.jpg" class="d-block w-100 img-fluid" alt="...">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>First slide label</h5>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="images/Image 03.jpg" class="d-block w-100 img-fluid" alt="...">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Second slide label</h5>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="images/Image 04.jpg" class="d-block w-100 img-fluid" alt="...">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Third slide label</h5>
-          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-        </div>
-      </div>
+    	<?php
+    		$texts= [
+    			'Holidays are meant for relaxation, to rejuvenate your energy moreover to spend Your quality time with your loved ones.',
+    			'It is imperative to have the best Tour Operator to be your travel planner.',
+    			'And we got the experience, Infrastructure, commitment and who is a real professional to plan your precious holidays.'
+    		];
+    		$slider_images = json_decode($site_images['homepage_slider'],true);
+    		$active = "active";
+    		for($i=0;$i<count($slider_images);$i++){ ?>
+    			<div class="carousel-item <?php echo $active;?>">
+			        <img src="images/tours/<?php echo $slider_images[$i];?>" class="d-block w-100 img-fluid" alt="...">
+			        <div class="carousel-caption d-none d-md-block">
+			          <h5>Shravni Tourism</h5>
+			          <p><?php echo $texts[$i];?>	</p>
+			        </div>
+		      </div>
+    		<?php	
+    			$active = '';
+    		} ?>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -81,14 +82,32 @@
 		<div class="col-sm-6 col-lg-3">
 		   <div class="card card-bor">
 		   		<a href="ashtavinayak-packages.php">
-		   		 <img class="card-img-top card-img-bor-rad img-fluid" src="images/ashtvinayak01.jpg" alt="Card image" style="width:100%">
+		   		 <img class="card-img-top card-img-bor-rad img-fluid" src="images/tours/<?php echo $site_images['astavinayak_display_image'];?>" alt="Card image" style="width:100%">
 		   		 <div class="card-body">
 		      		<h6 class="card-title text-al text-uppercase">Ashtvinayak</h6>
 		      	 </div>
 		      	</a>
 	  		</div>
-		</div>	
-		<div class="col-sm-6 col-lg-3">
+		</div>
+		<?php
+			$query = "SELECT * FROM tours WHERE id IN (".$site_content['home_maharashtra_tours'].");";
+			$fetch_data = mysqli_query($con,$query);
+			while($fields  = $fetch_data->fetch_assoc()) {?>
+			    <div class="col-sm-6 col-lg-3">
+				    <div class="card card-bor">
+				    	<a href="<?php echo LIVEROOT;?>package-details.php?id=<?php echo $fields['id']; ?>">
+
+				   		 <img class="card-img-top card-img-bor-rad img-fluid" src="images/tours/<?php echo $fields['display_image']; ?>" alt="Card image" style="width:100%">
+				   		 <div class="card-body">
+				      		<h6 class="card-title text-al text-uppercase">
+				      			<?php echo $fields['tour_name']; ?>
+				      		</h6>		      		
+				   		 </div>
+				   		</a>
+			  		</div>
+				</div>
+		<?php } ?>	
+		<!-- <div class="col-sm-6 col-lg-3">
 		    <div class="card card-bor">
 		   		 <img class="card-img-top card-img-bor-rad img-fluid" src="images/mahabaleshwar.jpg" alt="Card image" style="width:100%">
 		   		 <div class="card-body">
@@ -111,7 +130,7 @@
 		      		<h6 class="card-title text-al text-uppercase">Kokan Darshan</h6>
 		      	 </div>
 	  		</div>
-		</div>	
+		</div>	 -->
 
 	</div>
 	<div class="col text-center"><button type="button" class="btn btn-primary purple-btn mt-4 mb-4" href="#">View All Tours</button></div>
@@ -170,7 +189,24 @@
 	<h4 class="text-center text-uppercase pt-4 pb-4">Domestic Group Tours</h4>
 
 	<div class="row">
-		<div class="col-xs-6 col-sm-4 col-md-4">
+		<?php
+			$query = "SELECT * FROM tours WHERE id IN (".$site_content['home_india_tours'].");";
+			$fetch_data = mysqli_query($con,$query);
+			while($fields  = $fetch_data->fetch_assoc()) {?>
+				<a href="<?php echo LIVEROOT;?>package-details.php?id=<?php echo $fields['id']; ?>">
+			    <div class="col-xs-6 col-sm-4 col-md-4">
+				   <div class="card card-bor" style="width:325px">
+				   		 <img class="card-img-top card-img-bor-rad img-fluid" src="images/tours/<?php echo $fields['display_image']; ?>" alt="Card image" style="width:100%">
+				   		 <div class="card-body ca-bo row">
+				      		<div class="card-title tx-al-le text-uppercase col-sm-6"><?php echo $fields['tour_name']; ?></div>
+				      		<div class="card-title tx-al-ri text-uppercase col-sm-6 nopadd-mar">Rs. <?php echo $fields['tour_price']; ?></div>
+				      	 </div>
+			  		</div>
+				</div>
+				</a>
+		<?php } ?>
+
+		<!-- <div class="col-xs-6 col-sm-4 col-md-4">
 		   <div class="card card-bor" style="width:325px">
 		   		 <img class="card-img-top card-img-bor-rad img-fluid" src="images/Kerala.jpg" alt="Card image" style="width:100%">
 		   		 <div class="card-body ca-bo row">
@@ -199,10 +235,10 @@
 		      		<p class="card-text ca-tx">Goa the best places to visit in Goa for tourists,from beautiful churches to ancient forts and the best markets in Goa India.</p>
 		      	 </div>
 	  		</div>
-		</div>	
+		</div>	 -->
 		
 	</div>
-	<div class="row cus-pack">
+	<div class="row cus-pack" style="background-image: url('images/tours/<?php echo $site_images['homepage_family_display_image'];?>');">
 		<div class="cus-text" height="300px">
 			Customized Travel Perfection<br/>
 With the Professionalism of Experts<br/>

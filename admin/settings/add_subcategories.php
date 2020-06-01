@@ -36,7 +36,6 @@ $con=$est->connection();
                     $fetch_data = mysqli_query($con,$query);
                     $categories_data  = $fetch_data->fetch_assoc();
                     $page_action= $_GET['action'];
-
                     if(!empty($_GET['msg']) && $_GET['msg'] == 'update_success'){
                         echo "Category ID - ".$_GET['id']. " has been updated successfully.";
                     }
@@ -46,7 +45,7 @@ $con=$est->connection();
             ?>
             </h4>
         </center>
-        <form action="insert_tour.php" name="register" method="post">
+        <form action="insert_tour.php" name="register" method="post" enctype="multipart/form-data">
         <input type="hidden" id="data" name="data" value="subcategories" />
         <div class="medium-9 columns">
             <div class="tabs-content vertical" data-tabs-content="example-vert-tabs" style="margin-left: 30%;">
@@ -87,7 +86,15 @@ $con=$est->connection();
                             <th style="border:1px solid #000000;"><label>Name: </label></th>
                             <td > <input type="text" id="name" name="name" value="<?php echo $categories_data['name'];?>" /></td>
                         </tr>
-                       
+                       <tr>
+                            <th style="border:1px solid #000000;"><label>Display Image: </label></th>
+                            <td >
+                                <input type="file" id="display_image" onchange="readImage(this)" name="display_image" value="" />
+                                <?php if(isset($categories_data['display_image']) && $categories_data['cover_image'] != ''){?>
+                                <img id="display_image_preview" src="../../images/tours/<?php echo $categories_data['display_image']."?".time();?>" />
+                                <?php } ?>
+                            </td>
+                        </tr>
                         <tr>
                             <td colspan="2">
                                 <center>
@@ -113,6 +120,17 @@ $con=$est->connection();
         <script src="../js/sol.js"></script>
         <script src="../js/tinymce.min.js"></script>
         <script src="../js/jquery.multi-select.js"></script>
+        <script type="text/javascript">
+            function readImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#display_image_preview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
     </body>
 </html>
 

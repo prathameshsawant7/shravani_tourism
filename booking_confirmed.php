@@ -1,5 +1,6 @@
 <?php
    include("emailer.php");
+   include 'queries.php';
 ?>
 <!DOCTYPE html>
 <html>

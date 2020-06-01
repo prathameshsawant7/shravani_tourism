@@ -31,7 +31,7 @@
                             <li><a href='\<?php echo ADMINROOT;?>\settings\sub_categories.php'><span>Sub Categories</span></a></li>
                         </ul>
                     </li>
-                    <li><a href='\<?php echo ADMINROOT;?>\settings\site_cms.php'><span>Site Pages CMS</span></a></li>
+                    
                     <li>
                         <a href='#'><span>Bus Settings</span></a>
                         <ul class="menu vertical" style="z-index: 9999999;">
@@ -54,6 +54,13 @@
 <!--                         <li><a href='<?php echo WEBROOT;?>\listings\export.php'><span>Export Listing</span></a></li>
  --><!--                        <li><a href='<?php echo WEBROOT;?>/listings/upload.php'><span>Product Upload</span></a></li>
                         <li><a href='<?php echo WEBROOT;?>/listings/bulkupload.php'><span>Product Bulk Upload</span></a></li>-->
+                    </ul>
+                </li>
+                <li class='has-sub'><a href='#'><span>Site</span></a>
+                    <ul class="menu vertical" style="z-index: 9999999;">
+                        <li><a href='\<?php echo ADMINROOT;?>\settings\site_images.php'><span>Site Images</span></a></li>
+                        <li><a href='\<?php echo ADMINROOT;?>\settings\site_cms.php'><span>Site Pages CMS</span></a></li>
+                        <li><a href='\<?php echo ADMINROOT;?>\settings\site_content.php'><span>Site Content</span></a></li>
                     </ul>
                 </li>
                 <li class='has-sub'><a href='#'><span>Bookings</span></a>

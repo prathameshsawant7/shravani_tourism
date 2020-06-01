@@ -5,6 +5,8 @@ $est =new settings();
 $con=$est->connection();
 session_start();
 
+
+
 if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$id				= mysqli_escape_string($con,$_POST['id']);
 	$name 			= mysqli_escape_string($con,$_POST['name']);
@@ -22,21 +24,41 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$id = ($id == '')? mysqli_insert_id($con):$id;
 	header("Location:add_region.php?id=".$id.$action);
 }else if(isset($_POST['data']) && $_POST['data'] == "state") {
-	$id_state		= mysqli_escape_string($con,$_POST['id_state']);
+	$id_state		= mysqli_escape_string($con,$_POST['id']);
 	$state 			= mysqli_escape_string($con,$_POST['state']);
 	$active 		= mysqli_escape_string($con,$_POST['active']);
 	$page_action	= mysqli_escape_string($con,$_POST['page_action']);
 
-	if($page_action == 'edit'){
-		$query = "UPDATE states SET state='".$state."',active=".$active." WHERE id_state=".$id_state;
+	if(isset($_FILES['cover_image']['name']) && $_FILES['cover_image']['name']!=''){
+		$displayImageFilename 	= explode(".", $_FILES["cover_image"]["name"]);
+		$displayImageextension 	= end($displayImageFilename);
+		$imageNewName = 'cover_image_'.$id_state;
+		$imageNewName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $imageNewName).".".$displayImageextension;
+
+		$imageUploadStatus =true;
+		if (file_exists("../../images/tours/" .$imageNewName)) {
+    		unlink("../../images/tours/" .$imageNewName);
+    	}
+		if (!move_uploaded_file($_FILES["cover_image"]["tmp_name"],"../../images/tours/" .$imageNewName)){
+			    $imageUploadStatus = false;
+		}
+		$query_display_image = ",cover_image = '".$imageNewName."'";
+		$display_image = $imageNewName;
+
 	}else{
-		$query = "INSERT INTO states (state,active) VALUES ('".$state."','".$active."');";
+		$query_display_image = '';
+	}
+
+	if($page_action == 'edit'){
+		echo $query = "UPDATE states SET state='".$state."',active=".$active."  ".$query_display_image." WHERE id_state=".$id_state;
+	}else{
+		$query = "INSERT INTO states (state,cover_image,active) VALUES ('".$state."','".$imageNewName."','".$active."');";
 	}
 	mysqli_query($con,$query);
 	//print($data);exit;
 	$action = ($page_action == 'edit')?'&action=edit':'';
 	$id_state = ($id_state == '')? mysqli_insert_id($con):$id_state;
-	header("Location:add_state.php?id=".$id_state.$action);
+	header("Location:add_state.php?id_state=".$id_state.$action);
 }else if(isset($_POST['data']) && $_POST['data'] == "tour"){
 	$page_action = mysqli_escape_string($con,$_POST['page_action']);
 	$id = mysqli_escape_string($con,$_POST['id']);
@@ -50,6 +72,8 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 		$displayImageFilename 	= explode(".", $_FILES["display_image"]["name"]);
 		$displayImageextension 	= end($displayImageFilename);
 		$imageNewName = 'display_image_'.$tour_code.".".$displayImageextension;
+		$imageNewName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $imageNewName);
+
 		$imageUploadStatus =true;
 		if (file_exists("../../images/tours/" .$imageNewName)) {
     		unlink("../../images/tours/" .$imageNewName);
@@ -222,11 +246,30 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
     $name          = mysqli_escape_string($con,$_POST['name']);
     $user_id        = $_SESSION['cID'];
     $page_action    = mysqli_escape_string($con,$_POST['page_action']);
+    if(isset($_FILES['cover_image']['name']) && $_FILES['cover_image']['name']!=''){
+		$displayImageFilename 	= explode(".", $_FILES["cover_image"]["name"]);
+		$displayImageextension 	= end($displayImageFilename);
+		$imageNewName = 'cat_cover_image_'.$name.".".$displayImageextension;
+		$imageNewName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $imageNewName);
+
+		$imageUploadStatus =true;
+		if (file_exists("../../images/tours/" .$imageNewName)) {
+    		unlink("../../images/tours/" .$imageNewName);
+    	}
+		if (!move_uploaded_file($_FILES["cover_image"]["tmp_name"],"../../images/tours/" .$imageNewName)){
+			    $imageUploadStatus = false;
+		}
+		$query_display_image = ",cover_image = '".$imageNewName."'";
+		$display_image = $imageNewName;
+
+	}else{
+		$query_display_image = '';
+	}
 
     if($page_action == 'edit'){
-       $query = "UPDATE tour_categories SET name='".$name."' WHERE id=".$id;
+       $query = "UPDATE tour_categories SET name='".$name."' ".$query_display_image." WHERE id=".$id;
     }else{
-        $query = "INSERT INTO tour_categories (name,added_by) VALUES ('".$name."','".$user_id."');";
+        $query = "INSERT INTO tour_categories (name,cover_image,added_by) VALUES ('".$name."','".$imageNewName."','".$user_id."');";
     }
     mysqli_query($con,$query);
 	$action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
@@ -238,11 +281,31 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
     $name           = mysqli_escape_string($con,$_POST['name']);
     $user_id        = $_SESSION['cID'];
     $page_action    = mysqli_escape_string($con,$_POST['page_action']);
+    if(isset($_FILES['display_image']['name']) && $_FILES['display_image']['name']!=''){
+		$displayImageFilename 	= explode(".", $_FILES["display_image"]["name"]);
+		$displayImageextension 	= end($displayImageFilename);
+		$imageNewName = 'sub_cat_display_image_'.$category_id."_".$name;
+		$imageNewName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $imageNewName).".".$displayImageextension;
+
+		$imageUploadStatus =true;
+		if (file_exists("../../images/tours/" .$imageNewName)) {
+    		unlink("../../images/tours/" .$imageNewName);
+    	}
+		if (!move_uploaded_file($_FILES["display_image"]["tmp_name"],"../../images/tours/" .$imageNewName)){
+			    $imageUploadStatus = false;
+		}
+		$query_display_image = ",display_image = '".$imageNewName."'";
+		$display_image = $imageNewName;
+
+	}else{
+		$query_display_image = '';
+	}
+
 
     if($page_action == 'edit'){
-       $query = "UPDATE tour_subcategories SET category_id=".$category_id.",name='".$name."' WHERE id=".$id;
+       $query = "UPDATE tour_subcategories SET category_id=".$category_id.",name='".$name."' ".$query_display_image." WHERE id=".$id;
     }else{
-        $query = "INSERT INTO tour_subcategories (category_id,name,added_by) VALUES (".$category_id.",'".$name."','".$user_id."');";
+       $query = "INSERT INTO tour_subcategories (category_id,name,display_image,added_by) VALUES (".$category_id.",'".$name."','".$imageNewName."','".$user_id."');";
     }
     mysqli_query($con,$query);
 	$action = ($page_action == 'edit')?'&msg=update_success&action=edit':'';
@@ -284,7 +347,7 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 				$is_ashtavinayak = $getData[2];
 				$date = $getData[3];
 				$buses = $getData[4];
-				$query      = "SELECT count(tour_id) AS count FROM bus_dates WHERE tour_id=$tour_id AND tour_type='$tour_type' AND is_ashtavinayak='$is_ashtavinayak' AND date='$date' AND buses='$buses';";
+				$query      = "SELECT count(tour_id) AS count FROM bus_dates WHERE tour_id=$tour_id AND tour_type='$tour_type' AND is_ashtavinayak='$is_ashtavinayak' AND date='$date' AND buses='$buses' AND active=1;";
 	            $fetch_data = mysqli_query($con,$query);echo "<BR>";
 	            $records  = $fetch_data->fetch_assoc();
 	            if($records['count']<1){
@@ -308,6 +371,41 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 		$msg = "Bus dates has been successfully Imported.";
 	}
 	header("Location:import_bus_dates.php?msg=".$msg); 
+}else if(isset($_POST['data']) && $_POST['data'] == "import_group_tour_dates") {
+	$filename=$_FILES["file"]["tmp_name"];
+	$user_id = $_SESSION['cID'];
+	$msg = "";
+	if($_FILES["file"]["size"] > 0){
+		$file = fopen($filename, "r");
+		$counter = 0;
+		while (($getData = fgetcsv($file, 10000, ",")) !== FALSE){
+			if($counter != 0){
+				$tour_id = $getData[0];
+				$date = $getData[1];
+				$query      = "SELECT count(tour_id) AS count FROM group_tour_dates WHERE tour_id=$tour_id AND date='$date' AND active=1;";
+	            $fetch_data = mysqli_query($con,$query);
+	            $records  = $fetch_data->fetch_assoc();
+	            if($records['count']<1){
+	            	$sql = "INSERT into group_tour_dates (tour_id,date,added_by) 
+				   values (".$tour_id.",'".$date."',".$user_id.")";
+					$result = mysqli_query($con, $sql);
+					if(!isset($result)){
+					    $msg = "Invalid File:Please Upload CSV File.";    
+					}
+	            }
+	        }
+	        $counter++;
+		}
+
+	   fclose($file);  
+	}else{
+		$msg = "Invalid File:Please Upload CSV File.";
+	} 
+
+	if($msg == ''){
+		$msg = "Bus dates has been successfully Imported.";
+	}
+	header("Location:import_group_tour_dates.php?msg=".$msg); 
 	}else if(isset($_POST['data']) && $_POST['data'] == "configurations") {
 		$user_id = $_SESSION['cID'];
 		$gst_no         = mysqli_escape_string($con,$_POST['gst_no']);
@@ -319,15 +417,6 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	    $result = mysqli_query($con, $query);
 	    header("Location:configurations.php?msg=Updated successfully");
 	}else if(isset($_POST['data']) && $_POST['data'] == "site_cms") {
-		// $user_id = $_SESSION['cID'];
-		// $gst_no         = mysqli_escape_string($con,$_POST['gst_no']);
-		// $gst            = mysqli_escape_string($con,$_POST['gst']);
-	 //    $service_charge	= mysqli_escape_string($con,$_POST['service_charge']);
-	 //    $discount       = mysqli_escape_string($con,$_POST['discount']);
-
-	 //    $query = "UPDATE configurations SET gst_no='".$gst_no."',gst=".$gst.",service_charge=".$service_charge.",discount=".$discount.",updated_by=".$user_id." WHERE id=1";
-	 //    $result = mysqli_query($con, $query);
-	 //    header("Location:configurations.php?msg=Updated successfully");
 		$data = $_POST;
 		foreach ($data as $key => $value) {
 			if($key != 'data'){
@@ -336,6 +425,101 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 			}
 		}
 		header("Location:site_cms.php?msg=Updated successfully");
+
+	}
+	else if(isset($_POST['data']) && $_POST['data'] == "site_images") {
+		$data = $_POST;
+		//echo "<pre>";print_r($data);echo "</pre>";
+		//echo "<pre>";print_r($_FILES);echo "</pre>";
+		$query = "SELECT * FROM site_images WHERE id=1;";
+        $fetch_data = mysqli_query($con,$query);
+        $db_data  = $fetch_data->fetch_assoc();
+		//echo "<pre>";print_r($db_data);echo "</pre>";
+		$update_param = '';
+		$deleted_slider_images = array('homepage_slider' => [], 'family_tour_slider' => []);
+		foreach ($data['homepage_slider_delete'] as $key => $value) {
+			array_push($deleted_slider_images['homepage_slider'], $key);	
+		}
+
+		foreach ($data['family_tour_slider_delete'] as $key => $value) {
+			array_push($deleted_slider_images['family_tour_slider'], $key);	
+		}
+
+		foreach ($_FILES as $key => $data) {
+			if($key == 'homepage_slider' || $key == 'family_tour_slider'){
+				$image_list = [];
+				foreach (json_decode($db_data[$key],true) as $k => $v) {
+					if(!in_array($v, $deleted_slider_images[$key])){
+						array_push($image_list,$v);
+					}else{
+						if (file_exists("../../images/tours/" .$v)) {
+				    		unlink("../../images/tours/" .$v);
+				    	}
+					}
+				}
+				foreach ($data['name'] as $num => $name) {
+					if($name != ''){
+						$image_name 	= explode(".", $_FILES[$key]["name"][$num]);
+						$image_extension 	= end($image_name);
+						$image_new_name = $key."_".microtime();
+						$image_new_name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $image_new_name).".".$image_extension;
+
+						$image_upload_status =true;
+						if (file_exists("../../images/tours/" .$image_new_name)) {
+				    		unlink("../../images/tours/" .$image_new_name);
+				    	}
+						if (!move_uploaded_file($_FILES[$key]["tmp_name"][$num],"../../images/tours/" .$image_new_name)){
+							    $image_upload_status = false;
+						}
+						if($image_upload_status){
+							array_push($image_list,$image_new_name);
+						}
+					}
+				}
+				if($update_param == '')
+					$update_param = $key." = '".json_encode($image_list)."'";
+				else{
+					$update_param .= ", ".$key." = '".json_encode($image_list)."'";
+				}	
+			}else{
+				if($data['name'] != ''){
+					$image_name 	= explode(".", $_FILES[$key]["name"]);
+					$image_extension 	= end($image_name);
+					$image_new_name = $key.".".$image_extension;
+					$image_new_name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $image_new_name);
+					$image_upload_status =true;
+					if (file_exists("../../images/tours/" .$image_new_name)) {
+			    		unlink("../../images/tours/" .$image_new_name);
+			    	}
+					if (!move_uploaded_file($_FILES[$key]["tmp_name"],"../../images/tours/" .$image_new_name)){
+						    $image_upload_status = false;
+					}
+					if($update_param == '')
+						$update_param = $key." = '".$image_new_name."'";
+					else{
+						$update_param .= ", ".$key." = '".$image_new_name."'";
+					}
+				}
+			}
+		}
+		$query = "UPDATE site_images SET ".$update_param." WHERE id=1";
+		mysqli_query($con, $query);
+
+		header("Location:site_images.php?msg=Updated successfully");
+
+	}else if(isset($_POST['data']) && $_POST['data'] == "site_content") {
+		$data = $_POST;
+
+		print_r($data);
+		
+		foreach ($data as $key => $value) {
+			if($key != 'data'){
+				$val = implode(', ', $value);
+				echo $query = "UPDATE site_content SET content_ids='".$val."' WHERE content_name='".mysqli_escape_string($con,$key)."'";
+				mysqli_query($con, $query);
+			}
+		}
+		header("Location:site_content.php?msg=Updated successfully");
 
 	}
 ?>

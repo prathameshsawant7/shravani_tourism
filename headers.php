@@ -1,21 +1,3 @@
-<?php
-	include_once("configs/defines.php");
-	include("configs/settings.php");
-	$est =new settings();
-	$con=$est->connection();
-	session_start();
-
-	$query      = "SELECT * FROM site_cms;";
-    $fetch_data = mysqli_query($con,$query);
-    ;
-    while($fields  = $fetch_data->fetch_assoc()) {
-        $site_cms[$fields['name']] = $fields['content'];
-    } 
-
-    $query = "SELECT state FROM states WHERE id_state IN (SELECT DISTINCT tour_state FROM tours WHERE active=1);";
-    $place_to_travel_data = mysqli_query($con,$query);
-
-?>
 <header>
 <style type="text/css">
 	.field-error{
@@ -130,14 +112,14 @@
 	<div class="row">
 		<div class="col- col-sm-3 col-md-3 col-lg-3 logo">
 			<a class="nav-link" href="index.php">
-				<img src="images/logo.png" class="img-fluid">
+				<img src="images/tours/<?php echo $site_images['logo'];?>" class="img-fluid">
 			</a>
 		</div>
 		<div class="col- col-sm-9 col-md-9 col-lg-9">
 			<div class="col-sm-12 col-ms-12 col-lg-12 hidden-xs">
 				<div class="right-box-head">
 					<ul style="list-style:none;">
-			          <li class="top-butt track_order"><div class="dropdown">
+			         <!--  <li class="top-butt track_order"><div class="dropdown">
 					    <button type="button" class="btn dropdown-toggle drop-down" data-toggle="dropdown">Call: 9819124692    </button>
 					    <div class="dropdown-menu  drop-li drop-down">
 					      <a class="dropdown-item" href="#">9819124960</a>
@@ -147,10 +129,10 @@
 					      <h6 align="center">11am to 9 pm<h6></p>
 					    </div>
 					  </div>
- 					 </li>
- 					 <li class="top-butt track_order">
+ 					 </li> -->
+ 					 <!-- <li class="top-butt track_order">
 			            <a href="#" class="header-text">Help</a>
-			          </li>
+			          </li> -->
  					 <?php if(!$_SESSION){ ?>
 				          <li class="top-butt track_order">
 				            <a href="#myModal-log"  class="header-text" data-toggle="modal" >Login</a>
@@ -283,77 +265,54 @@
 				      <li class="nav-item active">
 				        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 				      </li>
-				      <li class="nav-item space-nav">
-				        <a class="nav-link" href="#">About US</a>
-				      </li>
 				      <li class="nav-item dropdown space-nav text-center">
 				        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				          Maharashtra <br/>Tours
 				        </a>
 				        <div class="dropdown-menu header-nav" aria-labelledby="navbarDropdown">
-				          <a class="dropdown-item" href="#">Action</a>
-				          <a class="dropdown-item" href="#">Another action</a>
+				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>ashtavinayak-packages.php">Ashtavinayk Yatra</a>
+				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra%20Tours&category=Maharashtra%20Tours&subcategory=Daily%20Tour">Daily Tours</a>
+				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra%20Tours&category=Maharashtra%20Tours&subcategory=Religious%20Tour">Religious Tours</a>
+				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra%20Tours&category=Maharashtra%20Tours&subcategory=Kokan%20Tour">Kokan Tours</a>
+				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra%20Tours&category=Maharashtra%20Tours&subcategory=Holiday%20Tour">Holiday Tours</a>
 				          <div class="dropdown-divider"></div>
-				          <a class="dropdown-item" href="#">Something else here</a>
+				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra-Tours&category=Maharashtra-Tours">All Maharashtra Tours</a>
 				        </div>
 				      </li>
 				      <li class="nav-item dropdown space-nav text-center">
-				        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				          Domestic <br/>Tours
+				        <a class="nav-link dropdown-toggle" href="<?php echo LIVEROOT;?>packages.php?q=India-Tours&category=India-Tours" >
+				          India <br/>Tours
 				        </a>
-				        <div class="dropdown-menu header-nav" aria-labelledby="navbarDropdown">
-				          <a class="dropdown-item" href="#">Action</a>
-				          <a class="dropdown-item" href="#">Another action</a>
-				          <div class="dropdown-divider"></div>
-				          <a class="dropdown-item" href="#">Something else here</a>
-				        </div>
 				      </li>
 				      <li class="nav-item dropdown space-nav text-center">
-				        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				          Customized <br/>Tours
+				        <a class="nav-link dropdown-toggle" href="<?php echo LIVEROOT;?>family-holiday-tours.php" >
+				          Family Holiday <br/>Tours
 				        </a>
-				        <div class="dropdown-menu header-nav" aria-labelledby="navbarDropdown">
-				          <a class="dropdown-item" href="#">Action</a>
-				          <a class="dropdown-item" href="#">Another action</a>
-				          <div class="dropdown-divider"></div>
-				          <a class="dropdown-item" href="#">Something else here</a>
-				        </div>
 				      </li>
 				      <li class="nav-item dropdown space-nav text-center">
-				        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				        <a class="nav-link dropdown-toggle" href="<?php echo LIVEROOT;?>packages.php?q=Honeymoon-Tours&category=Honeymoon-Tours">
 				          Honeymoon <br/>Tours
 				        </a>
-				        <div class="dropdown-menu header-nav" aria-labelledby="navbarDropdown">
-				          <a class="dropdown-item" href="#">Action</a>
-				          <a class="dropdown-item" href="#">Another action</a>
-				          <div class="dropdown-divider"></div>
-				          <a class="dropdown-item" href="#">Something else here</a>
-				        </div>
 				      </li>
 				      <li class="nav-item dropdown space-nav  text-center">
-				        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				        <a class="nav-link dropdown-toggle" href="<?php echo LIVEROOT;?>packages.php?q=Speciality-Tours&category=Speciality-Tours">
 				          Speciality<br/> Tours
 				        </a>
-				        <div class="dropdown-menu header-nav" aria-labelledby="navbarDropdown">
-				          <a class="dropdown-item" href="#">Action</a>
-				          <a class="dropdown-item" href="#">Another action</a>
-				          <div class="dropdown-divider"></div>
-				          <a class="dropdown-item" href="#">Something else here</a>
-				        </div>
 				      </li>
 				      <li class="nav-item dropdown space-nav  text-center">
-				        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				        <a class="nav-link dropdown-toggle" href="<?php echo LIVEROOT;?>packages.php?q=International-Tours&category=International-Tours">
 				          International<br/> Holidays
 				        </a>
-				        <div class="dropdown-menu header-nav" aria-labelledby="navbarDropdown">
-				          <a class="dropdown-item" href="#">Action</a>
-				          <a class="dropdown-item" href="#">Another action</a>
-				          <a class="dropdown-item" href="#">Something else here</a>
-				        </div>
 				      </li>
 				      <li class="nav-item space-nav">
-				        <a class="nav-link" href="#">Contact US</a>
+				        <a class="nav-link" href="<?php echo LIVEROOT;?>about-us.php">About <br/> &nbsp;&nbsp;&nbsp;US</a>
 				      </li>
+				      <li class="nav-item space-nav">
+				        <a class="nav-link" href="<?php echo LIVEROOT;?>terms-and-conditions.php">Terms &nbsp;&nbsp;& <br/> Conditions</a>
+				      </li>
+				      <!-- <li class="nav-item space-nav">
+				        <a class="nav-link" href="#">Contact US</a>
+				      </li> -->
 				  </div>
 				</nav>
 				<!--Navbar-->	

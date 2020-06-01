@@ -1,3 +1,4 @@
+<?php include 'queries.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,23 +12,36 @@
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <!--Calender-->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <!--Calender-->
 </head>
 <body>
 <div class="container-fluide">
 <?php 
 	include 'headers.php'; 
+	$link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 
+                "https" : "http") . "://" . $_SERVER['HTTP_HOST'] .  
+                $_SERVER['REQUEST_URI']; 
+
 	$query = "SELECT * FROM tours WHERE id=".$_GET['id'].";";
     $fetch_data = mysqli_query($con,$query);    
     $tour_data = $fetch_data->fetch_assoc();            
 ?>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/ashtvinayak-ban01.jpg" class="img-fluid"></div>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/tours/<?php echo $tour_data['display_image'];?>" class="img-fluid"></div>
 <!--BreadCrumps-->
 	<form>
 		<div class="row m-4">
 			<div class="col- col-sm-12 col-md-12 col-lg-12">
 				<ul class="breadcrumb br-crum">
-			    <li class="breadcrumb-item"><a href="#">Home</a></li>
-			    <li class="breadcrumb-item active"><?php echo $_GET['l'];?></li>
+			    <li class="breadcrumb-item"><a href="<?php echo LIVEROOT;?>">Home</a></li>
+			    <?php
+			    if(isset($_GET['q']) && $_SERVER['HTTP_REFERER'] != '' && $_SERVER['HTTP_REFERER'] != $link){ 
+			    ?>
+			    	<li class="breadcrumb-item"><a href="<?php echo $_SERVER['HTTP_REFERER'];?>"><?php echo $_GET['q'];?></a></li>
+				<?php } ?>
 			    <li class="breadcrumb-item active"><?php echo $tour_data['tour_code']." - ".$tour_data['tour_name'];?></li>
 			  </ul>
 			</div>
@@ -54,6 +68,87 @@
 			<!-- <div class="col-sm-2 col-md-2 col-lg-2 align-self-center bknowbox">
 				<a href="ashtvinayak-bus-booking.php?tour_id=<?php echo $_GET['tour_id']; ?>" class="btn btn-primary bknow-butt">BOOK NOW</a>
 			</div> -->
+
+			<div class="col-sm-2 col-md-2 col-lg-2 bknowbox" id="group_dates_div">
+				<span class="tour-search text-uppercase">Group Tour Dates</span>
+					<input id="group_dates" >
+			</div>
+
+			<div class="col-sm-2 col-md-2 col-lg-2 align-self-center bknowbox">
+				<a href="#" class="btn btn-primary bknow-butt" data-toggle="modal" data-target="#tour_page_enqiry">Tour Enquiry</a>
+
+
+			<!-- The Modal -->
+			<div class="modal fade" id="tour_page_enqiry">
+			<div class="modal-dialog" style="position: absolute;">
+			  <div class="modal-content mod-con">
+			  
+			    <!-- Modal Header -->
+			    <div class="modal-header mod-header">
+			      <h6 class="modal-title"><?php echo $tour_data['tour_code'];?> - <?php echo ucwords($tour_data['tour_name']);?> Enquiry</h6>
+			      <button type="button" class="close" data-dismiss="modal">&times;</button>
+			    </div>
+			    
+			    <!-- Modal body -->
+			    <form method="post" name="enquiry_form" id="tour_enquiry_form" >
+			    <div class="modal-body">
+			    	<div class="row form-group">
+			    		<label id="tour_enquiry_form_msg" class="enquiry-msg" style="display:none;"></label>
+			    	</div>
+			        <div class="row form-group" id="tour_enquiry_form_div">
+			        	<input type="hidden" name="action" value="enquiry">
+			        	<div class="col-sm-12 col-md-12 col-lg-12">
+			        		<input type="Name" class="form-control mod-in" id="tour_enquiry_name" name="name" placeholder="Name">
+			        		<p class="field-error"></p>
+			        	</div>
+			        	<div class="col-sm-12 col-md-12 col-lg-12">
+			        		<input type="text" class="form-control mod-in" id="tour_enquiry_email" name="email" placeholder="Email Id">
+			        		<p class="field-error"></p>
+			        	</div>
+			        	<div class="col-sm-6 col-md-6 col-lg-6">
+			        		<input type="text" class="form-control mod-in" id="tour_enquiry_mobile" name="mobile" placeholder="Mobile Number">
+			        		<p class="field-error"></p>
+			        	</div>
+			        	<div class="col-sm-6 col-md-6 col-lg-6">
+			        		<input type="text" class="form-control mod-in" id="tour_enquiry_city_of_guest" name="city_of_guest" placeholder="City of Residence">
+			        		<p class="field-error"></p>
+			        	</div>
+			        	
+			        	<div class="col-sm-6 col-md-6 col-lg-6">
+			        		<input type="text" class="form-control mod-in" id="tour_enquiry_time_to_travel" name="time_to_travel" placeholder="Time To Travel">
+			        	</div>
+			        			        	
+			        	<div class="col-sm-6 col-md-6 col-lg-6">
+			        		<select class="form-control mod-in dest-text bt-gr" id="tour_enquiry_mode_to_contact" name="mode_to_contact">
+			        			<option value="">Connect By</option>
+						        <option value="Call">Call</option>
+						        <option value="Email">Email</option>
+						        <option value="Text Message">Text Message</option>
+						        <option value="Whatsapp">Whatsapp</option>
+						    </select>
+			        	</div>
+			        	<input type="hidden" name="tour" value="<?php echo $tour_data['tour_code'];?> - <?php echo ucwords($tour_data['tour_name']);?>">
+			        	<input type="hidden" name="duration" value="<?php echo $tour_data['tour_duration'];?>">
+			        </div>	         
+				</form>
+			    </div>
+			    <!-- Modal footer -->
+			    <div class="modal-footer">
+			      <button type="button" id="tour_enquiry_submit" class="btn btn-success" onclick="submitTourEnquiry()">Submit</button>
+			    </div>
+			    </form>
+			  </div>
+			</div>
+			</div>
+
+			<!--Modal-->
+
+
+
+
+
+			</div>
+
 		</div>
 	</div>
 	<!--Package Details-->
@@ -226,8 +321,117 @@
 		</div>
 	</div>
 </div>
-
-
 <?php include 'footer.php'; ?>
+<script type="text/javascript">
+	$(function () {
+		<?php
+			$query = "SELECT GROUP_CONCAT(date) as dates FROM `group_tour_dates` WHERE tour_id=".$_GET['id'].";";
+	        $fetch_data = mysqli_query($con,$query);    
+	        $records = $fetch_data->fetch_assoc();
+
+	        if(isset($records['dates']) && $records['dates'] != ''){
+    	?>
+
+			var setDate = '';
+			var enableDays = "<?php echo $records['dates'];?>";
+			var date = new Date();
+			date.setDate(date.getDate());
+			
+			$("#group_dates").datepicker({ 
+		        maxViewMode: 2,
+		        weekStart: 1,
+		        startDate: date,
+		        value: setDate,
+		        disableDates: function(date){
+		        	let today = new Date();
+		        	today.setDate(today.getDate() - 1);
+		          	let current = formatDate(date);
+		          	if(today>=date){
+		          		return false;
+		          	}
+		      		return enableDays.indexOf(current) != -1
+		        },
+		        todayHighlight: true,
+		        format: "dd/mm/yyyy", 
+		        clearBtn: true,
+		        enabled: false,
+		        autoclose: true,
+		        uiLibrary: 'bootstrap4'
+		  	});
+			<?php
+		}else{ ?>
+			$("#group_dates_div").hide();
+		<?php } ?>
+
+	});	
+
+	function formatDate(d) {
+	  var day = String(d.getDate())
+	  //add leading zero if day is is single digit
+	  if (day.length == 1)
+	    day = '0' + day
+	  var month = String((d.getMonth()+1))
+	  //add leading zero if month is is single digit
+	  if (month.length == 1)
+	    month = '0' + month
+	 //console.log(day + "/" + month + "/" + d.getFullYear());
+	  return day + "/" + month + "/" + d.getFullYear()
+	}
+
+	function submitTourEnquiry(){
+		error = false;
+		$('.field-error').html("");
+		var name = trim($('#tour_enquiry_name').val());
+		var email = trim($('#tour_enquiry_email').val());
+		var mobile = trim($('#tour_enquiry_mobile').val());
+		var city_of_guest = trim($('#tour_enquiry_city_of_guest').val());
+
+		if(name == ''){
+			$('#tour_enquiry_name').next().html("Required field");
+			error = true;
+		}
+
+		if(email == ''){
+			$('#tour_enquiry_email').next().html("Required field");
+			error = true;
+		}
+
+		if(mobile == ''){
+			$('#tour_enquiry_mobile').next().html("Required field");
+			error = true;
+		}
+
+		if(city_of_guest == ''){
+			$('#tour_enquiry_city_of_guest').next().html("Required field");
+			error = true;
+		}
+
+		if(!error){
+			$.ajax({
+				url:'requests.php',
+				type: 'POST',
+			    data:$('#tour_enquiry_form').serialize(),
+			    success: function (data,status,xhr) {   // success callback function
+			        console.log(data);
+			        msg = "";
+			        if(data.indexOf("token=") !== -1){
+			        	token = data.replace("token=", "");
+			        	msg = "Token "+token+" generated for the enquiry. Tour specialist will get in touch with you shorty.";
+			        }else{
+			        	msg = "Something went wrong. Please reload the page and try again.";
+			        }
+			        $('#tour_enquiry_form_div').hide();
+			        $('#tour_enquiry_submit').hide();
+			        $('#tour_enquiry_form_msg').html(msg).show();
+			    },
+			    error: function (jqXhr, textStatus, errorMessage) { // error callback 
+			        console.log('Error: ' + errorMessage);
+			    }
+			});
+		}
+	}
+
+</script>
+
 </body>
 </html>

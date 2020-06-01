@@ -1,3 +1,4 @@
+<?php include 'queries.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +16,7 @@
 <body>
 <div class="container-fluide">
 <?php include 'headers.php'; ?>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/ashtvinayak-ban01.jpg" class="img-fluid"></div>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/tours/<?php echo $site_images['astavinayak_cover_image'];?>" class="img-fluid"></div>
 
 <!--Search-->
 	<form>

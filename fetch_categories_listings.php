@@ -28,18 +28,36 @@ if($_POST['cRows'] != 0)
 else 
     $item_per_page = 10;
 
+$q = (isset($_POST['q']) && $_POST['q'] != '')?$_POST['q']:'';
+
 
 if(isset($_POST['tour_category']) && $_POST['tour_category'] != ''){
     $tour_category = $_POST['tour_category'];
+    $query = "SELECT id FROM tour_categories WHERE name = '".$tour_category."';";
+    $fetch_data = mysqli_query($con,$query);
+    $tour_category_data = $fetch_data->fetch_assoc();    
 }
-$query = "SELECT id FROM tour_categories WHERE name = '".$tour_category."';";
-$fetch_data = mysqli_query($con,$query);
-$tour_category_data = $fetch_data->fetch_assoc();
-$tour_category_id = $tour_category_data['id'];
+$tour_category_id = (isset($tour_category_data['id']) && $tour_category_data['id']!='')?$tour_category_data['id']:'';
 
 
-if(isset($_POST['tour_region']) && $_POST['tour_region'] != '')
+if(isset($_POST['tour_subcategory']) && $_POST['tour_subcategory'] != ''){
+    $tour_subcategory = $_POST['tour_subcategory'];
+    $query = "SELECT id FROM tour_subcategories WHERE name = '".$tour_subcategory."' AND category_id = '".$tour_category_id."';";
+    $fetch_data = mysqli_query($con,$query);
+    $tour_subcategory_data = $fetch_data->fetch_assoc();    
+}
+$tour_subcategory_id = (isset($tour_subcategory_data['id']) && $tour_subcategory_data['id']!='')?$tour_subcategory_data['id']:'';
+
+
+if($tour_category_id != '')
+    $filter  .= "AND FIND_IN_SET(".$tour_category_id.", t.tour_categories) ";
+
+if($tour_subcategory_id != '')
+    $filter  .= "AND FIND_IN_SET(".$tour_subcategory_id.", t.tour_subcategories) ";
+
+if(isset($_POST['tour_region']) && $_POST['tour_region'] != ''){
     $filter  .= "AND t.tour_region = ".$_POST['tour_region']." ";
+}
 
 if(isset($_POST['tour_state']) && $_POST['tour_state'] != '')
     $filter  .= "AND t.tour_state = ".$_POST['tour_state']." ";
@@ -65,7 +83,7 @@ else{
     $OrderBy = "t.id DESC";
 }
 
-$query = "SELECT COUNT(*) FROM tours as t WHERE FIND_IN_SET(".$tour_category_id.", t.tour_categories) AND t.active=1 ".$filter;
+$query = "SELECT COUNT(*) FROM tours as t WHERE t.active=1 ".$filter;
 $results = $con->query($query);
 
 
@@ -76,8 +94,7 @@ $total_pages = ceil($get_total_rows[0]/$item_per_page);
 $page_position = (($page_number-1) * $item_per_page);
 
 $query = "SELECT t.* FROM tours as t "
-        . "WHERE FIND_IN_SET(".$tour_category_id.", t.tour_categories) "
-        . "AND t.active=1 ".$filter." "
+        . "WHERE t.active=1 ".$filter." "
         . "ORDER BY $OrderBy LIMIT $page_position, $item_per_page;";
 
 
@@ -95,7 +112,7 @@ $min_price = 0;
 $max_price = 0;
 while($listing_data = $fetch_data->fetch_assoc()){ 
     $count++;
-    $url = "package-details.php?l=".$tour_category."&id=".$listing_data['id'];
+    $url = "package-details.php?q=".$q."&id=".$listing_data['id'];
     $toursHtml .= '<div class="col-6 col-sm-3 col-md-3 col-lg-3 mb-3">';
     $toursHtml .= '<div class="card card-bor">';
     $toursHtml .= '<img class="card-img-top card-img-bor-rad img-fluid" src="images/tours/'.$listing_data['display_image'].'" alt="Card image" style="width:100%">';
@@ -113,7 +130,7 @@ $region_html = '';
 //     $regions = implode(',', $region_filter);
 $query = "SELECT DISTINCT r.id,r.name FROM regions as r "  
         . "LEFT JOIN tours as t ON t.tour_region = r.id " 
-        . "WHERE FIND_IN_SET(".$tour_category_id.", t.tour_categories) AND r.active=1 AND t.active=1";
+        . "WHERE r.active=1 AND t.active=1";
 $fetch_data = mysqli_query($con,$query);
 $region_html .= '<div class="col-sm-2 col-md-2 col-lg-2 form-group bor-right">';
 $region_html .= '<h6>Select Region</h6>';
@@ -135,7 +152,7 @@ $state_html = '';
 // $states = implode(',', $state_filter);
 $query = "SELECT DISTINCT s.id_state,s.state FROM states as s "  
         . "LEFT JOIN tours as t ON t.tour_state = s.id_state " 
-        . "WHERE FIND_IN_SET(".$tour_category_id.", t.tour_categories) AND s.active=1 AND t.active=1;";
+        . "WHERE s.active=1 AND t.active=1;";
 $fetch_data = mysqli_query($con,$query);
 $state_html .= '<div class="col-sm-2 col-md-2 col-lg-2 form-group bor-right">';
 $state_html .= '<h6>Select State</h6>';
@@ -154,7 +171,7 @@ $state_html .= '</div>';
 
 
 $query = "SELECT min(tour_price) as min, max(tour_price) as max FROM tours as t "  
-        . "WHERE FIND_IN_SET(".$tour_category_id.", t.tour_categories) AND t.active=1;";
+        . "WHERE t.active=1;";
 $fetch_data = mysqli_query($con,$query);
 $price_data = $fetch_data->fetch_assoc();
 $min_price  = $price_data['min'];
@@ -192,7 +209,7 @@ $price_html .= '</div>';
 
 
 $query = "SELECT DISTINCT t.tour_duration FROM tours as t "  
-        . "WHERE FIND_IN_SET(".$tour_category_id.", t.tour_categories) AND t.active=1;";
+        . "WHERE t.active=1;";
 $fetch_data = mysqli_query($con,$query);
 $duration_html .= '<div class="col-sm-4 col-md-4 col-lg-4 form-group bor-right">';
 $duration_html .= '<h6>Duration</h6>';
@@ -218,7 +235,10 @@ $duration_html .= '</div>';
 $duration_html .= '</div>';
 $duration_html .= '</div>';
 
-
+// $heading = ''
+// if($tour_category != ''){
+//     $heading = $tour_category
+// }
 $listingHtml .= '<div class="row m-4">';
 $listingHtml .= $region_html;
 $listingHtml .= $state_html;
@@ -226,7 +246,7 @@ $listingHtml .= $price_html;
 $listingHtml .= $duration_html;
 $listingHtml .= '<div class="container">';
 $listingHtml .= '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">';
-$listingHtml .= '<h4 class="text-center text-uppercase pt-4 pb-4">'.$tour_category.'</h4>';
+$listingHtml .= '<h4 class="text-center text-uppercase pt-4 pb-4">'.$q.'</h4>';
 $listingHtml .= '<div class="row">';
 if($toursHtml != '')
     $listingHtml .= $toursHtml;

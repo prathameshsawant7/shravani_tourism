@@ -44,7 +44,7 @@ $con=$est->connection();
             ?>
             </h4>
         </center>
-        <form action="insert_tour.php" name="register" method="post">
+        <form action="insert_tour.php" name="register" method="post" method="post" enctype="multipart/form-data">
         <input type="hidden" id="data" name="data" value="state" />
         <div class="medium-9 columns">
             <div class="tabs-content vertical" data-tabs-content="example-vert-tabs" style="margin-left: 30%;">
@@ -65,6 +65,15 @@ $con=$est->connection();
                         <tr>
                             <th style="border:1px solid #000000;"><label>State Name: </label></th>
                             <td > <input type="text" id="state" name="state" value="<?php echo $state_data['state'];?>" /></td>
+                        </tr>
+                        <tr>
+                            <th style="border:1px solid #000000;"><label>Cover Image: </label></th>
+                            <td >
+                                <input type="file" id="cover_image" onchange="readImage(this)" name="cover_image" value="" />
+                                <?php if(isset($state_data['cover_image']) && $state_data['cover_image'] != ''){?>
+                                <img id="cover_image_preview" src="../../images/tours/<?php echo $state_data['cover_image']."?".time();?>" />
+                            <?php } ?>
+                            </td>
                         </tr>
                         <tr>
                             <th style="border:1px solid #000000;"><label>Active: </label></th>
@@ -101,7 +110,7 @@ $con=$est->connection();
                 </table>
                
                 <input type="hidden" id="page_action" name="page_action" value="<?php echo $page_action;?>" />
-                <input type="hidden" id="id" name="id" value="<?php echo $id;?>" />
+                <input type="hidden" id="id" name="id" value="<?php echo $id_state;?>" />
                 
             </div>
         </div>
@@ -115,9 +124,16 @@ $con=$est->connection();
         <script src="../js/sol.js"></script>
         <script src="../js/tinymce.min.js"></script>
         <script src="../js/jquery.multi-select.js"></script>
-        <script>
-                tinymce.init({ selector:'textarea' });
-            $('#id_category').multiSelect();
+        <script type="text/javascript">
+            function readImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#cover_image_preview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
         </script>
     </body>
 </html>

@@ -1,3 +1,4 @@
+<?php include 'queries.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,10 +22,8 @@ $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ?
 $url_components = parse_url($link); 
 parse_str($url_components['query'], $url_params);
 
-if(isset($url_params['tour']) && $url_params['tour'] != ''){
-	include 'package-categories.php';
-}
 
+include 'package-categories.php';
 
 ?>
 </div>

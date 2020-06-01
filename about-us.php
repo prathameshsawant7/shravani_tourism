@@ -1,3 +1,4 @@
+<?php include 'queries.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,25 +16,23 @@
 <body>
 <div class="container-fluide">
 <?php include 'headers.php'; ?>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/about-us.jpg" class="img-fluid"></div>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/tours/<?php echo $site_images['about_us_cover_image'];?>" class="img-fluid"></div>
 
 <!--Search-->
 	<form>
 		<div class="row m-4">
 			<div class="col- col-sm-12 col-md-12 col-lg-12">
 				<ul class="breadcrumb br-crum">
-			    <li class="breadcrumb-item"><a href="#">Home</a></li>
+			    <li class="breadcrumb-item"><a href="<?php echo LIVEROOT;?>">Home</a></li>
 			    <li class="breadcrumb-item active">About Us</li>
 			  </ul>
 			</div>
 		
 	<!--Package list-->
 	<div class="container">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<?php echo $site_cms['about_us'];?>
-		
-	</div>
-	
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<?php echo $site_cms['about_us'];?>
+		</div>
 	</div>
 	<!--Package list-->
 </div>
