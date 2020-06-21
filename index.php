@@ -14,7 +14,55 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
       
+	<style type="text/css">
+    body{
+        font-family: Arail, sans-serif;
+    }
+    /* Formatting search box */
+    .search-box{
+        width: 300px;
+        position: relative;
+        display: inline-block;
+        font-size: 14px;
+    }
+    .search-box input[type="text"]{
+        height: 32px;
+        padding: 5px 10px;
+        border: 1px solid #CCCCCC;
+        font-size: 14px;
+    }
+    .result{
+        position: absolute;        
+        z-index: 999;
+        top: 100%;
+        left: 0;
+    }
+    .search-box input[type="text"], .result{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    /* Formatting result items */
+    .result p{
+        margin: 0;
+        padding: 7px 10px;
+        border: 1px solid #CCCCCC;
+        border-top: none;
+        cursor: pointer;
+        background: #f5f3f3;
+        margin-left: 30px;
+    	width: 78%;
+    }
 
+    .result a{
+    	color: rgba(0,0,0,.5);
+    	font-size: 14px;
+    	font-weight: bolder;
+    }
+
+    .result p:hover{
+        background: #f2f2f8;
+    }
+</style>
 </head>
 <body>
 <div class="container-fluide">
@@ -22,11 +70,12 @@
 <!--SearchBox-->
 <div class="main">
 	<div class="input-group md-form form-sm form-2 pl-0">
-  		<div class="input-group has-search">
+  		<div class="input-group has-search ">
 		    <span class="fa fa-search form-control-feedback ser-icon"></span>
-		    <input type="text" class="form-control ser-in" placeholder="Search this blog">
+		    <input id="search_box" type="text" class="form-control ser-in" placeholder="Search Tour Packages">
+		    <div class="result"></div>
 		    <div class="input-group-append">
-		      <button class="btn btn-secondary search-btn" type="button">
+		      <button class="btn btn-secondary search-btn" type="button" onclick="redirect_search()">
 		        Let's Go
 		      </button>
 	    	</div>
@@ -299,7 +348,36 @@ With the Professionalism of Experts<br/>
 </footer>
 </div>-->
 <?php include 'footer.php'; ?>
+<script type="text/javascript">
+var live_url = '<?php echo LIVEROOT;?>';
+$(document).ready(function(){
+    $('#search_box').on("keyup input", function(){
+        /* Get input value on change */
+        var inputVal = $(this).val();
+        var resultDropdown = $(this).siblings(".result");
+        if(inputVal.length && inputVal.length > 1){
+            $.get("requests.php", {action:'home_search',term: inputVal}).done(function(data){
+                // Display the returned data in browser
+                resultDropdown.html(data);
+            });
+        } else{
+            resultDropdown.empty();
+        }
+    });
+    
+    // Set search input value on click of result item
+    $(document).on("click", ".result p", function(){
+        $(this).parents(".search-box").find('input[type="text"]').val($(this).text());
+        $(this).parent(".result").empty();
+    });
+});
 
+
+function redirect_search(){
+	var search_text = $('#search_box').val();
+	window.location.href = live_url+"packages.php?q="+search_text+"&search="+search_text;
+}
+</script>
 
 	
 </body>

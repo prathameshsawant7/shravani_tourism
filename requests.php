@@ -104,6 +104,26 @@ if(isset($_POST['action']) && $_POST['action'] == 'enquiry') {
 	}catch(Exception $e){
 		echo 'fail';
 	}	
+}else if(isset($_GET['action']) && $_GET['action'] == 'home_search'){
+	$term = $_GET['term'];
+
+	if(strlen($term)>1){
+		$query = "SELECT t.id,t.tour_code,t.tour_name  FROM `tours` as t  LEFT JOIN states as s ON s.id_state = t.tour_state LEFT JOIN regions as r ON r.id = t.tour_region  WHERE (t.tour_name LIKE '%$term%'  OR t.tour_code LIKE '%$term%' OR t.tour_places LIKE '%$term%' OR s.state  LIKE '%$term%'  OR r.name  LIKE '%$term%'  OR FIND_IN_SET((SELECT id FROM tour_categories WHERE name LIKE '%$term%' LIMIT 1), t.tour_categories) OR FIND_IN_SET((SELECT id FROM tour_subcategories WHERE name LIKE '%$term%' LIMIT 1), t.tour_subcategories)) AND t.active = 1";
+		$result = mysqli_query($con,$query);
+		$fetch_data = mysqli_query($con,$query);
+		$records = False;
+
+		while($row = $fetch_data->fetch_assoc()){
+			$url = LIVEROOT."package-details.php?id=".$row["id"];
+			echo "<p><a href='$url'>" . $row["tour_code"].' - '.$row["tour_name"] . "</a></p>";
+			$records = True;
+		}
+		if(!$records){
+			echo "<p>No Records Found</p>";
+		}
+
+	}
+	
 }
 
 ?>

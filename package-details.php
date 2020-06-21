@@ -16,6 +16,12 @@
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+    	.gj-picker-bootstrap table tr td.gj-cursor-pointer div{
+		    color: #000000;
+		    background: #ffc324;
+		}
+    </style>
     <!--Calender-->
 </head>
 <body>
@@ -30,7 +36,7 @@
     $fetch_data = mysqli_query($con,$query);    
     $tour_data = $fetch_data->fetch_assoc();            
 ?>
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/tours/<?php echo $tour_data['display_image'];?>" class="img-fluid"></div>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><img src="images/tours/<?php echo $tour_data['cover_image'];?>" class="img-fluid"></div>
 <!--BreadCrumps-->
 	<form>
 		<div class="row m-4">

@@ -22,14 +22,13 @@ $filter = ' ';
 $OrderBy= "";
 
 
-
 if($_POST['cRows'] != 0)
     $item_per_page = $_POST['cRows'];
 else 
     $item_per_page = 10;
 
 $q = (isset($_POST['q']) && $_POST['q'] != '')?$_POST['q']:'';
-
+$search = (isset($_POST['search']) && $_POST['search'] != '')?$_POST['search']:'';
 
 if(isset($_POST['tour_category']) && $_POST['tour_category'] != ''){
     $tour_category = $_POST['tour_category'];
@@ -83,19 +82,31 @@ else{
     $OrderBy = "t.id DESC";
 }
 
-$query = "SELECT COUNT(*) FROM tours as t WHERE t.active=1 ".$filter;
-$results = $con->query($query);
 
 
-$get_total_rows = $results->fetch_row(); 
+if($search != ''){
+    $query = "SELECT COUNT(*) FROM `tours` as t  LEFT JOIN states as s ON s.id_state = t.tour_state LEFT JOIN regions as r ON r.id = t.tour_region  WHERE (t.tour_name LIKE '%$search%'  OR t.tour_code LIKE '%$search%' OR t.tour_places LIKE '%$search%' OR s.state  LIKE '%$search%'  OR r.name  LIKE '%$search%'  OR FIND_IN_SET((SELECT id FROM tour_categories WHERE name LIKE '%$search%' LIMIT 1), t.tour_categories) OR FIND_IN_SET((SELECT id FROM tour_subcategories WHERE name LIKE '%$search%' LIMIT 1), t.tour_subcategories)) AND t.active = 1 ".$filter;
 
-$total_pages = ceil($get_total_rows[0]/$item_per_page);
+    $results = $con->query($query);
+    $get_total_rows = $results->fetch_row(); 
+    $total_pages = ceil($get_total_rows[0]/$item_per_page);
+    $page_position = (($page_number-1) * $item_per_page);
 
-$page_position = (($page_number-1) * $item_per_page);
+    $query = "SELECT t.*  FROM `tours` as t  LEFT JOIN states as s ON s.id_state = t.tour_state LEFT JOIN regions as r ON r.id = t.tour_region  WHERE (t.tour_name LIKE '%$search%'  OR t.tour_code LIKE '%$search%' OR t.tour_places LIKE '%$search%' OR s.state  LIKE '%$search%'  OR r.name  LIKE '%$search%'  OR FIND_IN_SET((SELECT id FROM tour_categories WHERE name LIKE '%$search%' LIMIT 1), t.tour_categories) OR FIND_IN_SET((SELECT id FROM tour_subcategories WHERE name LIKE '%$search%' LIMIT 1), t.tour_subcategories)) AND t.active = 1 ".$filter." ORDER BY $OrderBy LIMIT $page_position, $item_per_page;";
+    
+}else{
+    $query = "SELECT COUNT(*) FROM tours as t WHERE t.active=1 ".$filter;
 
-$query = "SELECT t.* FROM tours as t "
+    $results = $con->query($query);
+    $get_total_rows = $results->fetch_row(); 
+    $total_pages = ceil($get_total_rows[0]/$item_per_page);
+    $page_position = (($page_number-1) * $item_per_page);
+
+    $query = "SELECT t.* FROM tours as t "
         . "WHERE t.active=1 ".$filter." "
         . "ORDER BY $OrderBy LIMIT $page_position, $item_per_page;";
+
+}
 
 
 $fetch_data = mysqli_query($con,$query);
@@ -115,10 +126,11 @@ while($listing_data = $fetch_data->fetch_assoc()){
     $url = "package-details.php?q=".$q."&id=".$listing_data['id'];
     $toursHtml .= '<div class="col-6 col-sm-3 col-md-3 col-lg-3 mb-3">';
     $toursHtml .= '<div class="card card-bor">';
+    $toursHtml .= '<a href="'.$url.'" >';
     $toursHtml .= '<img class="card-img-top card-img-bor-rad img-fluid" src="images/tours/'.$listing_data['display_image'].'" alt="Card image" style="width:100%">';
     $toursHtml .= '<div class="card-body text-center">';
-    $toursHtml .= '<h6 class="card-title text-uppercase">'.$listing_data['name'].'</h6>';
-    $toursHtml .= '<a href="'.$url.'" class="btn btn-primary view-butt">See Profile</a>';
+    $toursHtml .= '<h6 class="card-title text-uppercase">'.$listing_data['tour_name'].'</h6>';
+    $toursHtml .= '</a>';
     $toursHtml .= '</div>';
     $toursHtml .= '</div>';
     $toursHtml .= '</div>';
@@ -254,16 +266,29 @@ else{
     $listingHtml .=  "<BR><BR><BR><h5 class='text-center'>No records found for selected criteria. Please reach to us via phone ".$site_cms['site_phone']." or email us at ".$site_cms['site_email']." to know more about your search criteria.</h5>";
 }
 $listingHtml .= '</div></div>';
+$listingHtml .= '<div class="col- col-sm-12 col-md-12 col-lg-12">';
 $listingHtml .= paginate_function($item_per_page, $page_number, $get_total_rows[0], $total_pages);
-$listingHtml .= '</div>';
+$listingHtml .= '</div></div>';
 
 echo $listingHtml;
+
+
+
+// <div class="col- col-sm-12 col-md-12 col-lg-12">
+//         <ul class="pagination pagination-sm">
+//             <li class="page-item"><a class="page-link pg-link" href="#">Previous</a></li>
+//             <li class="page-item"><a class="page-link pg-link" href="#">1</a></li>
+//             <li class="page-item"><a class="page-link pg-link" href="#">2</a></li>
+//             <li class="page-item"><a class="page-link pg-link" href="#">3</a></li>
+//             <li class="page-item"><a class="page-link pg-link" href="#">Next</a></li>
+//         </ul>
+//     </div>
 
 function paginate_function($item_per_page, $current_page, $total_records, $total_pages)
 {
     $pagination = '';
     if($total_pages > 0 && $total_pages != 1 && $current_page <= $total_pages){ //verify total pages and current page number
-        $pagination .= '<ul class="pagination">';
+        $pagination .= '<ul class="pagination pagination-sm">';
        
         $right_links    = $current_page + 3;
         $previous       = $current_page - 3; //previous link
@@ -276,33 +301,33 @@ function paginate_function($item_per_page, $current_page, $total_records, $total
 //                $previous_link = 1;
             $previous_link = $current_page - 1;
             
-            $pagination .= '<li class="first"><a href="#" data-page="1" title="First">&laquo;</a></li>'; //first link
-            $pagination .= '<li><a href="#" data-page="'.$previous_link.'" title="Previous">&lt;</a></li>'; //previous link
+            $pagination .= '<li class="page-item first"><a class="page-link pg-link" href="#" data-page="1" title="First">&laquo;</a></li>'; //first link
+            $pagination .= '<li class="page-item"><a class="page-link pg-link" href="#" data-page="'.$previous_link.'" title="Previous">&lt;</a></li>'; //previous link
                 for($i = ($current_page-2); $i < $current_page; $i++){ //Create left-hand side links
                     if($i > 0){
-                        $pagination .= '<li><a href="#" data-page="'.$i.'" title="Page'.$i.'">'.$i.'</a></li>';
+                        $pagination .= '<li class="page-item"><a class="page-link pg-link" href="#" data-page="'.$i.'" title="Page'.$i.'">'.$i.'</a></li>';
                     }
                 }  
             $first_link = false; //set first link to false
         }
        
         if($first_link){ //if current active page is first link
-            $pagination .= '<li class="first active">'.$current_page.'</li>';
+            $pagination .= '<li class="page-item first active"><label class="page-link">'.$current_page.'</label></li>';
         }elseif($current_page == $total_pages){ //if it's the last active link
-            $pagination .= '<li class="last active">'.$current_page.'</li>';
+            $pagination .= '<li class="page-item last active"><label class="page-link">'.$current_page.'</label></li>';
         }else{ //regular current link
-            $pagination .= '<li class="active">'.$current_page.'</li>';
+            $pagination .= '<li class="page-item active"><label class="page-link">'.$current_page.'</label></li>';
         }
                
         for($i = $current_page+1; $i < $right_links ; $i++){ //create right-hand side links
             if($i<=$total_pages){
-                $pagination .= '<li><a href="#" data-page="'.$i.'" title="Page '.$i.'">'.$i.'</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link pg-link" href="#" data-page="'.$i.'" title="Page '.$i.'">'.$i.'</a></li>';
             }
         }
         if($current_page < $total_pages){
                 $next_link = ($i > $total_pages)? $total_pages : $i;
-                $pagination .= '<li><a href="#" data-page="'.$next_link.'" title="Next">&gt;</a></li>'; //next link
-                $pagination .= '<li class="last"><a href="#" data-page="'.$total_pages.'" title="Last">&raquo;</a></li>'; //last link
+                $pagination .= '<li class="page-item"><a class="page-link pg-link" href="#" data-page="'.$next_link.'" title="Next">&gt;</a></li>'; //next link
+                $pagination .= '<li class="page-item last"><a class="page-link pg-link" href="#" data-page="'.$total_pages.'" title="Last">&raquo;</a></li>'; //last link
         }
        
         $pagination .= '</ul>';

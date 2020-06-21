@@ -68,11 +68,31 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	$tour_name = mysqli_escape_string($con,$_POST['tour_name']);
 	$tour_desc = mysqli_escape_string($con,$_POST['tour_desc']);
 
+	if(isset($_FILES['cover_image']['name']) && $_FILES['cover_image']['name']!=''){
+		$displayImageFilename 	= explode(".", $_FILES["cover_image"]["name"]);
+		$displayImageextension 	= end($displayImageFilename);
+		$imageNewName = 'cover_image_'.$tour_code;
+		$imageNewName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $imageNewName).".".$displayImageextension;
+
+		$imageUploadStatus =true;
+		if (file_exists("../../images/tours/" .$imageNewName)) {
+    		unlink("../../images/tours/" .$imageNewName);
+    	}
+		if (!move_uploaded_file($_FILES["cover_image"]["tmp_name"],"../../images/tours/" .$imageNewName)) {
+			    $imageUploadStatus = false;
+		}
+		$query_cover_image = ",cover_image = '".$imageNewName."'";
+		$cover_image = $imageNewName;
+
+	}else{
+		$query_cover_image = '';
+	}
+
 	if(isset($_FILES['display_image']['name']) && $_FILES['display_image']['name']!=''){
 		$displayImageFilename 	= explode(".", $_FILES["display_image"]["name"]);
 		$displayImageextension 	= end($displayImageFilename);
-		$imageNewName = 'display_image_'.$tour_code.".".$displayImageextension;
-		$imageNewName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $imageNewName);
+		$imageNewName = 'display_image_'.$tour_code;
+		$imageNewName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $imageNewName).".".$displayImageextension;
 
 		$imageUploadStatus =true;
 		if (file_exists("../../images/tours/" .$imageNewName)) {
@@ -102,13 +122,13 @@ if(isset($_POST['data']) && $_POST['data'] == "region") {
 	
 	//mysql_set_charset( $con, 'utf8');
 	
-	print_r($rates_json);
 
 	if($page_action == 'edit'){
-		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_categories='".$tour_categories."',tour_subcategories='".$tour_subcategories."'".$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary='".$itenerary."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
+		$query = "UPDATE tours SET tour_code='".$tour_code."',tour_name='".$tour_name."',tour_desc='".trim($tour_desc)."',tour_categories='".$tour_categories."',tour_subcategories='".$tour_subcategories."'".$query_cover_image.$query_display_image.",tour_region='".$tour_region."',tour_state='".$tour_state."',tour_places='".$tour_places."',tour_duration='".$tour_duration."',tour_price='".$tour_price."',itenerary='".$itenerary."',rates_json='".$rates_json."',inclusive='".trim($inclusive)."',exclusive='".trim($exclusive)."',special_note='".trim($special_note)."',active='".$active."' WHERE id='".$id."'";
+
 
 	}else{
-		$query = "INSERT INTO tours (tour_code,tour_name,tour_desc,tour_categories,tour_subcategories,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_desc."','".$tour_categories."','".$tour_subcategories."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
+		$query = "INSERT INTO tours (tour_code,tour_name,tour_desc,tour_categories,tour_subcategories,cover_image,display_image,tour_region,tour_state,tour_places,tour_duration,tour_price,itenerary,rates_json,inclusive,exclusive,special_note,active) VALUES ('".$tour_code."','".$tour_name."','".$tour_desc."','".$tour_categories."','".$tour_subcategories."','".$cover_image."','".$display_image."',".$tour_region.",".$tour_state.",'".$tour_places."','".$tour_duration."','".$tour_price."','".$itenerary."','".$rates_json."','".$inclusive."','".$exclusive."','".$special_note."',".$active.");";
 	}
 	//echo "<pre>".$query."</pre>";exit;
 	//print($query);exit;

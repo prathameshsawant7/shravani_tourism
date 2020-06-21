@@ -103,7 +103,7 @@ $con=$est->connection();
                 </thead>
                 <tbody>
                     <?php 
-                    $query = "SELECT CONCAT(t.tour_code,' - ',t.tour_name) AS tour, STR_TO_DATE(b.date, '%d/%m/%Y') as date_ord, b.date , b.added_by FROM group_tour_dates as b LEFT JOIN tours as t ON t.id = b.tour_id WHERE b.active=1  AND date_format(STR_TO_DATE(b.date, '%d/%m/%Y'), '%Y%m%d') > date_format(curdate(), '%Y%m%d') ORDER BY date_ord;";
+                    $query = "SELECT t.id, CONCAT(t.tour_code,' - ',t.tour_name) AS tour, STR_TO_DATE(b.date, '%d/%m/%Y') as date_ord, b.date , b.added_by FROM group_tour_dates as b LEFT JOIN tours as t ON t.id = b.tour_id WHERE b.active=1  AND date_format(STR_TO_DATE(b.date, '%d/%m/%Y'), '%Y%m%d') > date_format(curdate(), '%Y%m%d') ORDER BY date_ord;";
                     $fetch_data  = mysqli_query($con,$query);
                     while ($data = $fetch_data->fetch_assoc()) {
                     ?>

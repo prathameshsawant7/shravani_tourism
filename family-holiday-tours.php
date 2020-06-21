@@ -153,6 +153,7 @@
 					   <?php
 							$query = "SELECT * FROM tours WHERE tour_state = ".$fields['id_state']." ORDER BY id DESC LIMIT 4;";
 							$tour_fetch_data = mysqli_query($con,$query);
+							$state_url = LIVEROOT."packages.php?q=".$fields['state']."&state=".$fields['id_state'];
 							while($tour_fields  = $tour_fetch_data->fetch_assoc()) {?>
 							   <div class="col-sm-7 col-md-7 col-lg-7 text-left">
 							   	<a href="<?php echo LIVEROOT;?>package-details.php?id=<?php echo $tour_fields['id']; ?>" class="card-text">
@@ -170,7 +171,7 @@
 					   <div class="col-sm-7 col-md-7 col-lg-7 text-left"><a href="#" class="card-text">Kerala Special</a></div>
 					   <div class="col-sm-5 col-md-5 col-lg-5 text-right"><a href="#" class="card-text">₹32,000</a></div> -->
 					    <div class="col-sm-12 col-md-12 col-lg-12 text-center pad-none">
-					   	<button class="btn btn-default view-but">View More</button>
+					   	<a href="<?php echo $state_url; ?>" class="btn btn-default view-but">View More</a>
 					   </div>
 					   </div>
 					  </div>

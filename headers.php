@@ -133,16 +133,8 @@
  					 <!-- <li class="top-butt track_order">
 			            <a href="#" class="header-text">Help</a>
 			          </li> -->
- 					 <?php if(!$_SESSION){ ?>
+			         <?php if($_SESSION && isset($_SESSION['name']) && $_SESSION['name'] != ''){ ?>	
 				          <li class="top-butt track_order">
-				            <a href="#myModal-log"  class="header-text" data-toggle="modal" >Login</a>
-				          </li>
-				          <li class="top-butt track_order">
-				            <a href="#myModal-sign"  class="header-text" data-toggle="modal" >Sign Up</a>
-				          </li>
-			      	  <?php } else { ?>
-
-			      	  	<li class="top-butt track_order">
 					        <a class="header-text nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: -7px;">
 					          Welcome, <b><?php echo $_SESSION['name'];?></b>
 					        </a>
@@ -150,6 +142,14 @@
 					          <a class="dropdown-item" onclick="logout();" >Logout</a>
 					        </div>
 					     </li>
+			      	  <?php } else { ?>
+
+			      	  	<li class="top-butt track_order">
+				            <a href="#myModal-log"  class="header-text" data-toggle="modal" >Login</a>
+				        </li>
+				        <li class="top-butt track_order">
+				            <a href="#myModal-sign"  class="header-text" data-toggle="modal" >Sign Up</a>
+				        </li>
 			      	  <?php } ?>
 			                   
 			        </ul>
@@ -275,9 +275,9 @@
 				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra%20Tours&category=Maharashtra%20Tours&subcategory=Religious%20Tour">Religious Tours</a>
 				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra%20Tours&category=Maharashtra%20Tours&subcategory=Kokan%20Tour">Kokan Tours</a>
 				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra%20Tours&category=Maharashtra%20Tours&subcategory=Holiday%20Tour">Holiday Tours</a>
-				          <div class="dropdown-divider"></div>
+				          <!-- <div class="dropdown-divider"></div>
 				          <a class="dropdown-item" href="<?php echo LIVEROOT;?>packages.php?q=Maharashtra-Tours&category=Maharashtra-Tours">All Maharashtra Tours</a>
-				        </div>
+				        </div> -->
 				      </li>
 				      <li class="nav-item dropdown space-nav text-center">
 				        <a class="nav-link dropdown-toggle" href="<?php echo LIVEROOT;?>packages.php?q=India-Tours&category=India-Tours" >
@@ -310,6 +310,11 @@
 				      <li class="nav-item space-nav">
 				        <a class="nav-link" href="<?php echo LIVEROOT;?>terms-and-conditions.php">Terms &nbsp;&nbsp;& <br/> Conditions</a>
 				      </li>
+				      <?php if($_SESSION && isset($_SESSION['name']) && $_SESSION['name'] != ''){ ?>
+				      <li class="nav-item space-nav">
+				        <a class="nav-link" href="<?php echo LIVEROOT;?>my-bookings.php">My &nbsp;&nbsp;<br/> Bookings</a>
+				      </li>
+				  	  <?php } ?>
 				      <!-- <li class="nav-item space-nav">
 				        <a class="nav-link" href="#">Contact US</a>
 				      </li> -->

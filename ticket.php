@@ -115,6 +115,12 @@
 			<div class="form-group">
 				<div class ="row inv-tab-bor">
 					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 inv-tab-bor1 col-txt-1 col-txt-head-left">
+						Ticket:
+					</div>
+					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 inv-tab-bor2 col-txt-1">
+						<?php echo $ticket;?>					
+					</div>
+					<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 inv-tab-bor1 col-txt-1 col-txt-head-left">
 						Tour:
 					</div>
 					<div class="col-sm-9 col-md-9 col-lg-9 col-xl-9 inv-tab-bor2 col-txt-1">

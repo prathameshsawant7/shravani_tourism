@@ -31,7 +31,8 @@
                             <li><a href='\<?php echo ADMINROOT;?>\settings\sub_categories.php'><span>Sub Categories</span></a></li>
                         </ul>
                     </li>
-                    
+
+                    <li><a href='\<?php echo ADMINROOT;?>\settings\import_group_tour_dates.php'><span>Group Tour Dates</span></a></li>
                     <li>
                         <a href='#'><span>Bus Settings</span></a>
                         <ul class="menu vertical" style="z-index: 9999999;">

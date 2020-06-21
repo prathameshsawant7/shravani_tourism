@@ -1,5 +1,6 @@
 <?php
 $q = (isset($url_params['q']) && $url_params['q'] != '')?str_replace("-"," ",$url_params['q']):'';
+$search = (isset($url_params['search']) && $url_params['search'] != '')?str_replace("-"," ",$url_params['search']):'';
 $tour_category = (isset($url_params['category']) && $url_params['category'] != '')?str_replace("-"," ",$url_params['category']):'';
 $tour_subcategory = (isset($url_params['subcategory']) && $url_params['subcategory'] != '')?str_replace("-"," ",$url_params['subcategory']):'';
 $tour_region = (isset($url_params['region']) && $url_params['region'] != '')?$url_params['region']:'';
@@ -121,6 +122,7 @@ $tour_duration = (isset($url_params['duration']) && $url_params['duration'] != '
 
 <script type="text/javascript">
 	var q = '<?php echo $q;?>';
+	var search = '<?php echo $search;?>';
 	var tour_category = '<?php echo $tour_category;?>';
 	var tour_subcategory = '<?php echo $tour_subcategory;?>';
 	var tour_region = '<?php echo $tour_region;?>';
@@ -191,7 +193,7 @@ $tour_duration = (isset($url_params['duration']) && $url_params['duration'] != '
 
 	    $("#loading").show(); //show loading element
 	    $("#table_tour_list").html('');
-	    $("#table_tour_list").load("fetch_categories_listings.php",{"arrangeOrder":arrangeOrder,"cRows":cRows,"page":page,"q":q,"tour_category":tour_category,"tour_subcategory":tour_subcategory,"tour_region":tour_region,"tour_state":tour_state,"tour_price":tour_price,"tour_duration":tour_duration}, function(){ //get content from PHP page
+	    $("#table_tour_list").load("fetch_categories_listings.php",{"arrangeOrder":arrangeOrder,"cRows":cRows,"page":page,"q":q,"search":search,"tour_category":tour_category,"tour_subcategory":tour_subcategory,"tour_region":tour_region,"tour_state":tour_state,"tour_price":tour_price,"tour_duration":tour_duration}, function(){ //get content from PHP page
 	        $("#loading").hide(); //once done, hide loading element
 	        // $("#id").val(id);
 	        // $("#name").val(name);

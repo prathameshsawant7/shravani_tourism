@@ -113,6 +113,14 @@ $con=$est->connection();
                             </td>
                         </tr>
                         <tr>
+                            <th style="border:1px solid #000000;"><label>Cover Image: </label></th>
+                            <td >
+                                <input type="file" id="cover_image" onchange="readImage(this)" name="cover_image" value="" />
+                                <img id="cover_image_preview" src="../../images/tours/<?php echo $tour_data['cover_image']."?".time();?>" />
+
+                            </td>
+                        </tr>
+                        <tr>
                             <th style="border:1px solid #000000;"><label>Display Image: </label></th>
                             <td >
                                 <input type="file" id="display_image" onchange="readImage(this)" name="display_image" value="" />
@@ -354,7 +362,7 @@ $con=$est->connection();
                     if (input.files && input.files[0]) {
                         var reader = new FileReader();
                         reader.onload = function (e) {
-                            $('#display_image_preview').attr('src', e.target.result);
+                            $('#'+input.id+'_preview').attr('src', e.target.result);
                         }
                         reader.readAsDataURL(input.files[0]);
                     }
